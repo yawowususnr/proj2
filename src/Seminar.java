@@ -22,7 +22,8 @@ public class Seminar {
      * Dummy seminar constructor
      */
     public Seminar() {
-        // Nothing here
+  
+        // Nothing heress
     }
 
     /**
