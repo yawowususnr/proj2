@@ -62,7 +62,7 @@ class BST<K extends Comparable<K>, V>
     // ----------------------------------------------------------
     /**
      * Place a description of your method here.
-     * @param e
+     * @param newKVP
      */
     public void insert(KeyValuePair<K, V> newKVP)
     {
@@ -88,13 +88,13 @@ class BST<K extends Comparable<K>, V>
     }
 
 
-    private BSTNode deleteMax(BSTNode rt)
+    private BSTNode<KeyValuePair<K, V>> deleteMax(BSTNode<KeyValuePair<K, V>> root)
     {
-        if (rt.right() == null)
+        if (root.getRight() == null)
         {
-            return rt.getLeft();
+            return root.getLeft();
         }
-        rt.setRight(deleteMax(rt.right()));
+        root.setRight(deleteMax(root.getRight()));
     }
 
 
@@ -110,36 +110,36 @@ class BST<K extends Comparable<K>, V>
     }
 
 
-    private BSTNode removehelp(BSTNode rt, Comparable key)
+    private BSTNode<KeyValuePair<K, V>> removehelp(BSTNode<KeyValuePair<K, V>> rt, K key)
     {
         if (rt == null)
         {
             return null;
         }
 
-        if (rt.value().compareTo(key) > 0)
+        if (rt.getElement().compareTo(key) > 0)
         {
-            rt.setLeft(removehelp(rt.left(), key));
+            rt.setLeft(removehelp(rt.getLeft(), key));
         }
-        else if (rt.value().compareTo(key) < 0)
+        else if (rt.getElement().compareTo(key) < 0)
         {
-            rt.setRight(removehelp(rt.right(), key));
+            rt.setRight(removehelp(rt.getRight(), key));
         }
         else
         { // Found the node
-            if (rt.left() == null)
+            if (rt.getLeft() == null)
             {
-                return rt.right();
+                return rt.getRight();
             }
-            else if (rt.right() == null)
+            else if (rt.getRight() == null)
             {
-                return rt.left();
+                return rt.getLeft();
             }
             else
             { // Two children
-                BSTNode temp = getmax(rt.left());
-                rt.setValue(temp.value());
-                rt.setLeft(deletemax(rt.left()));
+                BSTNode<KeyValuePair<K, V>> temp = getmax(rt.getLeft());
+                rt.setElement(temp.getElement());
+                rt.setLeft(deleteMax(rt.getLeft()));
             }
         }
 
@@ -150,9 +150,9 @@ class BST<K extends Comparable<K>, V>
     // Remove a record from the tree
     // key: The key value of record to remove
     // Returns the record removed, null if there is none.
-    public E remove(E key)
+    public KeyValuePair<K, V> remove(K key)
     {
-        E temp = findhelp(root, key); // First find it
+        KeyValuePair<K, V> temp = findhelp(root, key); // First find it
         if (temp != null)
         {
             root = removehelp(root, key); // Now remove it
