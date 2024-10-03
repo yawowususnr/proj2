@@ -25,7 +25,8 @@ class BST<K extends Comparable<K>, V>
         nodecount = 0;
     }
 
-
+    
+    //-------------------------------------------------------------------
 
     // Return the record with key value k, null if none exists
     // key: The key value to find
@@ -86,16 +87,111 @@ class BST<K extends Comparable<K>, V>
         }
         return root;
     }
+    
+    
+    // ----------------------------------------------------------
+    
+    
+    /* 
+     * Remove a record from the tree
+     *   key: The key value of record to remove
+     *   Returns the record removed, null if there is none.
+     */
+   public KeyValuePair<K, V> remove(K key)
+   {
+       KeyValuePair<K, V> temp = findhelp(root, key); // First find it
+       if (temp != null)
+       {
+           root = removehelp(root, key); // Now remove it
+           nodecount--;
+       }
+       return temp;
+   }
 
 
-//    private BSTNode<KeyValuePair<K, V>> deleteMax(BSTNode<KeyValuePair<K, V>> root)
-//    {
-//        if (root.getRight() == null)
-//        {
-//            return root.getLeft();
-//        }
-//        root.setRight(deleteMax(root.getRight()));
-//    }
+    private BSTNode<KeyValuePair<K, V>> deleteMax(BSTNode<KeyValuePair<K, V>> root)
+    {
+        if (root.getRight() == null)
+        {
+            return root.getLeft();
+        }
+        root.setRight(deleteMax(root.getRight()));
+        return root;
+    }
+    
+    private BSTNode<KeyValuePair<K, V>> getMax(BSTNode<KeyValuePair<K, V>> root)
+    {
+        if (root.getRight() == null)
+        {
+            return root;
+        }
+        return getMax(root.getRight());
+    }
+
+
+
+    
+    
+    // ----------------------------------------------------------
+
+    private BSTNode<KeyValuePair<K, V>> removehelp(BSTNode<KeyValuePair<K, V>> rt, K key)
+    {
+        if (rt == null)
+        {
+            return null;
+        }
+
+        if (rt.getElement().compareTo(key) > 0)
+        {
+            rt.setLeft(removehelp(rt.getLeft(), key));
+        }
+        else if (rt.getElement().compareTo(key) < 0)
+        {
+            rt.setRight(removehelp(rt.getRight(), key));
+        }
+        else
+        { // Found the node
+            if (rt.getLeft() == null)
+            {
+                return rt.getRight();
+            }
+            else if (rt.getRight() == null)
+            {
+                return rt.getLeft();
+            }
+            else
+            { // Two children
+                BSTNode<KeyValuePair<K, V>> temp = getMax(rt.getLeft());
+                rt.setElement(temp.getElement());
+                rt.setLeft(deleteMax(rt.getLeft())); 
+            }
+        }
+
+        return rt;
+    }
+    
+    
+    private int traverseHelp(BSTNode<KeyValuePair<K, V>> root, K lo, K hi) {
+        
+        if (root == null) {
+            return 1;
+        }
+        
+        if (root.getElement().compareTo(lo) < 0) {
+            return traverseHelp(root.getRight(), lo, hi) + 1;
+        } else if (root.getElement().compareTo(lo) < 0) {
+            return traverseHelp(root.getRight(), lo, hi) + 1;
+        } else {
+            int traversed = traverseHelp(root.getLeft(), lo, hi);
+            
+            System.out.println(root.getElement().getValue().toString());
+            return traversed + 1;
+        }
+    }
+    
+    public int traverse(K lo, K hi) {
+        return traverseHelp(root, lo, hi);
+    }
 
 
 //    private void printhelp(BSTNode<KeyValuePair<K, V>> rt)
@@ -109,57 +205,6 @@ class BST<K extends Comparable<K>, V>
 //        printhelp(rt.getRight());
 //    }
 
-
-//    private BSTNode<KeyValuePair<K, V>> removehelp(BSTNode<KeyValuePair<K, V>> rt, K key)
-//    {
-//        if (rt == null)
-//        {
-//            return null;
-//        }
-//
-//        if (rt.getElement().compareTo(key) > 0)
-//        {
-//            rt.setLeft(removehelp(rt.getLeft(), key));
-//        }
-//        else if (rt.getElement().compareTo(key) < 0)
-//        {
-//            rt.setRight(removehelp(rt.getRight(), key));
-//        }
-//        else
-//        { // Found the node
-//            if (rt.getLeft() == null)
-//            {
-//                return rt.getRight();
-//            }
-//            else if (rt.getRight() == null)
-//            {
-//                return rt.getLeft();
-//            }
-//            else
-//            { // Two children
-//                BSTNode<KeyValuePair<K, V>> temp = getmax(rt.getLeft());
-//                rt.setElement(temp.getElement());
-//                rt.setLeft(deleteMax(rt.getLeft())); 
-//            }
-//        }
-//
-//        return rt;
-//    }
-
-
-    // Remove a record from the tree
-    // key: The key value of record to remove
-    // Returns the record removed, null if there is none.
-//    public KeyValuePair<K, V> remove(K key)
-//    {
-//        KeyValuePair<K, V> temp = findhelp(root, key); // First find it
-//        if (temp != null)
-//        {
-//            root = removehelp(root, key); // Now remove it
-//            nodecount--;
-//        }
-//        return temp;
-//    }
 
 
     // Return the number of records in the dictionary
