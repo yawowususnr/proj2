@@ -30,35 +30,59 @@ public class Controller {
 
 	public void remove(int id) {
 		KeyValuePair<Integer, Seminar> removedNode = this.idBST.remove(id);
-		
+
 		if (removedNode != null) {
 			Seminar seminarObject = removedNode.getValue();
-			
+
 			this.costBST.remove(seminarObject.cost());
-			
+
 			this.dateBST.remove(seminarObject.date());
-			
-		}
-		else {
+
+			for (String word : seminarObject.keywords()) {
+				this.keywordsBST.remove(word);
+			}
+
+		} else {
 			System.out.println("Failed");
 		}
-		
-		
-		
+
 	}
-	
+
 	public void searchID(int id) {
-		
+		KeyValuePair<Integer, Seminar> KVPair = this.idBST.find(id);
+
+		if (KVPair != null) {
+			System.out.println("Found");
+		} else {
+			System.out.println("Not Found");
+		}
 	}
-	
-	public void searchCost(int cost) {
-		
+
+	public void searchCost(int firstCost, int secCost) {
+
 	}
-	
+
 	public void searchDate(String firstDate, String secDate) {
-		
+
 	}
-	public void print() {
+
+	public void print(String s) {
+		if (s.equals("ID")) {
+			System.out.println("ID TREE");
+			this.idBST.print();
+		} else if (s.equals("cost")) {
+			System.out.println("ID TREE");
+			this.costBST.print();
+		} else if (s.equals("date")) {
+			System.out.println("ID TREE");
+			this.dateBST.print();
+		} else if (s.equals("keyword")) {
+			System.out.println("ID TREE");
+			this.keywordBST.print();
+		} else {
+			System.out.println("Location Tree:");
+
+		}
 
 	}
 }
