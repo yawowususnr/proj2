@@ -98,15 +98,15 @@ class BST<K extends Comparable<K>, V>
     }
 
 
-    private void printhelp(BSTNode<E> rt)
+    private void printhelp(BSTNode<KeyValuePair<K, V>> rt)
     {
         if (rt == null)
         {
             return;
         }
-        printhelp(rt.left());
-        printVisit(rt.value());
-        printhelp(rt.right());
+        printhelp(rt.getLeft());
+        printVisit(rt.getElement());
+        printhelp(rt.getRight());
     }
 
 
@@ -160,9 +160,6 @@ class BST<K extends Comparable<K>, V>
         }
         return temp;
     }
-
-
-
 
 
     // Return the number of records in the dictionary
