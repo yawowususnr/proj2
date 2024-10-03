@@ -26,14 +26,6 @@ class BST<K extends Comparable<K>, V>
     }
 
 
-    // Insert a record into the tree.
-    // Records can be anything, but they must be Comparable
-    // e: The record to insert.
-    public void insert(E e)
-    {
-        root = inserthelp(root, e);
-        nodecount++;
-    }
 
     // Return the record with key value k, null if none exists
     // key: The key value to find
@@ -62,23 +54,37 @@ class BST<K extends Comparable<K>, V>
         }
 
     }
+    
 
-
-    private BSTNode inserthelp(BSTNode rt, Comparable e)
+    // Insert a record into the tree.
+    // Records can be anything, but they must be Comparable
+    // e: The record to insert.
+    // ----------------------------------------------------------
+    /**
+     * Place a description of your method here.
+     * @param e
+     */
+    public void insert(KeyValuePair<K, V> newKVP)
     {
-        if (rt == null)
+        root = inserthelp(root, newKVP);
+        nodecount++;
+    }
+
+    private BSTNode<KeyValuePair<K, V>> inserthelp(BSTNode<KeyValuePair<K, V>> root, KeyValuePair<K, V> newKVP)
+    {
+        if (root == null)
         {
-            return new BSTNode(e);
+            return new BSTNode<KeyValuePair<K, V>>(newKVP);
         }
-        if (rt.value().compareTo(e) >= 0)
+        if (root.getElement().compareTo(newKVP) >= 0)
         {
-            rt.setLeft(inserthelp(rt.left(), e));
+            root.setLeft(inserthelp(root.getLeft(), newKVP));
         }
         else
         {
-            rt.setRight(inserthelp(rt.right(), e));
+            root.setRight(inserthelp(root.getRight(), newKVP));
         }
-        return rt;
+        return root;
     }
 
 
