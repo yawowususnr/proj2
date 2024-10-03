@@ -17,7 +17,7 @@ public class Controller {
 		this.keywordsBST = new BST<String, Seminar>();
 	}
 
-	public void insert(int id, String title, String date, int length, short x, short y, int cost, String[] keywords,
+	public void insert(int id, String title, String date, int length, short x, short y, int cost, String[] keywords, int keywords_length,
 			String desc) {
 
 		Seminar seminarNode = new Seminar(id, title, date, length, x, y, cost, keywords, desc);
@@ -25,6 +25,10 @@ public class Controller {
 		this.idBST.insert(new KeyValuePair<Integer, Seminar>(id, seminarNode));
 		this.costBST.insert(new KeyValuePair<Integer, Seminar>(cost, seminarNode));
 		this.dateBST.insert(new KeyValuePair<String, Seminar>(date, seminarNode));
+		
+//		for (int i = 0; i < keywords_length; i ++) {
+//			
+//		}
 
 	}
 
