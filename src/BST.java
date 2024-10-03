@@ -153,6 +153,7 @@ class BST<K extends Comparable<K>, V>
     public KeyValuePair<K, V> remove(K key)
     {
         KeyValuePair<K, V> temp = findhelp(root, key); // First find it
+
         if (temp != null)
         {
             root = removehelp(root, key); // Now remove it
