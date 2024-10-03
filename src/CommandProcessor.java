@@ -34,7 +34,7 @@ public class CommandProcessor {
                 command = sc.next();
                 switch(command) {
                     case "insert":
-                        String Id = sc.next();
+                        String Id = sc.next().trim();
                         String title = sc.nextLine();
                         String chunkOfInfo = sc.nextLine();
                         String[] singleLine = chunkOfInfo.split("\\s+");
@@ -46,14 +46,36 @@ public class CommandProcessor {
                             len++;
                         }
                         String description = sc.nextLine();
-                        
-                        
-                        
-                        
                         control.insert(Integer.parseInt(Id), title, singleLine[0], Integer.parseInt(singleLine[1]), Short.parseShort(singleLine[2]), Short.parseShort(singleLine[3]), Integer.parseInt(singleLine[4]),keyWords,len, description);
+                        break;
+                    case "delete":
+                        String ID = sc.next();
+                        control.delete(Integer.parseInt(ID));
+                        break;
+                    case "search":
+                        String type = sc.next();
+                        switch(type) {
+                            case "keyword":
+                            case "location":
+                            case "ID":
+                                String id = sc.next();
+                                control.searchID(Integer.parseInt(id));
+                                break;
+                                
+                            case "date":
+                            case "cost":    
+                        }
+                            
+                        
+                        
+                    case "print":
+                        
+                        
                       
                     
                 }
+                
+                    
                 
             }
             

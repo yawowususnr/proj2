@@ -63,6 +63,7 @@ public class Controller {
 	}
 
 	public void searchCost(int firstCost, int secCost) {
+	    KeyValuePair<Integer, Seminar> KVPair = this.costBST.
 
 	}
 
