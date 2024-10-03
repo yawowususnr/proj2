@@ -66,7 +66,7 @@ class BST<E extends Comparable<E>> {
 
     private BSTNode deleteMax(BSTNode rt) {
         if (rt.right() == null) {
-            return rt.left;
+            return rt.getLeft();
         }
         rt.setRight(deleteMax(rt.right()));
     }
