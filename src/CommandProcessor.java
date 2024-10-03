@@ -38,16 +38,20 @@ public class CommandProcessor {
                         String title = sc.nextLine();
                         String chunkOfInfo = sc.nextLine();
                         String[] singleLine = chunkOfInfo.split("\\s+");
-                        String keyWords = sc.nextLine();
-                        String[] arrayOfKeyWords = keyWords.split("\\s+");
+                        Scanner keyScan = new Scanner(new File(sc.nextLine()));
+                        String[] keyWords = new String[100];
+                        int len = 0;
+                        while (keyScan.hasNext()) {
+                            keyWords[len] = keyScan.next();
+                            len++;
+                        }
                         String description = sc.nextLine();
-                        control.insert(Integer.parseInt(Id), title, singleLine[0], Integer.parseInt(singleLine[1]), Short.parseShort(singleLine[2]), Short.parseShort(singleLine[3]), Integer.parseInt(singleLine[4]), arrayOfKeyWords, description);
-                        
-                    
                         
                         
                         
                         
+                        control.insert(Integer.parseInt(Id), title, singleLine[0], Integer.parseInt(singleLine[1]), Short.parseShort(singleLine[2]), Short.parseShort(singleLine[3]), Integer.parseInt(singleLine[4]),keyWords,len, description);
+                      
                     
                 }
                 
