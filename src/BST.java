@@ -150,9 +150,9 @@ class BST<K extends Comparable<K>, V>
     // Remove a record from the tree
     // key: The key value of record to remove
     // Returns the record removed, null if there is none.
-    public E remove(E key)
+    public KeyValuePair<K, V> remove(K key)
     {
-        E temp = findhelp(root, key); // First find it
+    	KeyValuePair<K, V> temp = findhelp(root, key); // First find it
         if (temp != null)
         {
             root = removehelp(root, key); // Now remove it
