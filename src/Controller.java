@@ -32,7 +32,7 @@ public class Controller {
 
 	}
 
-	public void remove(int id) {
+	public void delete(int id) {
 		KeyValuePair<Integer, Seminar> removedNode = this.idBST.remove(id);
 
 		if (removedNode != null) {
