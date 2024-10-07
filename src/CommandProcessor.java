@@ -69,20 +69,20 @@ public class CommandProcessor {
                                 location[1] = sc.next();
                                 location[2] = sc.next();
                                 control.searchLocation(Short.parseShort(
-                                    location[0]), Short.parseShort(location[0]),
-                                    Short.parseShort(location[0]));
+                                    location[0]), Short.parseShort(location[1]),
+                                    Short.parseShort(location[2]));
 
                             case "ID":
                                 String id = sc.next();
                                 control.searchId(Integer.parseInt(id));
 
                             case "date":
-                                String[] dates = new String[3];
+                                String[] dates = new String[2];
                                 dates[0] = sc.next();
                                 dates[1] = sc.next();
                                 control.searchDate(dates[0], dates[1]);
                             case "cost":
-                                String[] cost = new String[3];
+                                String[] cost = new String[2];
                                 cost[0] = sc.next();
                                 cost[1] = sc.next();
                                 int lowerCost = Integer.parseInt(cost[0]);
