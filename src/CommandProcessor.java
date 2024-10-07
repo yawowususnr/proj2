@@ -59,8 +59,7 @@ public class CommandProcessor {
                             case "location":
                             case "ID":
                                 String id = sc.next();
-                                control.searchID(Integer.parseInt(id));
-                                break;
+                                
                                 
                             case "date":
                             case "cost":    
@@ -69,6 +68,8 @@ public class CommandProcessor {
                         
                         
                     case "print":
+                        String printType = sc.next();
+                        control.print(printType);
                         
                         
                       
