@@ -17,15 +17,15 @@ public class Controller {
 		this.keywordsBST = new BST<String, Seminar>();
 	}
 
-	public void insert(int id, String title, String date, int length, short x, short y, int cost, String[] keywords, int keywords_length,
-			String desc) {
+	public void insert(int id, String title, String date, int length, short x, short y, int cost, String[] keywords,
+			int keywords_length, String desc) {
 
 		Seminar seminarNode = new Seminar(id, title, date, length, x, y, cost, keywords, desc);
 
 		this.idBST.insert(new KeyValuePair<Integer, Seminar>(id, seminarNode));
 		this.costBST.insert(new KeyValuePair<Integer, Seminar>(cost, seminarNode));
 		this.dateBST.insert(new KeyValuePair<String, Seminar>(date, seminarNode));
-		
+
 //		for (int i = 0; i < keywords_length; i ++) {
 //			
 //		}
@@ -52,23 +52,27 @@ public class Controller {
 
 	}
 
-	public void searchID(int id) {
-		KeyValuePair<Integer, Seminar> KVPair = this.idBST.find(id);
-
-		if (KVPair != null) {
-			System.out.println("Found");
+	public void searchId(int id) {
+		KeyValuePair<Integer, Seminar> foundNode = this.idBST.find(id);
+		if (foundNode != null) {
+			System.out.println("Found record with id" + id);
 		} else {
-			System.out.println("Not Found");
+			System.out.println("Search failed");
 		}
+
 	}
 
 	public void searchCost(int firstCost, int secCost) {
-	    KeyValuePair<Integer, Seminar> KVPair = this.costBST.
+		this.costBST.traverse(firstCost, secCost);
 
 	}
 
 	public void searchDate(String firstDate, String secDate) {
+		this.dateBST.traverse(firstDate, secDate);
+	}
 
+	public void searchkeyword(String keyword) {
+		this.keywordsBST.traverse(keyword, keyword);
 	}
 
 	public void print(String s) {
