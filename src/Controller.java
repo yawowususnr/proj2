@@ -10,15 +10,37 @@ public class Controller {
 
 	private BST<String, Seminar> keywordsBST;
 
-	public Controller() {
+	private Bintree bintree;
+
+	private int size;
+
+	public Controller(int size) {
 		this.idBST = new BST<Integer, Seminar>();
 		this.costBST = new BST<Integer, Seminar>();
 		this.dateBST = new BST<String, Seminar>();
 		this.keywordsBST = new BST<String, Seminar>();
+		this.size = size;
+		this.bintree = new Bintree(this.size);
+	}
+
+	public boolean checkIfValid(int x, int y) {
+		return (x >= 0 && x < this.size && y >= 0 && y < this.size);
 	}
 
 	public void insert(int id, String title, String date, int length, short x, short y, int cost, String[] keywords,
 			int keywords_length, String desc) {
+
+		KeyValuePair<Integer, Seminar> foundNode = this.idBST.find(id);
+		
+		if (foundNode != null) {
+			System.out.println("There already exists a record with ID " + id);
+			return;
+		}
+
+		if (this.checkIfValid(x, y) == false) {
+			System.out.println("Bad insertion of coordinates");
+			return;
+		}
 
 		Seminar seminarNode = new Seminar(id, title, date, length, x, y, cost, keywords, desc);
 
@@ -26,9 +48,11 @@ public class Controller {
 		this.costBST.insert(new KeyValuePair<Integer, Seminar>(cost, seminarNode));
 		this.dateBST.insert(new KeyValuePair<String, Seminar>(date, seminarNode));
 
-//		for (int i = 0; i < keywords_length; i ++) {
-//			
-//		}
+		for (int i = 0; i < keywords_length; i++) {
+			this.keywordsBST.insert(new KeyValuePair<String, Seminar>(keywords[i], seminarNode));
+			;
+		}
+		this.bintree.insert(seminarNode);
 
 	}
 
@@ -45,6 +69,10 @@ public class Controller {
 			for (String word : seminarObject.keywords()) {
 				this.keywordsBST.remove(word);
 			}
+			
+			this.bintree.remove(seminarObject);
+			
+			System.out.println("Record with ID " + seminarObject.id() + " successfully deleted");
 
 		} else {
 			System.out.println("Failed");
