@@ -1,4 +1,4 @@
-dimport java.io.File;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
@@ -32,7 +32,7 @@ public class CommandProcessor {
             String arg0;
             while (sc.hasNext()) {
                 command = sc.next();
-                switch(command) {
+                switch (command) {
                     case "insert":
                         String Id = sc.next().trim();
                         String title = sc.nextLine();
@@ -46,7 +46,11 @@ public class CommandProcessor {
                             len++;
                         }
                         String description = sc.nextLine();
-                        control.insert(Integer.parseInt(Id), title, singleLine[0], Integer.parseInt(singleLine[1]), Short.parseShort(singleLine[2]), Short.parseShort(singleLine[3]), Integer.parseInt(singleLine[4]),keyWords,len, description);
+                        control.insert(Integer.parseInt(Id), title,
+                            singleLine[0], Integer.parseInt(singleLine[1]),
+                            Short.parseShort(singleLine[2]), Short.parseShort(
+                                singleLine[3]), Integer.parseInt(singleLine[4]),
+                            keyWords, len, description);
                         break;
                     case "delete":
                         String ID = sc.next();
@@ -54,44 +58,51 @@ public class CommandProcessor {
                         break;
                     case "search":
                         String type = sc.next();
-                        switch(type) {
+                        switch (type) {
                             case "keyword":
+                                String newWord = sc.next();
+                                control.searchkeyword(newWord);
+
                             case "location":
+                                String[] location = new String[3];
+                                location[0] = sc.next();
+                                location[1] = sc.next();
+                                location[2] = sc.next();
+                                control.searchLocation(Short.parseShort(
+                                    location[0]), Short.parseShort(location[0]),
+                                    Short.parseShort(location[0]));
+
                             case "ID":
                                 String id = sc.next();
-                                
-                                
+                                control.searchId(Integer.parseInt(id));
+
                             case "date":
-                            case "cost":    
+                                String[] dates = new String[3];
+                                dates[0] = sc.next();
+                                dates[1] = sc.next();
+                                control.searchDate(dates[0], dates[1]);
+                            case "cost":
+                                String[] cost = new String[3];
+                                cost[0] = sc.next();
+                                cost[1] = sc.next();
+                                int lowerCost = Integer.parseInt(cost[0]);
+                                int upperCost = Integer.parseInt(cost[1]);
+                                control.searchCost(lowerCost, upperCost);
                         }
-                            
-                        
-                        
+
                     case "print":
                         String printType = sc.next();
                         control.print(printType);
-                        
-                        
-                      
-                    
+
                 }
-                
-                    
-                
+
             }
-            
-          
-            
-            
-            
+
         }
         catch (Exception e) {
             e.printStackTrace();
         }
 
     }
-
-
-  
 
 }
