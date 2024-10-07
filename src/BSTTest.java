@@ -36,7 +36,7 @@ public class BSTTest
         KeyValuePair<Integer, String> kvp2 = this.bstTree.find(6);
 
         assertNotNull(kvp2);
-        assertEquals(kvp2.getValue(), "Six");
+        assertEquals(kvp2.getValue(), "Six"); 
     }
 
 // public void testRemove() {
