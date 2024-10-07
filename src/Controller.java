@@ -31,7 +31,7 @@ public class Controller {
 			int keywords_length, String desc) {
 
 		KeyValuePair<Integer, Seminar> foundNode = this.idBST.find(id);
-		
+
 		if (foundNode != null) {
 			System.out.println("There already exists a record with ID " + id);
 			return;
@@ -69,9 +69,9 @@ public class Controller {
 			for (String word : seminarObject.keywords()) {
 				this.keywordsBST.remove(word);
 			}
-			
+
 			this.bintree.remove(seminarObject);
-			
+
 			System.out.println("Record with ID " + seminarObject.id() + " successfully deleted");
 
 		} else {
@@ -115,7 +115,7 @@ public class Controller {
 			this.dateBST.print();
 		} else if (s.equals("keyword")) {
 			System.out.println("ID TREE");
-			this.keywordBST.print();
+			this.keywordsBST.print();
 		} else {
 			System.out.println("Location Tree:");
 
