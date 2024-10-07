@@ -240,7 +240,7 @@ class BST<K extends Comparable<K>, V>
         }
         else
         {
-            printHelp(root, 0);
+            printhelp(root, 0);
             System.out.println("Number of records: " + size());
         }
     }
