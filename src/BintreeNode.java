@@ -1,9 +1,50 @@
+/**
+ * Bintree node interface
+ * 
+ * @author Elishah Steele
+ * @version 10/9/23
+ */
+interface BintreeNode {
+    /**
+     * Checks if the node is internal
+     * 
+     * @return true if the node is internal
+     */
+    boolean isInternal();
 
-public interface BintreeNode {
 
-    public abstract BintreeNode insert(Seminar seminar, BoundingBox box);
-    public abstract List<Seminar> search(BoundingBox searchBox, BoundingBox nodeBox);
-    public abstract BintreeNode remove(Seminar seminar, BoundingBox box);
+    /**
+     * Checks if the node is a leaf
+     * 
+     * @return true if the node is a leaf
+     */
+    boolean isLeaf();
 
-        
+
+    /**
+     * Inserts a seminar into the node
+     * 
+     * @param seminar
+     *            the seminar to be inserted
+     * @param level
+     *            the level of the Bintree
+     * @param bbox
+     *            the bounding box at this level
+     * @return the node with the seminar in it
+     */
+    BintreeNode insert(Seminar seminar, int level, BoundingBox bbox);
+
+
+    /**
+     * Removes a seminar from the node
+     * 
+     * @param seminar
+     *            the seminar to be removed
+     * @param level
+     *            the level of the Bintree
+     * @param bbox
+     *            the bounding box at this level
+     * @return the node with the seminar removed from it
+     */
+    BintreeNode remove(Seminar seminar, int level, BoundingBox bbox);
 }
