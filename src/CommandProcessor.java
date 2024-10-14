@@ -14,6 +14,7 @@ import java.util.Scanner;
 public class CommandProcessor {
 
     private static String fileName;
+    private static Controller control;
 
     /**
      * Initializes CommandProcessor with specified hash table size and file
@@ -25,8 +26,13 @@ public class CommandProcessor {
      *            the command file name
      */
     public CommandProcessor(String name, Controller control) {
+        this.fileName = name;
+        this.control = control;
+    }
+
+
+    public static void processFile() {
         try {
-            fileName = name;
             Scanner sc = new Scanner(new File(fileName));
             String command;
             String arg0;
@@ -102,7 +108,6 @@ public class CommandProcessor {
         catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
 }
