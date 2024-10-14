@@ -36,7 +36,18 @@ public class SemSearch {
      *     Command line parameters
      */
     public static void main(String[] args) {
-        // This is the main file for the program.
-        Seminar dum = new Seminar();
+        if (args.length == 2)
+        {
+            int worldSize = Integer.parseInt(args[0]);
+            String filename = args[1];
+            
+            Controller controller = new Controller(worldSize);
+
+            CommandProcessor processor =
+                new CommandProcessor(filename, controller);
+//            processor.processFile(); 
+        }
     }
+    
+
 }
