@@ -64,19 +64,20 @@ public class CommandProcessor {
                         break;
                     case "search":
                         String type = sc.next();
+                        System.out.println("type" + type);
                         switch (type) {
                             case "keyword":
                                 String newWord = sc.next();
                                 control.searchkeyword(newWord);
 
                             case "location":
-                                String[] location = new String[3];
-                                location[0] = sc.next();
-                                location[1] = sc.next();
-                                location[2] = sc.next();
-                                control.searchLocation(Short.parseShort(
-                                    location[0]), Short.parseShort(location[1]),
-                                    Short.parseShort(location[2]));
+//                                String[] location = new String[3];
+//                                location[0] = sc.next();
+//                                location[1] = sc.next();
+//                                location[2] = sc.next();
+//                                control.searchLocation(Short.parseShort(
+//                                    location[0]), Short.parseShort(location[1]),
+//                                    Short.parseShort(location[2]));
 
                             case "ID":
                                 String id = sc.next();

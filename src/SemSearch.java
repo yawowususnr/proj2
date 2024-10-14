@@ -45,7 +45,7 @@ public class SemSearch {
 
             CommandProcessor processor =
                 new CommandProcessor(filename, controller);
-//            processor.processFile(); 
+            processor.processFile(); 
         }
     }
     
