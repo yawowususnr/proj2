@@ -214,7 +214,7 @@ class BST<K extends Comparable<K>, V>
     {
         if (node == null)
         {
-            return -1; // A null node has a height of -1
+            return 0;
         }
         int leftHeight = getHeight(node.getLeft());
         int rightHeight = getHeight(node.getRight());
@@ -228,54 +228,38 @@ class BST<K extends Comparable<K>, V>
         printhelp(BSTNode<KeyValuePair<K, V>> rt, int level, int height)
     {
         String space = "";
-        int distance = 4 * (height - level);
+        int distance = (height - level);
 
         for (int i = 0; i < distance; i++)
         {
-            space += "  ";
+            space += "    ";
         }
         if (rt == null)
         {
             // Print null nodes with the corresponding indentation.
             System.out.println(space + "(" + "null" + ")");
+            space += " ";
+
             return;
         }
         printhelp(rt.getLeft(), level + 1, height);
-        // Print right subtree first (mirroring the tree visually)
-
-        // Print the current node with indentation based on height - level
 
         printVisit(space, rt.getElement());
 
-        // Print left subtree
         printhelp(rt.getRight(), level + 1, height);
 
     }
 
-// private void printhelp(BSTNode<KeyValuePair<K, V>> rt, int level)
-// {
-// String space = "";
-//
-// for (int i = 0; i < level; i++)
-// {
-// space += " ";
-// }
-//
-// if (rt == null)
-// {
-// System.out.println(space + "(" + "null" + ")");
-// return;
-// }
-// printhelp(rt.getLeft(), level + 1);
-// printVisit(space, rt.getElement());
-// printhelp(rt.getRight(), level + 1);
-// }
-
 
     private void printVisit(String space, KeyValuePair<K, V> node)
     {
+
         K key = node.getKey();
+
+        System.out.println(space + '\\');
         System.out.println(space + "(" + String.valueOf(key) + ")");
+        System.out.println(space + '/');
+
     }
 
 
@@ -288,7 +272,7 @@ class BST<K extends Comparable<K>, V>
         else
         {
             int heightOfTree = getHeight(root);
-            System.out.println("Height of tree is :" + heightOfTree);
+
             printhelp(root, 0, heightOfTree);
             System.out.println("Number of records: " + size());
         }
