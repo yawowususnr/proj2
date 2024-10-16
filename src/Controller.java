@@ -22,6 +22,14 @@ public class Controller {
         this.size = size;
         this.bintree = new Bintree(this.size);
     }
+    
+    public int getSize() {
+        return this.size;
+    }
+    
+    public BST<Integer, Seminar> getidBSTree(){
+        return this.idBST;
+    }
 
 
     public boolean checkIfValid(int x, int y) {
