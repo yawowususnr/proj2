@@ -38,7 +38,7 @@ public class SemSearchTest extends TestCase {
     {
 
         String[] args = new String[2];
-        args[0] = "10";
+        args[0] = "128";
         args[1] = "solutionTestData/P2_sampleInput.txt";
 
 

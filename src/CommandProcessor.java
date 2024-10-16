@@ -13,50 +13,49 @@ import java.util.Scanner;
  */
 public class CommandProcessor {
 
-    private static String fileName;
-    private static Controller control;
+    private String fileName;
+    private Controller control;
 
     /**
-     * Initializes CommandProcessor with specified hash table size and file
-     * name.
+     * Initializes CommandProcessor with specified file name and controller.
      * 
-     * @param size
-     *            the size of the hash table
      * @param name
      *            the command file name
+     * @param control
+     *            the controller to perform operations
      */
     public CommandProcessor(String name, Controller control) {
         this.fileName = name;
         this.control = control;
     }
 
-
-    public static void processFile() {
-        try {
-            Scanner sc = new Scanner(new File(fileName));
+    public void processFile() {
+        try (Scanner sc = new Scanner(new File(fileName))) {
             String command;
-            String arg0;
             while (sc.hasNext()) {
                 command = sc.next();
                 switch (command) {
                     case "insert":
                         String Id = sc.next().trim();
+                        sc.nextLine();
                         String title = sc.nextLine();
-                        String chunkOfInfo = sc.nextLine();
-                        String[] singleLine = chunkOfInfo.split("\\s+");
-                        Scanner keyScan = new Scanner(new File(sc.nextLine()));
-                        String[] keyWords = new String[100];
-                        int len = 0;
-                        while (keyScan.hasNext()) {
-                            keyWords[len] = keyScan.next();
-                            len++;
-                        }
-                        String description = sc.nextLine();
-                        control.insert(Integer.parseInt(Id), title,
-                            singleLine[0], Integer.parseInt(singleLine[1]),
-                            Short.parseShort(singleLine[2]), Short.parseShort(
-                                singleLine[3]), Integer.parseInt(singleLine[4]),
-                            keyWords, len, description);
+//                        sc.nextLine();
+                        String chunkOfInfo = sc.nextLine().trim(); 
+                        String[] singleLine = chunkOfInfo.split("\\s+");   
+                        
+                        String keywords = sc.nextLine().trim();
+                   
+                        String[] keywordArray = keywords.split("\\s+");   
+                        
+
+  
+                            String description = sc.nextLine().trim();
+                            control.insert(Integer.parseInt(Id), title,
+                                singleLine[0], Integer.parseInt(singleLine[1]),
+                                Short.parseShort(singleLine[2]), 
+                                Short.parseShort(singleLine[3]),
+                                Integer.parseInt(singleLine[4]), 
+                                keywordArray, keywordArray.length, description);
                         break;
                     case "delete":
                         String ID = sc.next();
@@ -64,51 +63,50 @@ public class CommandProcessor {
                         break;
                     case "search":
                         String type = sc.next();
-                        System.out.println("type" + type);
                         switch (type) {
                             case "keyword":
                                 String newWord = sc.next();
                                 control.searchkeyword(newWord);
-
+                                break;
                             case "location":
-//                                String[] location = new String[3];
-//                                location[0] = sc.next();
-//                                location[1] = sc.next();
-//                                location[2] = sc.next();
-//                                control.searchLocation(Short.parseShort(
-//                                    location[0]), Short.parseShort(location[1]),
-//                                    Short.parseShort(location[2]));
-
+                                String[] location = new String[3];  
+                                location[0] = sc.next();
+                                location[1] = sc.next();
+                                location[2] = sc.next();
+                                 control.searchLocation(Short.parseShort(location[0]), 
+                                    Short.parseShort(location[1]), Short.parseShort(location[2]));
+                                break;
                             case "ID":
                                 String id = sc.next();
                                 control.searchId(Integer.parseInt(id));
-
+                                break;
                             case "date":
                                 String[] dates = new String[2];
                                 dates[0] = sc.next();
                                 dates[1] = sc.next();
                                 control.searchDate(dates[0], dates[1]);
+                                break;
                             case "cost":
-                                String[] cost = new String[2];
+                                String[] cost = new String[2]; 
                                 cost[0] = sc.next();
                                 cost[1] = sc.next();
                                 int lowerCost = Integer.parseInt(cost[0]);
                                 int upperCost = Integer.parseInt(cost[1]);
                                 control.searchCost(lowerCost, upperCost);
+                                break;
                         }
-
+                        break;
                     case "print":
                         String printType = sc.next();
                         control.print(printType);
-
+                        break;
+                    default:
+                        System.out.println("Unknown command: " + command);
+                        break;
                 }
-
             }
-
-        }
-        catch (Exception e) {
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
     }
-
 }

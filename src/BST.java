@@ -187,21 +187,25 @@ class BST<K extends Comparable<K>, V>
         {
             return traverseHelp(root.getRight(), lo, hi) + 1;
         }
-        else if (root.getElement().compareTo(lo) < 0)
+        else if (root.getElement().compareTo(hi) > 0)
         {
-            return traverseHelp(root.getRight(), lo, hi) + 1;
+            return traverseHelp(root.getLeft(), lo, hi) + 1;
         }
         else
         {
             int traversed = traverseHelp(root.getLeft(), lo, hi);
-
             System.out.println(root.getElement().getValue().toString());
+            if (root.getElement().compareTo(hi) != 0) {
+                traversed +=  traverseHelp(root.getRight(), lo, hi);
+            }
             return traversed + 1;
         }
     }
 
 
-    public int traverse(K lo, K hi)
+
+
+    public int traverse(K lo, K hi) 
     {
         return traverseHelp(root, lo, hi);
     }

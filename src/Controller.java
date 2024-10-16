@@ -20,25 +20,25 @@ public class Controller {
 		this.dateBST = new BST<String, Seminar>();
 		this.keywordsBST = new BST<String, Seminar>();
 		this.size = size;
-		this.bintree = new Bintree(this.size);
+		this.bintree = new Bintree(this.size); 
 	}
 
 	public boolean checkIfValid(int x, int y) {
-		return (x >= 0 && x < this.size && y >= 0 && y < this.size);
+	    return (x >= 0 && x < this.size && y >= 0 && y < this.size); 
 	}
 
-	public void insert(int id, String title, String date, int length, short x, short y, int cost, String[] keywords,
+	public void insert(int id, String title, String date, int length, short x, short y, int cost, String[] keywords, 
 			int keywords_length, String desc) {
 
 		KeyValuePair<Integer, Seminar> foundNode = this.idBST.find(id);
 
 		if (foundNode != null) {
-			System.out.println("There already exists a record with ID " + id);
+			System.out.println("Insert FAILED - There is already a record with ID " + id);
 			return;
 		}
 
 		if (this.checkIfValid(x, y) == false) {
-			System.out.println("Bad insertion of coordinates");
+			System.out.println("Insert FAILED - Bad x, y coordinates: "+ String.valueOf(x) + ", " + String.valueOf(y)); 
 			return;
 		}
 
@@ -50,11 +50,18 @@ public class Controller {
 
 		for (int i = 0; i < keywords_length; i++) {
 			this.keywordsBST.insert(new KeyValuePair<String, Seminar>(keywords[i], seminarNode));
-			;
+			
 		}
 		this.bintree.insert(seminarNode);
+		
+		System.out.println("Successfully inserted record with ID " + id);
+		System.out.println(seminarNode.toString());
+		
+		
 
 	}
+	
+
 
 	public void delete(int id) {
 		KeyValuePair<Integer, Seminar> removedNode = this.idBST.remove(id);
@@ -72,10 +79,10 @@ public class Controller {
 
 			this.bintree.remove(seminarObject);
 
-			System.out.println("Record with ID " + seminarObject.id() + " successfully deleted");
+			System.out.println("Record with ID " + seminarObject.id() + " successfully deleted from the database");
 
 		} else {
-			System.out.println("Failed");
+			System.out.println("Search FAILED -- There is no record with ID " + id);
 		}
 
 	}
@@ -83,41 +90,54 @@ public class Controller {
 	public void searchId(int id) {
 		KeyValuePair<Integer, Seminar> foundNode = this.idBST.find(id);
 		if (foundNode != null) {
-			System.out.println("Found record with id" + id);
+			System.out.println("Found record with ID " + id + ":");
+			Seminar foundNodeSeminar = foundNode.getValue();
+			System.out.println(foundNodeSeminar.toString());
+			
 		} else {
-			System.out.println("Search failed");
+			System.out.println("Search FAILED -- There is no record with ID " + id);
 		}
 
 	}
 
 	public void searchCost(int firstCost, int secCost) {
-		this.costBST.traverse(firstCost, secCost);
-
+	    System.out.println("Seminars with costs in range " + String.valueOf(firstCost) + " " + "to "+String.valueOf(secCost) + ":");
+	    int count = this.costBST.traverse(firstCost, secCost);
+	    System.out.println(String.valueOf(count) + " nodes visited in this search");
 	}
 
 	public void searchDate(String firstDate, String secDate) {
-		this.dateBST.traverse(firstDate, secDate);
+	    System.out.println("Seminars with dates in range " + firstDate + " to " + secDate + ":"); 
+	    int count = this.dateBST.traverse(firstDate, secDate);
+		System.out.println(String.valueOf(count) + " nodes visited in this search"); 
 	}
 
 	public void searchkeyword(String keyword) {
-		this.keywordsBST.traverse(keyword, keyword);
+	    System.out.println("Seminars matching keyword " + keyword + ":");
+		int count = this.keywordsBST.traverse(keyword, keyword);
 	}
+	
+	public void searchLocation(int x, int y, int radius) {
+	    System.out.println("Seminars within " + radius + " units of " + x + ", " + y + ":");
+	    bintree.search(new Seminar(0, "", "", 0, (short)x, (short)y, 0, new String[] {}, ""), radius);
+	} 
 
 	public void print(String s) {
 		if (s.equals("ID")) {
-			System.out.println("ID TREE");
+			System.out.println("ID Tree:");
 			this.idBST.print();
 		} else if (s.equals("cost")) {
-			System.out.println("ID TREE");
+			System.out.println("Cost Tree:");
 			this.costBST.print();
 		} else if (s.equals("date")) {
-			System.out.println("ID TREE");
+			System.out.println("Date Tree:");
 			this.dateBST.print();
 		} else if (s.equals("keyword")) {
-			System.out.println("ID TREE");
+			System.out.println("Keyword Tree:");
 			this.keywordsBST.print();
-		} else {
+		} else if (s.equals("location")){
 			System.out.println("Location Tree:");
+			this.bintree.print();
 
 		}
 

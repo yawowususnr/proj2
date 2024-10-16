@@ -213,7 +213,7 @@ public class Bintree {
                 }
 
             }
-            else {
+            else { 
                 if (searchSeminar.y() - radius < midY && searchSeminar.y()
                     + radius >= midY) {
                     return searchRecursive(internalNode.left(), searchSeminar,
