@@ -26,6 +26,15 @@ public class Controller {
     public int getSize() {
         return this.size;
     }
+    public BST<Integer, Seminar> getcostBSTree(){
+        return this.costBST;
+    }
+    public BST<String, Seminar> getdateBSTree(){
+        return this.dateBST;
+    }
+    public BST<String, Seminar> getkeyWordsBSTree(){
+        return this.keywordsBST;
+    }
     
     public BST<Integer, Seminar> getidBSTree(){
         return this.idBST;
