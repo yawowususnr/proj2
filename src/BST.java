@@ -195,32 +195,33 @@ class BST<K extends Comparable<K>, V>
         {
             int traversed = traverseHelp(root.getLeft(), lo, hi);
             System.out.println(root.getElement().getValue().toString());
-            if (root.getElement().compareTo(hi) != 0) {
-                traversed +=  traverseHelp(root.getRight(), lo, hi);
+            if (root.getElement().compareTo(hi) != 0)
+            {
+                traversed += traverseHelp(root.getRight(), lo, hi);
             }
             return traversed + 1;
         }
     }
 
 
-
-
-    public int traverse(K lo, K hi) 
+    public int traverse(K lo, K hi)
     {
         return traverseHelp(root, lo, hi);
     }
 
 
     private void printhelp(BSTNode<KeyValuePair<K, V>> rt, int level)
-    {   String space = "";
-        
-        for (int i = 0; i < level; i++) {
+    {
+        String space = "";
+
+        for (int i = 0; i < level; i++)
+        {
             space += "  ";
         }
-            
+
         if (rt == null)
         {
-            System.out.println(space + "null");
+            System.out.println(space + "(" + "null" + ")");
             return;
         }
         printhelp(rt.getLeft(), level + 1);
@@ -232,7 +233,7 @@ class BST<K extends Comparable<K>, V>
     private void printVisit(String space, KeyValuePair<K, V> node)
     {
         K key = node.getKey();
-        System.out.println(space + String.valueOf(key));
+        System.out.println(space + "(" + String.valueOf(key) + ")");
     }
 
 
