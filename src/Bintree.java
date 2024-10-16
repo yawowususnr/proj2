@@ -1,8 +1,8 @@
 /**
  * Class that holds the world
- * 
  */
-class BoundingBox {
+class BoundingBox
+{
     private double xMin; // minimum x value
     private double yMin; // minimum y value
     private double xMax; // maximum x value
@@ -20,7 +20,8 @@ class BoundingBox {
      * @param yMax
      *            the max y value
      */
-    public BoundingBox(double xMin, double yMin, double xMax, double yMax) {
+    public BoundingBox(double xMin, double yMin, double xMax, double yMax)
+    {
         this.xMin = xMin;
         this.yMin = yMin;
         this.xMax = xMax;
@@ -33,7 +34,8 @@ class BoundingBox {
      * 
      * @return the minimum x value
      */
-    public double getxMin() {
+    public double getxMin()
+    {
         return xMin;
     }
 
@@ -43,7 +45,8 @@ class BoundingBox {
      * 
      * @return the minimum y value
      */
-    public double getyMin() {
+    public double getyMin()
+    {
         return yMin;
     }
 
@@ -53,7 +56,8 @@ class BoundingBox {
      * 
      * @return the maximum x value
      */
-    public double getxMax() {
+    public double getxMax()
+    {
         return xMax;
     }
 
@@ -63,7 +67,8 @@ class BoundingBox {
      * 
      * @return the maximum y value
      */
-    public double getyMax() {
+    public double getyMax()
+    {
         return yMax;
     }
 }
@@ -78,7 +83,8 @@ class BoundingBox {
  * @author Clarence Braimah
  * @version 10/9/23
  */
-public class Bintree {
+public class Bintree
+{
     private BintreeNode root; // the root node
     private BoundingBox initialBoundingBox; // the starting bounding box
 
@@ -88,8 +94,12 @@ public class Bintree {
      * @param worldSize
      *            the size of the world
      */
-    public Bintree(int worldSize) {
-        initialBoundingBox = new BoundingBox(0.0, 0.0, (double)(worldSize - 1),
+    public Bintree(int worldSize)
+    {
+        initialBoundingBox = new BoundingBox(
+            0.0,
+            0.0,
+            (double)(worldSize - 1),
             (double)(worldSize - 1));
         root = EmptyNode.getInstance();
     }
@@ -100,7 +110,8 @@ public class Bintree {
      * 
      * @return the initial bounding box
      */
-    public BoundingBox getWorld() {
+    public BoundingBox getWorld()
+    {
         return initialBoundingBox;
     }
 
@@ -111,7 +122,8 @@ public class Bintree {
      * @param seminar
      *            the seminar to be inserted
      */
-    public void insert(Seminar seminar) {
+    public void insert(Seminar seminar)
+    {
         root = root.insert(seminar, 0, initialBoundingBox);
     }
 
@@ -122,7 +134,8 @@ public class Bintree {
      * @param seminar
      *            the seminar to be removed
      */
-    public void remove(Seminar seminar) {
+    public void remove(Seminar seminar)
+    {
         root = root.remove(seminar, 0, initialBoundingBox);
     }
 
@@ -135,48 +148,70 @@ public class Bintree {
      * @param radius
      *            the radius around the search seminar to look at
      */
-    public void search(Seminar searchSeminar, double radius) {
-        int visited = searchRecursive(root, searchSeminar, radius, 0,
-            initialBoundingBox);
+    public void search(Seminar searchSeminar, double radius)
+    {
+        int visited =
+            searchRecursive(root, searchSeminar, radius, 0, initialBoundingBox);
         System.out.println(visited + " nodes visited in this search");
     }
 
+    private int getHeight(BintreeNode node) {
+        if (node instanceof EmptyNode) {
+            return -1; // Empty node has a height of -1
+        } else if (node.isLeaf()) {
+            return 0;  // Leaf node has a height of 0
+        } else if (node.isInternal()) {
+            InternalNode internal = (InternalNode) node;
+            int leftHeight = getHeight(internal.left());
+            int rightHeight = getHeight(internal.right());
+            return Math.max(leftHeight, rightHeight) + 1; // Height of an internal node
+        }
+        return -1;
+    }
 
     /**
      * Prints the entire Bintree
      */
     public void print() {
-        printRecursive(root, 0);
+        int treeHeight = getHeight(root);  // Get the height of the tree
+        printRecursive(root, 0, treeHeight);
     }
 
-
-    private void printRecursive(BintreeNode node, int level) {
+    private void printRecursive(BintreeNode node, int level, int treeHeight) {
+        // Calculate the indentation based on the height of the tree minus the level
         String increment = "";
-        for (int i = 0; i < level; i++) {
-            increment += "  ";
+        int distance = (treeHeight - level) + 1;
+
+        for (int i = 0; i < distance; i++)
+        {
+            increment += "    ";
         }
 
         if (node.isInternal()) {
-            InternalNode internal = (InternalNode)node;
-            System.out.println(increment + "I");
-            printRecursive(internal.left(), level + 1);
-            printRecursive(internal.right(), level + 1);
-        }
+            InternalNode internal = (InternalNode) node;
+            System.out.println(increment + "(I)");
+            
+            // Right child first
+            printRecursive(internal.right(), level + 1, treeHeight);
+            
+            // Left child next
+            printRecursive(internal.left(), level + 1, treeHeight);
+        } 
         else if (node.isLeaf()) {
-            LeafNode leaf = (LeafNode)node;
+            LeafNode leaf = (LeafNode) node;
             Seminar[] seminars = leaf.getSeminars();
-            String string = "Leaf with " + leaf.getSize() + " objects:";
+            StringBuilder string = new StringBuilder("(Leaf with " + leaf.getSize() + " objects:");
             for (int i = 0; i < leaf.getSize(); i++) {
-                string += " " + seminars[i].id();
+                string.append(" ").append(seminars[i].id());
             }
-
-            System.out.println(increment + string);
-        }
+            System.out.println(increment + string + ')');
+        } 
         else {
-            System.out.println(increment + "E");
-            return;
+            // Empty node
+            System.out.println(increment + "(E)");
         }
     }
+
 
 
     private int searchRecursive(
@@ -184,69 +219,143 @@ public class Bintree {
         Seminar searchSeminar,
         double radius,
         int level,
-        BoundingBox bbox) {
-        if (node.isInternal()) {
+        BoundingBox bbox)
+    {
+        if (node.isInternal())
+        {
             InternalNode internalNode = (InternalNode)node;
             double midX = (bbox.getxMin() + bbox.getxMax()) / 2.0;
             double midY = (bbox.getyMin() + bbox.getyMax()) / 2.0;
 
-            if (level % 2 == 0) {
-                if (searchSeminar.x() - radius < midX && searchSeminar.x()
-                    + radius >= midX) {
-                    return searchRecursive(internalNode.left(), searchSeminar,
-                        radius, level + 1, new BoundingBox(bbox.getxMin(), bbox
-                            .getyMin(), midX, bbox.getyMax()))
-                        + searchRecursive(internalNode.right(), searchSeminar,
-                            radius, level + 1, new BoundingBox(midX, bbox
-                                .getyMin(), bbox.getxMax(), bbox.getyMax()))
+            if (level % 2 == 0)
+            {
+                if (searchSeminar.x() - radius < midX
+                    && searchSeminar.x() + radius >= midX)
+                {
+                    return searchRecursive(
+                        internalNode.left(),
+                        searchSeminar,
+                        radius,
+                        level + 1,
+                        new BoundingBox(
+                            bbox.getxMin(),
+                            bbox.getyMin(),
+                            midX,
+                            bbox.getyMax()))
+                        + searchRecursive(
+                            internalNode.right(),
+                            searchSeminar,
+                            radius,
+                            level + 1,
+                            new BoundingBox(
+                                midX,
+                                bbox.getyMin(),
+                                bbox.getxMax(),
+                                bbox.getyMax()))
                         + 1;
                 }
-                else if (searchSeminar.x() - radius < midX) {
-                    return searchRecursive(internalNode.left(), searchSeminar,
-                        radius, level + 1, new BoundingBox(bbox.getxMin(), bbox
-                            .getyMin(), midX, bbox.getyMax())) + 1;
+                else if (searchSeminar.x() - radius < midX)
+                {
+                    return searchRecursive(
+                        internalNode.left(),
+                        searchSeminar,
+                        radius,
+                        level + 1,
+                        new BoundingBox(
+                            bbox.getxMin(),
+                            bbox.getyMin(),
+                            midX,
+                            bbox.getyMax()))
+                        + 1;
                 }
-                else if (searchSeminar.x() + radius >= midX) {
-                    return searchRecursive(internalNode.right(), searchSeminar,
-                        radius, level + 1, new BoundingBox(midX, bbox.getyMin(),
-                            bbox.getxMax(), bbox.getyMax())) + 1;
+                else if (searchSeminar.x() + radius >= midX)
+                {
+                    return searchRecursive(
+                        internalNode.right(),
+                        searchSeminar,
+                        radius,
+                        level + 1,
+                        new BoundingBox(
+                            midX,
+                            bbox.getyMin(),
+                            bbox.getxMax(),
+                            bbox.getyMax()))
+                        + 1;
                 }
 
             }
-            else { 
-                if (searchSeminar.y() - radius < midY && searchSeminar.y()
-                    + radius >= midY) {
-                    return searchRecursive(internalNode.left(), searchSeminar,
-                        radius, level + 1, new BoundingBox(bbox.getxMin(), bbox
-                            .getyMin(), bbox.getxMax(), midY))
-                        + searchRecursive(internalNode.right(), searchSeminar,
-                            radius, level + 1, new BoundingBox(bbox.getxMin(),
-                                midY, bbox.getxMax(), bbox.getyMax())) + 1;
+            else
+            {
+                if (searchSeminar.y() - radius < midY
+                    && searchSeminar.y() + radius >= midY)
+                {
+                    return searchRecursive(
+                        internalNode.left(),
+                        searchSeminar,
+                        radius,
+                        level + 1,
+                        new BoundingBox(
+                            bbox.getxMin(),
+                            bbox.getyMin(),
+                            bbox.getxMax(),
+                            midY))
+                        + searchRecursive(
+                            internalNode.right(),
+                            searchSeminar,
+                            radius,
+                            level + 1,
+                            new BoundingBox(
+                                bbox.getxMin(),
+                                midY,
+                                bbox.getxMax(),
+                                bbox.getyMax()))
+                        + 1;
                 }
-                else if (searchSeminar.y() - radius < midY) {
-                    return searchRecursive(internalNode.left(), searchSeminar,
-                        radius, level + 1, new BoundingBox(bbox.getxMin(), bbox
-                            .getyMin(), bbox.getxMax(), midY)) + 1;
+                else if (searchSeminar.y() - radius < midY)
+                {
+                    return searchRecursive(
+                        internalNode.left(),
+                        searchSeminar,
+                        radius,
+                        level + 1,
+                        new BoundingBox(
+                            bbox.getxMin(),
+                            bbox.getyMin(),
+                            bbox.getxMax(),
+                            midY))
+                        + 1;
                 }
-                else if (searchSeminar.y() + radius >= midY) {
-                    return searchRecursive(internalNode
-                        .right(), searchSeminar,
-                        radius, level + 1, new BoundingBox(bbox.getxMin(), midY,
-                            bbox.getxMax(), bbox.getyMax())) + 1;
+                else if (searchSeminar.y() + radius >= midY)
+                {
+                    return searchRecursive(
+                        internalNode.right(),
+                        searchSeminar,
+                        radius,
+                        level + 1,
+                        new BoundingBox(
+                            bbox.getxMin(),
+                            midY,
+                            bbox.getxMax(),
+                            bbox.getyMax()))
+                        + 1;
                 }
 
             }
         }
-        else if (node.isLeaf()) {
+        else if (node.isLeaf())
+        {
             LeafNode leafNode = (LeafNode)node;
 
-            for (Seminar seminar : leafNode.getSeminars()) {
-                double distance = Math.sqrt(Math.pow(searchSeminar.x() - seminar
-                    .x(), 2) + Math.pow(searchSeminar.y() - seminar.y(), 2));
-                if (distance <= radius) {
-                    System.out.println("Found a record with key value "
-                        + seminar.id() + " at " + seminar.x() + ", " + seminar
-                            .y());
+            for (Seminar seminar : leafNode.getSeminars())
+            {
+                double distance = Math.sqrt(
+                    Math.pow(searchSeminar.x() - seminar.x(), 2)
+                        + Math.pow(searchSeminar.y() - seminar.y(), 2));
+                if (distance <= radius)
+                {
+                    System.out.println(
+                        "Found a record with key value " + seminar.id() + " at "
+                            + seminar.x() + ", " + seminar.y());
                 }
             }
         }
