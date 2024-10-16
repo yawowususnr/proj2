@@ -19,8 +19,8 @@ public class ControllerTest extends TestCase {
             (short)20, 500, keywords, keywords.length, "Learn Java");
         assertEquals(this.controller.getidBSTree().size(), 1);
         assertNotNull(controller.getcostBSTree().find(500));
-        assertNotNull(controller.getdateBSTree().find("2024-10-01"),
-            "Seminar should be found in the date BST");
+        assertNotNull(controller.getdateBSTree().find("2024-10-01"));
+   
     }
 
 }
