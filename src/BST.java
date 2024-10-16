@@ -210,24 +210,66 @@ class BST<K extends Comparable<K>, V>
     }
 
 
-    private void printhelp(BSTNode<KeyValuePair<K, V>> rt, int level)
+    private int getHeight(BSTNode<KeyValuePair<K, V>> node)
+    {
+        if (node == null)
+        {
+            return -1; // A null node has a height of -1
+        }
+        int leftHeight = getHeight(node.getLeft());
+        int rightHeight = getHeight(node.getRight());
+        return 1 + Math.max(leftHeight, rightHeight); // Height is max of left
+                                                      // or right subtree + 1
+    }
+
+
+    private
+        void
+        printhelp(BSTNode<KeyValuePair<K, V>> rt, int level, int height)
     {
         String space = "";
+        int distance = 4 * (height - level);
 
-        for (int i = 0; i < level; i++)
+        for (int i = 0; i < distance; i++)
         {
             space += "  ";
         }
-
         if (rt == null)
         {
+            // Print null nodes with the corresponding indentation.
             System.out.println(space + "(" + "null" + ")");
             return;
         }
-        printhelp(rt.getLeft(), level + 1);
+        printhelp(rt.getLeft(), level + 1, height);
+        // Print right subtree first (mirroring the tree visually)
+
+        // Print the current node with indentation based on height - level
+
         printVisit(space, rt.getElement());
-        printhelp(rt.getRight(), level + 1);
+
+        // Print left subtree
+        printhelp(rt.getRight(), level + 1, height);
+
     }
+
+// private void printhelp(BSTNode<KeyValuePair<K, V>> rt, int level)
+// {
+// String space = "";
+//
+// for (int i = 0; i < level; i++)
+// {
+// space += " ";
+// }
+//
+// if (rt == null)
+// {
+// System.out.println(space + "(" + "null" + ")");
+// return;
+// }
+// printhelp(rt.getLeft(), level + 1);
+// printVisit(space, rt.getElement());
+// printhelp(rt.getRight(), level + 1);
+// }
 
 
     private void printVisit(String space, KeyValuePair<K, V> node)
@@ -245,7 +287,9 @@ class BST<K extends Comparable<K>, V>
         }
         else
         {
-            printhelp(root, 0);
+            int heightOfTree = getHeight(root);
+            System.out.println("Height of tree is :" + heightOfTree);
+            printhelp(root, 0, heightOfTree);
             System.out.println("Number of records: " + size());
         }
     }
