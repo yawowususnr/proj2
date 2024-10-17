@@ -63,7 +63,7 @@ public class Controller {
         if (foundNode != null) {
             System.out.println(
                 "Insert FAILED - There is already a record with ID " + id);
-            return;
+            return ;
         }
 
         if (this.checkIfValid(x, y) == false) {
@@ -189,7 +189,7 @@ public class Controller {
         }
         else if (s.equals("location")) {
             System.out.println("Location Tree:");
-            this.bintree.print();
+            this.bintree.print(); 
 
         }
 

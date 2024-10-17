@@ -40,8 +40,13 @@ public class SemSearchTest extends TestCase {
         String[] args = new String[2];
         args[0] = "128";
         args[1] = "solutionTestData/P2_sampleInput.txt";
+        
+        
 
-
+        String[] args2 = new String[1];
+        args2[0] = "100";
+        
+        SemSearch.main(args2);
 
         // Invoke main method of our Graph Project
         SemSearch.main(args);

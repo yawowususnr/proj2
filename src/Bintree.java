@@ -79,8 +79,7 @@ class BoundingBox
 /**
  * Binary tree that holds x and y coordinates
  * 
- * @author Elishah Steele
- * @author Clarence Braimah
+ * @author Yaw Owusu Snr
  * @version 10/9/23
  */
 public class Bintree
@@ -99,8 +98,8 @@ public class Bintree
         initialBoundingBox = new BoundingBox(
             0.0,
             0.0,
-            (double)(worldSize - 1),
-            (double)(worldSize - 1));
+            (worldSize - 1),
+            (worldSize - 1));
         root = EmptyNode.getInstance();
     }
 
@@ -156,32 +155,36 @@ public class Bintree
     }
 
     private int getHeight(BintreeNode node) {
-        if (node instanceof EmptyNode) {
-            return -1; // Empty node has a height of -1
-        } else if (node.isLeaf()) {
-            return 0;  // Leaf node has a height of 0
-        } else if (node.isInternal()) {
+        if (node.isLeaf()) {
+            return 0;
+        }
+        if (node.isInternal()) {
             InternalNode internal = (InternalNode) node;
             int leftHeight = getHeight(internal.left());
             int rightHeight = getHeight(internal.right());
             return Math.max(leftHeight, rightHeight) + 1; // Height of an internal node
         }
-        return -1;
+        return 0;
     }
 
     /**
      * Prints the entire Bintree
      */
     public void print() {
-        int treeHeight = getHeight(root);  // Get the height of the tree
-        printRecursive(root, 0, treeHeight);
-    }
+        int treeHeight = getHeight(root);
+        if (treeHeight == 0) {
+            System.out.println("E");
+            return;
+        }
+        // Get the height of the tree
+        printRecursive(root, 0, treeHeight); 
+    } 
 
     private void printRecursive(BintreeNode node, int level, int treeHeight) {
         // Calculate the indentation based on the height of the tree minus the level
         String increment = "";
-        int distance = (treeHeight - level) + 1;
-
+        int distance = (treeHeight - level);
+        System.out.println(distance);
         for (int i = 0; i < distance; i++)
         {
             increment += "    ";
@@ -361,5 +364,13 @@ public class Bintree
         }
 
         return 1;
+    }
+    
+    /**
+     * Place a description of your method here.
+     * @return
+     */
+    public BintreeNode getRoot() {
+        return root;
     }
 }

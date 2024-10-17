@@ -16,7 +16,7 @@ class EmptyNode implements BintreeNode {
 public static EmptyNode getInstance() {
     if (instance == null) {
         instance = new EmptyNode();}
-    return instance;}
+    return instance;} 
 
 
 
@@ -24,7 +24,7 @@ public static EmptyNode getInstance() {
 
 
 public boolean isInternal() {
-    return false;}
+    return false;} 
 
 
      
