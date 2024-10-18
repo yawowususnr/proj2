@@ -1,8 +1,7 @@
 /**
  * A modified node class for leaf nodes
  * 
- * @author Elishah Steele (esteele21)
- * @author Clarence Braimah (clarencebraimah)
+ * @author Yaw Owusu Snr
  * @version 10/9/23
  */
 class LeafNode implements BintreeNode {

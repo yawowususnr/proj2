@@ -1,7 +1,7 @@
 /**
  * Bintree node interface
  * 
- * @author Elishah Steele
+ * @author Yaw Owusu Snr
  * @version 10/9/23
  */
 interface BintreeNode {

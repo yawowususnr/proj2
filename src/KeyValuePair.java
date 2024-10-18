@@ -4,7 +4,7 @@
  *  @param <K>
  *  @param <V>
  * 
- *  @author owusu
+ *  @author Yaw Owusu Snr
  *  @version Oct 2, 2024
  */
 public class KeyValuePair<K extends Comparable<K>, V>

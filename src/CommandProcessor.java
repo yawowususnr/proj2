@@ -8,7 +8,7 @@ import java.util.Scanner;
  * Processes commands from a file to perform operations.
  * 
  * @author
- * @author Chris Nicoue-Beglah
+ * @author Yaw Owusu Snr
  * @version <2024-09-20>
  */
 public class CommandProcessor {

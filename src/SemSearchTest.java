@@ -4,8 +4,7 @@ import java.nio.file.Paths;
 import student.TestCase;
 
 /**
- * @author {Your Name Here}
- * @version {Put Something Here}
+ * @author Yaw Owusu Snr
  */
 public class SemSearchTest extends TestCase {
     /**

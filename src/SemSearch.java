@@ -6,8 +6,7 @@
 /**
  * The class containing the main method.
  *
- * @author {Your Name Here}
- * @version {Put Something Here}
+ * @author Yaw Owusu Snr
  */
 
 // On my honor:

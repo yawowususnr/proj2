@@ -1,8 +1,7 @@
 /**
  
 A modified node class for empty nodes using flyweight design patterns
-@author Elishah Steele (esteele21)
-@author Clarence Braimah (clarencebraimah)
+@author Yaw Owusu Snr
 @version 10/9/23
 
  **/
