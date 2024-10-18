@@ -1,13 +1,11 @@
 import student.TestCase;
 
-public class BSTTest
-    extends TestCase
-{
+public class BSTTest extends TestCase {
 
     private BST<Integer, String> bstTree;
+    
 
-    public void setUp()
-    {
+    public void setUp() {
 
         this.bstTree = new BST<>();
         KeyValuePair<Integer, String> root = new KeyValuePair<>(5, "Five");
@@ -15,11 +13,24 @@ public class BSTTest
 
         assertEquals(1, bstTree.size());
         assertEquals(root, bstTree.find(5));
+
     }
+//    public void testRemvoe3() {
+//        this.bstTree.insert(new KeyValuePair<>(3, "Four"));
+//        this.bstTree.insert(new KeyValuePair<>(1, "Six"));
+//        this.bstTree.insert(new KeyValuePair<>(4, "Seven"));
+//        this.bstTree.insert(new KeyValuePair<>(2, "Four"));
+//        this.bstTree.insert(new KeyValuePair<>(5, "Six"));
+//        Seminar sem;
+//        bstTree.remove(new KeyValuePair<>(5, "Six"));
+//        assertEquals(4, bstTree.size());
+//
+//
+//        
+//    }
 
 
-    public void testInsertElement()
-    {
+    public void testInsertElement() {
         this.bstTree.insert(new KeyValuePair<>(4, "Four"));
         this.bstTree.insert(new KeyValuePair<>(6, "Six"));
         this.bstTree.insert(new KeyValuePair<>(7, "Seven"));
@@ -40,8 +51,7 @@ public class BSTTest
     }
 
 
-    public void testRemove()
-    {
+    public void testRemove() {
         KeyValuePair<Integer, String> nullNode = this.bstTree.remove(100);
 
         assertNull(nullNode);
@@ -60,8 +70,7 @@ public class BSTTest
     }
 
 
-    public void testRemove2()
-    {
+    public void testRemove2() {
 
         this.bstTree.remove(5);
         assertNull(this.bstTree.remove(5));
@@ -102,8 +111,7 @@ public class BSTTest
     }
 
 
-    public void testTraverse()
-    {
+    public void testTraverse() {
         // Insert nodes into the tree
         this.bstTree.insert(new KeyValuePair<>(6, "Six"));
         this.bstTree.insert(new KeyValuePair<>(3, "Three"));
@@ -116,12 +124,11 @@ public class BSTTest
 
         // Test traversal between 3 and 8
         int traversedNodes = this.bstTree.traverse(3, 8);
-        assertEquals(12, traversedNodes);  // Nodes traversed: 3, 6, 8, 2, 7
+        assertEquals(12, traversedNodes); // Nodes traversed: 3, 6, 8, 2, 7
     }
 
 
-    public void testEmptyHeight()
-    {
+    public void testEmptyHeight() {
         this.bstTree.remove(5);
         this.bstTree.print();
 
@@ -133,8 +140,7 @@ public class BSTTest
     }
 
 
-    public void testgetHeight()
-    {
+    public void testgetHeight() {
         this.bstTree.insert(new KeyValuePair<>(6, "Six"));
         this.bstTree.insert(new KeyValuePair<>(3, "Three"));
         this.bstTree.insert(new KeyValuePair<>(9, "Nine"));
@@ -153,8 +159,7 @@ public class BSTTest
     }
 
 
-    public void testClear()
-    {
+    public void testClear() {
         this.bstTree.insert(new KeyValuePair<>(4, "Four"));
         this.bstTree.insert(new KeyValuePair<>(6, "Six"));
         this.bstTree.insert(new KeyValuePair<>(7, "Seven"));
