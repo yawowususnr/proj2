@@ -30,7 +30,7 @@ public class SeminarTest extends TestCase {
         String semPrint = mysem.toString();
         System.out.println("testtoString");
         System.out.println(semPrint);
-        assertTrue(semPrint.equals(expected));
+        assertTrue(semPrint.equals(expected)); 
         assertTrue(mysem.id() == 1729);
         assertTrue(mysem.cost() == 125);
         assertTrue(mysem.x() == 15);

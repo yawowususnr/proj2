@@ -106,7 +106,7 @@ class BST<K extends Comparable<K>, V>
         if (temp != null)
         {
             root = removehelp(root, key); // Now remove it
-            nodecount--;
+            nodecount = nodecount - 1;
         }
         return temp;
     }
@@ -115,7 +115,7 @@ class BST<K extends Comparable<K>, V>
     public void remove(KeyValuePair<K, V> pair)
     {
         root = removehelp(root, pair);
-        nodecount--;
+        nodecount = nodecount - 1; 
     }
 
 

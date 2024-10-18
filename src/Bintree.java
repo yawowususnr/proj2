@@ -154,7 +154,7 @@ public class Bintree
         System.out.println(visited + " nodes visited in this search");
     }
 
-    private int getHeight(BintreeNode node) {
+    public int getHeight(BintreeNode node) {
         if (node.isLeaf()) {
             return 0;
         }
@@ -206,7 +206,7 @@ public class Bintree
             System.out.println(increment + string + ')');
         } 
         else {
-            System.out.println(increment + "(E)");
+            System.out.println(increment + "(E)"); 
         }
     } 
 
