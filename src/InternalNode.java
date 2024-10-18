@@ -38,6 +38,10 @@ class InternalNode implements BintreeNode {
     public boolean isLeaf() {
         return false;
     }
+    
+    public boolean isEmpty() {
+        return false;
+    }
 
 
     /**

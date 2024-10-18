@@ -32,6 +32,9 @@ public boolean isInternal() {
 public boolean isLeaf() {
     return false;}
 
+public boolean isEmpty() {
+    return true;
+}
 
 
 

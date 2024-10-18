@@ -40,7 +40,7 @@ public class SemSearchTest extends TestCase {
         String[] args = new String[2];
         args[0] = "128";
         args[1] = "solutionTestData/P2_sampleInput.txt";
-        
+//        args[1] = "solutionTestData/testInput.txt";
         
 
         String[] args2 = new String[1];
@@ -58,6 +58,8 @@ public class SemSearchTest extends TestCase {
         // Expected output from file
         String expectedOutput =
             readFile("solutionTestData/P2_sampleOutput.txt");
+//        String expectedOutput =
+//            readFile("solutionTestData/testOutput.txt");
 
         // Compare the two outputs
         // once you have implemented your project

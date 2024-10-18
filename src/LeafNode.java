@@ -29,7 +29,7 @@ class LeafNode implements BintreeNode {
             newArray[i] = seminars[i];
         }
 
-        seminars = newArray;
+        seminars = newArray; 
     }
 
 
@@ -103,6 +103,10 @@ class LeafNode implements BintreeNode {
      */
     public boolean isLeaf() {
         return true;
+    }
+    
+    public boolean isEmpty() {
+        return false;
     }
 
 

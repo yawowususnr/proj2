@@ -19,6 +19,9 @@ interface BintreeNode {
      * @return true if the node is a leaf
      */
     boolean isLeaf();
+    
+    
+    boolean isEmpty();
 
 
     /**

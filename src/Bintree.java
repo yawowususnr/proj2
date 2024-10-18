@@ -166,16 +166,13 @@ public class Bintree
         }
         return 0;
     }
+    
 
-    /**
+    /**a
      * Prints the entire Bintree
      */
     public void print() {
         int treeHeight = getHeight(root);
-        if (treeHeight == 0) {
-            System.out.println("E");
-            return;
-        }
         // Get the height of the tree
         printRecursive(root, 0, treeHeight); 
     } 
@@ -184,10 +181,9 @@ public class Bintree
         // Calculate the indentation based on the height of the tree minus the level
         String increment = "";
         int distance = (treeHeight - level);
-        System.out.println(distance);
         for (int i = 0; i < distance; i++)
         {
-            increment += "    ";
+            increment += "    "; 
         }
 
         if (node.isInternal()) {
@@ -210,10 +206,9 @@ public class Bintree
             System.out.println(increment + string + ')');
         } 
         else {
-            // Empty node
             System.out.println(increment + "(E)");
         }
-    }
+    } 
 
 
 

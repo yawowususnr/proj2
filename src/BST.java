@@ -24,7 +24,6 @@ class BST<K extends Comparable<K>, V>
         root = null;
         nodecount = 0;
     }
-    
 
     // -------------------------------------------------------------------
 
@@ -110,6 +109,57 @@ class BST<K extends Comparable<K>, V>
             nodecount--;
         }
         return temp;
+    }
+
+
+    public void remove(KeyValuePair<K, V> pair)
+    {
+        root = removehelp(root, pair);
+        nodecount--;
+    }
+
+
+    public
+        BSTNode<KeyValuePair<K, V>>
+        removehelp(BSTNode<KeyValuePair<K, V>> rt, KeyValuePair<K, V> pair)
+    {
+        if (rt == null)
+        {
+            return null;
+        }
+
+        if (rt.getElement().compareTo(pair.getKey()) > 0)
+        {
+            rt.setLeft(removehelp(rt.getLeft(), pair));
+        }
+        else if (rt.getElement().compareTo(pair.getKey()) < 0)
+        {
+            rt.setRight(removehelp(rt.getRight(), pair));
+        }
+        else if (((Seminar)pair.getValue()).id() != ((Seminar)rt.getElement().getValue()).id())
+        {
+            rt.setLeft(removehelp(rt.getLeft(), pair));
+        }
+
+        else
+        { // Found the node
+            if (rt.getLeft() == null)
+            {
+                return rt.getRight();
+            }
+            else if (rt.getRight() == null)
+            {
+                return rt.getLeft();
+            }
+            else
+            { // Two children
+                BSTNode<KeyValuePair<K, V>> temp = getMax(rt.getLeft());
+                rt.setElement(temp.getElement());
+                rt.setLeft(deleteMax(rt.getLeft())); 
+            }
+        }
+
+        return rt;
     }
 
 
