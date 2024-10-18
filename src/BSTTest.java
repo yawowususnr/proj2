@@ -16,6 +16,11 @@ public class BSTTest
         assertEquals(1, bstTree.size());
         assertEquals(root, bstTree.find(5));
     }
+    
+//    public void testEasyInsert() {
+//        bstTree.remove(new KeyValuePair<>(5, "Five"));
+//        assertEquals(0, bstTree.size());
+//    }
 
 
     public void testInsertElement()

@@ -5,12 +5,22 @@
 
 import java.lang.Object;
 
+/**
+ * A generic Binary Search Tree (BST) implementation.
+ * 
+ * @param <K>
+ *            The type of keys maintained by this BST, which must be comparable.
+ * @param <V>
+ *            The type of values maintained by this BST.
+ */
 class BST<K extends Comparable<K>, V>
 {
     private BSTNode<KeyValuePair<K, V>> root; // Root of the BST
     private int nodecount; // Number of nodes in the BST
 
-    // constructor
+    /**
+     * Constructs an empty Binary Search Tree.
+     */
     public BST()
     {
         root = null;
@@ -18,7 +28,9 @@ class BST<K extends Comparable<K>, V>
     }
 
 
-    // Reinitialize tree
+    /**
+     * Reinitializes the tree to be empty.
+     */
     public void clear()
     {
         root = null;
@@ -28,13 +40,29 @@ class BST<K extends Comparable<K>, V>
     // -------------------------------------------------------------------
 
 
-    // Return the record with key value k, null if none exists
-    // key: The key value to find
+    /**
+     * Finds a record with the specified key in the BST.
+     * 
+     * @param key
+     *            The key value to find.
+     * @return The KeyValuePair associated with the key, or null if none exists.
+     */
     public KeyValuePair<K, V> find(K key)
     {
         return findhelp(root, key);
     }
 
+
+    /**
+     * Helper method to find a record with the specified key starting from a
+     * given node.
+     * 
+     * @param root
+     *            The current node.
+     * @param key
+     *            The key value to find.
+     * @return The KeyValuePair associated with the key, or null if none exists.
+     */
 
     private KeyValuePair<K, V> findhelp(BSTNode<KeyValuePair<K, V>> root, K key)
     {
@@ -58,14 +86,11 @@ class BST<K extends Comparable<K>, V>
     }
 
 
-    // Insert a record into the tree.
-    // Records can be anything, but they must be Comparable
-    // e: The record to insert.
-    // ----------------------------------------------------------
     /**
-     * Place a description of your method here.
+     * Inserts a new KeyValuePair into the tree.
      * 
      * @param newKVP
+     *            The KeyValuePair to insert.
      */
     public void insert(KeyValuePair<K, V> newKVP)
     {
@@ -74,6 +99,15 @@ class BST<K extends Comparable<K>, V>
     }
 
 
+    /**
+     * Helper method to insert a KeyValuePair starting from a given node.
+     * 
+     * @param root
+     *            The current node.
+     * @param newKVP
+     *            The KeyValuePair to insert.
+     * @return The new root of the subtree.
+     */
     private
         BSTNode<KeyValuePair<K, V>>
         inserthelp(BSTNode<KeyValuePair<K, V>> root, KeyValuePair<K, V> newKVP)
@@ -96,9 +130,12 @@ class BST<K extends Comparable<K>, V>
     // ----------------------------------------------------------
 
 
-    /*
-     * Remove a record from the tree key: The key value of record to remove
-     * Returns the record removed, null if there is none.
+    /**
+     * Removes a record from the tree using the specified key.
+     * 
+     * @param key
+     *            The key value of the record to remove.
+     * @return The KeyValuePair removed, or null if there was none.
      */
     public KeyValuePair<K, V> remove(K key)
     {
@@ -112,13 +149,29 @@ class BST<K extends Comparable<K>, V>
     }
 
 
+    /**
+     * Removes a specified KeyValuePair from the tree.
+     * 
+     * @param pair
+     *            The KeyValuePair to remove.
+     */
+
     public void remove(KeyValuePair<K, V> pair)
     {
         root = removehelp(root, pair);
-        nodecount = nodecount - 1; 
+        nodecount = nodecount - 1;
     }
 
 
+    /**
+     * Helper method to remove a KeyValuePair starting from a given node.
+     * 
+     * @param rt
+     *            The current node.
+     * @param pair
+     *            The KeyValuePair to remove.
+     * @return The new root of the subtree.
+     */
     public
         BSTNode<KeyValuePair<K, V>>
         removehelp(BSTNode<KeyValuePair<K, V>> rt, KeyValuePair<K, V> pair)
@@ -136,7 +189,8 @@ class BST<K extends Comparable<K>, V>
         {
             rt.setRight(removehelp(rt.getRight(), pair));
         }
-        else if (((Seminar)pair.getValue()).id() != ((Seminar)rt.getElement().getValue()).id())
+        else if (((Seminar)pair.getValue())
+            .id() != ((Seminar)rt.getElement().getValue()).id())
         {
             rt.setLeft(removehelp(rt.getLeft(), pair));
         }
@@ -155,7 +209,7 @@ class BST<K extends Comparable<K>, V>
             { // Two children
                 BSTNode<KeyValuePair<K, V>> temp = getMax(rt.getLeft());
                 rt.setElement(temp.getElement());
-                rt.setLeft(deleteMax(rt.getLeft())); 
+                rt.setLeft(deleteMax(rt.getLeft()));
             }
         }
 
@@ -163,6 +217,13 @@ class BST<K extends Comparable<K>, V>
     }
 
 
+    /**
+     * Deletes the maximum node from a subtree.
+     * 
+     * @param root
+     *            The root of the subtree.
+     * @return The new root of the subtree.
+     */
     private BSTNode<KeyValuePair<K, V>> deleteMax(
         BSTNode<KeyValuePair<K, V>> root)
     {
@@ -175,6 +236,13 @@ class BST<K extends Comparable<K>, V>
     }
 
 
+    /**
+     * Retrieves the maximum node from a subtree.
+     * 
+     * @param root
+     *            The root of the subtree.
+     * @return The maximum node.
+     */
     private BSTNode<KeyValuePair<K, V>> getMax(BSTNode<KeyValuePair<K, V>> root)
     {
         if (root.getRight() == null)
@@ -187,6 +255,16 @@ class BST<K extends Comparable<K>, V>
     // ----------------------------------------------------------
 
 
+    /**
+     * Helper method to remove a record using its key starting from a given
+     * node.
+     * 
+     * @param rt
+     *            The current node.
+     * @param key
+     *            The key value of the record to remove.
+     * @return The new root of the subtree.
+     */
     private
         BSTNode<KeyValuePair<K, V>>
         removehelp(BSTNode<KeyValuePair<K, V>> rt, K key)
@@ -226,6 +304,17 @@ class BST<K extends Comparable<K>, V>
     }
 
 
+    /**
+     * Helper method to traverse the tree and count records within a range.
+     * 
+     * @param root
+     *            The current node.
+     * @param lo
+     *            The lower bound of the range.
+     * @param hi
+     *            The upper bound of the range.
+     * @return The number of records traversed.
+     */
     private int traverseHelp(BSTNode<KeyValuePair<K, V>> root, K lo, K hi)
     {
 
@@ -255,12 +344,28 @@ class BST<K extends Comparable<K>, V>
     }
 
 
+    /**
+     * Traverses the tree and prints all records within the specified range.
+     * 
+     * @param lo
+     *            The lower bound of the range.
+     * @param hi
+     *            The upper bound of the range.
+     * @return The number of records traversed.
+     */
     public int traverse(K lo, K hi)
     {
         return traverseHelp(root, lo, hi);
     }
 
 
+    /**
+     * Calculates the height of the tree starting from a given node.
+     * 
+     * @param node
+     *            The current node.
+     * @return The height of the subtree.
+     */
     private int getHeight(BSTNode<KeyValuePair<K, V>> node)
     {
         if (node == null)
@@ -274,6 +379,16 @@ class BST<K extends Comparable<K>, V>
     }
 
 
+    /**
+     * Helper method to print the BST structure recursively.
+     * 
+     * @param rt
+     *            The current node.
+     * @param level
+     *            The current level in the tree.
+     * @param height
+     *            The height of the tree.
+     */
     private
         void
         printhelp(BSTNode<KeyValuePair<K, V>> rt, int level, int height)
@@ -302,6 +417,14 @@ class BST<K extends Comparable<K>, V>
     }
 
 
+    /**
+     * Prints the KeyValuePair node in a structured format.
+     * 
+     * @param space
+     *            The indentation to use for printing.
+     * @param node
+     *            The KeyValuePair node to print.
+     */
     private void printVisit(String space, KeyValuePair<K, V> node)
     {
 
@@ -314,6 +437,10 @@ class BST<K extends Comparable<K>, V>
     }
 
 
+    /**
+     * Prints the entire BST in a structured format. If the tree is empty, a
+     * message is printed indicating so.
+     */
     public void print()
     {
         if (size() == 0)
@@ -330,7 +457,11 @@ class BST<K extends Comparable<K>, V>
     }
 
 
-    // Return the number of records in the dictionary
+    /**
+     * Returns the number of records (nodes) in the BST.
+     * 
+     * @return The count of records in the dictionary.
+     */
     public int size()
     {
         return nodecount;

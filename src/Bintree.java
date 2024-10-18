@@ -1,5 +1,9 @@
 /**
- * Class that holds the world
+ * Class that represents a bounding box in a 2D coordinate system. The bounding
+ * box is defined by its minimum and maximum x and y values.
+ * 
+ * @author Yaw Owusu Snr
+ * @version 10/9/23
  */
 class BoundingBox
 {
@@ -95,11 +99,8 @@ public class Bintree
      */
     public Bintree(int worldSize)
     {
-        initialBoundingBox = new BoundingBox(
-            0.0,
-            0.0,
-            (worldSize - 1),
-            (worldSize - 1));
+        initialBoundingBox =
+            new BoundingBox(0.0, 0.0, (worldSize - 1), (worldSize - 1));
         root = EmptyNode.getInstance();
     }
 
@@ -154,63 +155,87 @@ public class Bintree
         System.out.println(visited + " nodes visited in this search");
     }
 
-    public int getHeight(BintreeNode node) {
-        if (node.isLeaf()) {
+
+    public int getHeight(BintreeNode node)
+    {
+        if (node.isLeaf())
+        {
             return 0;
         }
-        if (node.isInternal()) {
-            InternalNode internal = (InternalNode) node;
+        if (node.isInternal())
+        {
+            InternalNode internal = (InternalNode)node;
             int leftHeight = getHeight(internal.left());
             int rightHeight = getHeight(internal.right());
-            return Math.max(leftHeight, rightHeight) + 1; // Height of an internal node
+            return Math.max(leftHeight, rightHeight) + 1; // Height of an
+                                                          // internal node
         }
         return 0;
     }
-    
 
-    /**a
-     * Prints the entire Bintree
+
+    /**
+     * a Prints the entire Bintree
      */
-    public void print() {
+    public void print()
+    {
         int treeHeight = getHeight(root);
         // Get the height of the tree
-        printRecursive(root, 0, treeHeight); 
-    } 
+        printRecursive(root, 0, treeHeight);
+    }
 
-    private void printRecursive(BintreeNode node, int level, int treeHeight) {
-        // Calculate the indentation based on the height of the tree minus the level
+
+    private void printRecursive(BintreeNode node, int level, int treeHeight)
+    {
+        // Calculate the indentation based on the height of the tree minus the
+        // level
         String increment = "";
         int distance = (treeHeight - level);
         for (int i = 0; i < distance; i++)
         {
-            increment += "    "; 
+            increment += "    ";
         }
 
-        if (node.isInternal()) {
-            InternalNode internal = (InternalNode) node;
+        if (node.isInternal())
+        {
+            InternalNode internal = (InternalNode)node;
             System.out.println(increment + "(I)");
-            
+
             // Right child first
             printRecursive(internal.right(), level + 1, treeHeight);
-            
+
             // Left child next
             printRecursive(internal.left(), level + 1, treeHeight);
-        } 
-        else if (node.isLeaf()) {
-            LeafNode leaf = (LeafNode) node;
+        }
+        else if (node.isLeaf())
+        {
+            LeafNode leaf = (LeafNode)node;
             Seminar[] seminars = leaf.getSeminars();
-            StringBuilder string = new StringBuilder("(Leaf with " + leaf.getSize() + " objects:");
-            for (int i = 0; i < leaf.getSize(); i++) {
+            StringBuilder string =
+                new StringBuilder("(Leaf with " + leaf.getSize() + " objects:");
+            for (int i = 0; i < leaf.getSize(); i++)
+            {
                 string.append(" ").append(seminars[i].id());
             }
             System.out.println(increment + string + ')');
-        } 
-        else {
-            System.out.println(increment + "(E)"); 
         }
-    } 
+        else
+        {
+            System.out.println(increment + "(E)");
+        }
+    }
 
 
+    /**
+     * Recursively prints the tree structure, level by level.
+     * 
+     * @param node
+     *            the current node to print
+     * @param level
+     *            the current level of the node
+     * @param treeHeight
+     *            the height of the tree
+     */
 
     private int searchRecursive(
         BintreeNode node,
@@ -360,12 +385,15 @@ public class Bintree
 
         return 1;
     }
-    
+
+
     /**
-     * Place a description of your method here.
-     * @return
+     * returns the root node
+     * 
+     * @return returns the root node
      */
-    public BintreeNode getRoot() {
+    public BintreeNode getRoot()
+    {
         return root;
     }
 }
