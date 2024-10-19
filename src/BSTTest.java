@@ -1,10 +1,23 @@
 import student.TestCase;
 
+/**
+ * This class tests the functionality of the Binary Search Tree (BST)
+ * implementation.
+ * It contains test cases for inserting, removing, and traversing elements in
+ * the BST.
+ * 
+ * @author Yaw Owusu Snr
+ * @author Chris Nicoue-Beglah
+ * @version 10/9/23
+ */
 public class BSTTest extends TestCase {
 
     private BST<Integer, String> bstTree;
-    
 
+    /**
+     * Sets up the initial state of the BST by inserting a root node.
+     * This method is called before each test case.
+     */
     public void setUp() {
 
         this.bstTree = new BST<>();
@@ -15,22 +28,13 @@ public class BSTTest extends TestCase {
         assertEquals(root, bstTree.find(5));
 
     }
-    
-//    public void testEasyInsert() {
-//        bstTree.remove(new KeyValuePair<>(5, "Five"));
-//        assertEquals(0, bstTree.size());
-//    public void testRemvoe3() {
-//        this.bstTree.insert(new KeyValuePair<>(3, "Four"));
-//        this.bstTree.insert(new KeyValuePair<>(1, "Six"));
-//        this.bstTree.insert(new KeyValuePair<>(4, "Seven"));
-//        this.bstTree.insert(new KeyValuePair<>(2, "Four"));
-//        this.bstTree.insert(new KeyValuePair<>(5, "Six"));
-//        Seminar sem;
-//        bstTree.remove(new KeyValuePair<>(5, "Six"));
-//        assertEquals(4, bstTree.size());
-//    }
 
 
+    /**
+     * Tests the insertion of elements into the BST.
+     * It verifies that nodes can be inserted and found correctly,
+     * and ensures the size of the tree is updated.
+     */
     public void testInsertElement() {
         this.bstTree.insert(new KeyValuePair<>(4, "Four"));
         this.bstTree.insert(new KeyValuePair<>(6, "Six"));
@@ -52,6 +56,11 @@ public class BSTTest extends TestCase {
     }
 
 
+    /**
+     * Tests the removal of elements from the BST.
+     * It verifies that non-existent nodes return null and ensures that
+     * the tree size is updated correctly after removing nodes.
+     */
     public void testRemove() {
         KeyValuePair<Integer, String> nullNode = this.bstTree.remove(100);
 
@@ -71,6 +80,12 @@ public class BSTTest extends TestCase {
     }
 
 
+    /**
+     * Tests a more complex removal scenario, removing nodes with different
+     * characteristics.
+     * It includes cases where nodes have no children, one child, or two
+     * children.
+     */
     public void testRemove2() {
 
         this.bstTree.remove(5);
@@ -112,6 +127,10 @@ public class BSTTest extends TestCase {
     }
 
 
+    /**
+     * Tests the traversal of the BST within a specified range.
+     * It verifies that the correct number of nodes are traversed.
+     */
     public void testTraverse() {
         // Insert nodes into the tree
         this.bstTree.insert(new KeyValuePair<>(6, "Six"));
@@ -129,6 +148,10 @@ public class BSTTest extends TestCase {
     }
 
 
+    /**
+     * Tests the height of an empty tree and verifies the correct printed
+     * output.
+     */
     public void testEmptyHeight() {
         this.bstTree.remove(5);
         this.bstTree.print();
@@ -141,6 +164,10 @@ public class BSTTest extends TestCase {
     }
 
 
+    /**
+     * Tests the height of the BST by printing its structure.
+     * Verifies that the correct tree structure is printed.
+     */
     public void testgetHeight() {
         this.bstTree.insert(new KeyValuePair<>(6, "Six"));
         this.bstTree.insert(new KeyValuePair<>(3, "Three"));
@@ -160,6 +187,10 @@ public class BSTTest extends TestCase {
     }
 
 
+    /**
+     * Tests the clearing of the BST, ensuring all nodes are removed and the
+     * size is reset.
+     */
     public void testClear() {
         this.bstTree.insert(new KeyValuePair<>(4, "Four"));
         this.bstTree.insert(new KeyValuePair<>(6, "Six"));

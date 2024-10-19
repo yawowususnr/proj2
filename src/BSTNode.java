@@ -1,9 +1,14 @@
 /**
- * 
  */
 
 /**
- * @param <E> 
+ * Bst ndoe class
+ * 
+ * @author Yaw Owusu Snr
+ * @author Chris Nicoue-Beglah
+ * @version 10/9/23
+ * @param <E>
+ *            generic tyupe
  * 
  */
 public class BSTNode<E extends Comparable<? super E>> {
@@ -11,25 +16,26 @@ public class BSTNode<E extends Comparable<? super E>> {
     private E element;
     private BSTNode<E> left;
     private BSTNode<E> right;
-    
-    
+
     // ----------------------------------------------------------
     /**
      * Create a new BSTNode object.
-     * @param newElement KVPair object in our case
+     * 
+     * @param newElement
+     *            KVPair object in our case
      */
     public BSTNode(E newElement) {
         this.setElement(newElement);
     }
 
-    
+
     // ----------------------------------------------------------
     /**
      * gets BST node to the right
+     * 
      * @return right node
      */
-    public BSTNode<E> getRight()
-    {
+    public BSTNode<E> getRight() {
         return right;
     }
 
@@ -37,10 +43,11 @@ public class BSTNode<E extends Comparable<? super E>> {
     // ----------------------------------------------------------
     /**
      * Assigns BST node to the right child of current node
-     * @param right BST Node
+     * 
+     * @param right
+     *            BST Node
      */
-    public void setRight(BSTNode<E> right)
-    {
+    public void setRight(BSTNode<E> right) {
         this.right = right;
     }
 
@@ -48,10 +55,10 @@ public class BSTNode<E extends Comparable<? super E>> {
     // ----------------------------------------------------------
     /**
      * gets BST node to the left
+     * 
      * @return left node
      */
-    public BSTNode<E> getLeft()
-    {
+    public BSTNode<E> getLeft() {
         return left;
     }
 
@@ -59,10 +66,11 @@ public class BSTNode<E extends Comparable<? super E>> {
     // ----------------------------------------------------------
     /**
      * Assigns BST node to the right child of current node
-     * @param left bst node to add
+     * 
+     * @param left
+     *            bst node to add
      */
-    public void setLeft(BSTNode<E> left)
-    {
+    public void setLeft(BSTNode<E> left) {
         this.left = left;
     }
 
@@ -70,10 +78,10 @@ public class BSTNode<E extends Comparable<? super E>> {
     // ----------------------------------------------------------
     /**
      * Gets KeyValuePair object
+     * 
      * @return KVPair object
      */
-    public E getElement()
-    {
+    public E getElement() {
         return element;
     }
 
@@ -81,10 +89,11 @@ public class BSTNode<E extends Comparable<? super E>> {
     // ----------------------------------------------------------
     /**
      * Sets KVPair object
-     * @param KVPair object
+     * 
+     * @param element
+     *            KVPair object
      */
-    public void setElement(E element)
-    {
+    public void setElement(E element) {
         this.element = element;
     }
 

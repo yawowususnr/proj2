@@ -1,28 +1,24 @@
 
 /**
- * 
- */
-
-import java.lang.Object;
-
-/**
  * A generic Binary Search Tree (BST) implementation.
+ * 
+ * @author Yaw Owusu Snr
+ * @author Chris Nicoue-Beglah
+ * @version 10/9/23
  * 
  * @param <K>
  *            The type of keys maintained by this BST, which must be comparable.
  * @param <V>
  *            The type of values maintained by this BST.
  */
-class BST<K extends Comparable<K>, V>
-{
+class BST<K extends Comparable<K>, V> {
     private BSTNode<KeyValuePair<K, V>> root; // Root of the BST
     private int nodecount; // Number of nodes in the BST
 
     /**
      * Constructs an empty Binary Search Tree.
      */
-    public BST()
-    {
+    public BST() {
         root = null;
         nodecount = 0;
     }
@@ -31,8 +27,7 @@ class BST<K extends Comparable<K>, V>
     /**
      * Reinitializes the tree to be empty.
      */
-    public void clear()
-    {
+    public void clear() {
         root = null;
         nodecount = 0;
     }
@@ -47,8 +42,7 @@ class BST<K extends Comparable<K>, V>
      *            The key value to find.
      * @return The KeyValuePair associated with the key, or null if none exists.
      */
-    public KeyValuePair<K, V> find(K key)
-    {
+    public KeyValuePair<K, V> find(K key) {
         return findhelp(root, key);
     }
 
@@ -57,30 +51,25 @@ class BST<K extends Comparable<K>, V>
      * Helper method to find a record with the specified key starting from a
      * given node.
      * 
-     * @param root
+     * @param rt
      *            The current node.
      * @param key
      *            The key value to find.
      * @return The KeyValuePair associated with the key, or null if none exists.
      */
 
-    private KeyValuePair<K, V> findhelp(BSTNode<KeyValuePair<K, V>> root, K key)
-    {
-        if (root == null)
-        {
+    private KeyValuePair<K, V> findhelp(BSTNode<KeyValuePair<K, V>> rt, K key) {
+        if (rt == null) {
             return null;
         }
-        if (root.getElement().compareTo(key) > 0)
-        {
-            return findhelp(root.getLeft(), key);
+        if (rt.getElement().compareTo(key) > 0) {
+            return findhelp(rt.getLeft(), key);
         }
-        else if (root.getElement().compareTo(key) == 0)
-        {
-            return root.getElement();
+        else if (rt.getElement().compareTo(key) == 0) {
+            return rt.getElement();
         }
-        else
-        {
-            return findhelp(root.getRight(), key);
+        else {
+            return findhelp(rt.getRight(), key);
         }
 
     }
@@ -92,8 +81,7 @@ class BST<K extends Comparable<K>, V>
      * @param newKVP
      *            The KeyValuePair to insert.
      */
-    public void insert(KeyValuePair<K, V> newKVP)
-    {
+    public void insert(KeyValuePair<K, V> newKVP) {
         root = inserthelp(root, newKVP);
         nodecount++;
     }
@@ -102,29 +90,25 @@ class BST<K extends Comparable<K>, V>
     /**
      * Helper method to insert a KeyValuePair starting from a given node.
      * 
-     * @param root
+     * @param rt
      *            The current node.
      * @param newKVP
      *            The KeyValuePair to insert.
      * @return The new root of the subtree.
      */
-    private
-        BSTNode<KeyValuePair<K, V>>
-        inserthelp(BSTNode<KeyValuePair<K, V>> root, KeyValuePair<K, V> newKVP)
-    {
-        if (root == null)
-        {
+    private BSTNode<KeyValuePair<K, V>> inserthelp(
+        BSTNode<KeyValuePair<K, V>> rt,
+        KeyValuePair<K, V> newKVP) {
+        if (rt == null) {
             return new BSTNode<KeyValuePair<K, V>>(newKVP);
         }
-        if (root.getElement().compareTo(newKVP) >= 0)
-        {
-            root.setLeft(inserthelp(root.getLeft(), newKVP));
+        if (rt.getElement().compareTo(newKVP) >= 0) {
+            rt.setLeft(inserthelp(rt.getLeft(), newKVP));
         }
-        else
-        {
-            root.setRight(inserthelp(root.getRight(), newKVP));
+        else {
+            rt.setRight(inserthelp(rt.getRight(), newKVP));
         }
-        return root;
+        return rt;
     }
 
     // ----------------------------------------------------------
@@ -137,11 +121,9 @@ class BST<K extends Comparable<K>, V>
      *            The key value of the record to remove.
      * @return The KeyValuePair removed, or null if there was none.
      */
-    public KeyValuePair<K, V> remove(K key)
-    {
+    public KeyValuePair<K, V> remove(K key) {
         KeyValuePair<K, V> temp = findhelp(root, key); // First find it
-        if (temp != null)
-        {
+        if (temp != null) {
             root = removehelp(root, key); // Now remove it
             nodecount = nodecount - 1;
         }
@@ -156,8 +138,7 @@ class BST<K extends Comparable<K>, V>
      *            The KeyValuePair to remove.
      */
 
-    public void remove(KeyValuePair<K, V> pair)
-    {
+    public void remove(KeyValuePair<K, V> pair) {
         root = removehelp(root, pair);
         nodecount = nodecount - 1;
     }
@@ -172,41 +153,32 @@ class BST<K extends Comparable<K>, V>
      *            The KeyValuePair to remove.
      * @return The new root of the subtree.
      */
-    public
-        BSTNode<KeyValuePair<K, V>>
-        removehelp(BSTNode<KeyValuePair<K, V>> rt, KeyValuePair<K, V> pair)
-    {
-        if (rt == null)
-        {
+    public BSTNode<KeyValuePair<K, V>> removehelp(
+        BSTNode<KeyValuePair<K, V>> rt,
+        KeyValuePair<K, V> pair) {
+        if (rt == null) {
             return null;
         }
 
-        if (rt.getElement().compareTo(pair.getKey()) > 0)
-        {
+        if (rt.getElement().compareTo(pair.getKey()) > 0) {
             rt.setLeft(removehelp(rt.getLeft(), pair));
         }
-        else if (rt.getElement().compareTo(pair.getKey()) < 0)
-        {
+        else if (rt.getElement().compareTo(pair.getKey()) < 0) {
             rt.setRight(removehelp(rt.getRight(), pair));
         }
-        else if (((Seminar)pair.getValue())
-            .id() != ((Seminar)rt.getElement().getValue()).id())
-        {
+        else if (((Seminar)pair.getValue()).id() != ((Seminar)rt.getElement()
+            .getValue()).id()) {
             rt.setLeft(removehelp(rt.getLeft(), pair));
         }
 
-        else
-        { // Found the node
-            if (rt.getLeft() == null)
-            {
+        else { // Found the node
+            if (rt.getLeft() == null) {
                 return rt.getRight();
             }
-            else if (rt.getRight() == null)
-            {
+            else if (rt.getRight() == null) {
                 return rt.getLeft();
             }
-            else
-            { // Two children
+            else { // Two children
                 BSTNode<KeyValuePair<K, V>> temp = getMax(rt.getLeft());
                 rt.setElement(temp.getElement());
                 rt.setLeft(deleteMax(rt.getLeft()));
@@ -220,36 +192,32 @@ class BST<K extends Comparable<K>, V>
     /**
      * Deletes the maximum node from a subtree.
      * 
-     * @param root
+     * @param rt
      *            The root of the subtree.
      * @return The new root of the subtree.
      */
     private BSTNode<KeyValuePair<K, V>> deleteMax(
-        BSTNode<KeyValuePair<K, V>> root)
-    {
-        if (root.getRight() == null)
-        {
-            return root.getLeft();
+        BSTNode<KeyValuePair<K, V>> rt) {
+        if (rt.getRight() == null) {
+            return rt.getLeft();
         }
-        root.setRight(deleteMax(root.getRight()));
-        return root;
+        rt.setRight(deleteMax(rt.getRight()));
+        return rt;
     }
 
 
     /**
      * Retrieves the maximum node from a subtree.
      * 
-     * @param root
+     * @param rt
      *            The root of the subtree.
      * @return The maximum node.
      */
-    private BSTNode<KeyValuePair<K, V>> getMax(BSTNode<KeyValuePair<K, V>> root)
-    {
-        if (root.getRight() == null)
-        {
-            return root;
+    private BSTNode<KeyValuePair<K, V>> getMax(BSTNode<KeyValuePair<K, V>> rt) {
+        if (rt.getRight() == null) {
+            return rt;
         }
-        return getMax(root.getRight());
+        return getMax(rt.getRight());
     }
 
     // ----------------------------------------------------------
@@ -265,35 +233,27 @@ class BST<K extends Comparable<K>, V>
      *            The key value of the record to remove.
      * @return The new root of the subtree.
      */
-    private
-        BSTNode<KeyValuePair<K, V>>
-        removehelp(BSTNode<KeyValuePair<K, V>> rt, K key)
-    {
-        if (rt == null)
-        {
+    private BSTNode<KeyValuePair<K, V>> removehelp(
+        BSTNode<KeyValuePair<K, V>> rt,
+        K key) {
+        if (rt == null) {
             return null;
         }
 
-        if (rt.getElement().compareTo(key) > 0)
-        {
+        if (rt.getElement().compareTo(key) > 0) {
             rt.setLeft(removehelp(rt.getLeft(), key));
         }
-        else if (rt.getElement().compareTo(key) < 0)
-        {
+        else if (rt.getElement().compareTo(key) < 0) {
             rt.setRight(removehelp(rt.getRight(), key));
         }
-        else
-        { // Found the node
-            if (rt.getLeft() == null)
-            {
+        else { // Found the node
+            if (rt.getLeft() == null) {
                 return rt.getRight();
             }
-            else if (rt.getRight() == null)
-            {
+            else if (rt.getRight() == null) {
                 return rt.getLeft();
             }
-            else
-            { // Two children
+            else { // Two children
                 BSTNode<KeyValuePair<K, V>> temp = getMax(rt.getLeft());
                 rt.setElement(temp.getElement());
                 rt.setLeft(deleteMax(rt.getLeft()));
@@ -307,7 +267,7 @@ class BST<K extends Comparable<K>, V>
     /**
      * Helper method to traverse the tree and count records within a range.
      * 
-     * @param root
+     * @param rt
      *            The current node.
      * @param lo
      *            The lower bound of the range.
@@ -315,29 +275,23 @@ class BST<K extends Comparable<K>, V>
      *            The upper bound of the range.
      * @return The number of records traversed.
      */
-    private int traverseHelp(BSTNode<KeyValuePair<K, V>> root, K lo, K hi)
-    {
+    private int traverseHelp(BSTNode<KeyValuePair<K, V>> rt, K lo, K hi) {
 
-        if (root == null)
-        {
+        if (rt == null) {
             return 1;
         }
 
-        if (root.getElement().compareTo(lo) < 0)
-        {
-            return traverseHelp(root.getRight(), lo, hi) + 1;
+        if (rt.getElement().compareTo(lo) < 0) {
+            return traverseHelp(rt.getRight(), lo, hi) + 1;
         }
-        else if (root.getElement().compareTo(hi) > 0)
-        {
-            return traverseHelp(root.getLeft(), lo, hi) + 1;
+        else if (rt.getElement().compareTo(hi) > 0) {
+            return traverseHelp(rt.getLeft(), lo, hi) + 1;
         }
-        else
-        {
-            int traversed = traverseHelp(root.getLeft(), lo, hi);
-            System.out.println(root.getElement().getValue().toString());
-            if (root.getElement().compareTo(hi) != 0)
-            {
-                traversed += traverseHelp(root.getRight(), lo, hi);
+        else {
+            int traversed = traverseHelp(rt.getLeft(), lo, hi);
+            System.out.println(rt.getElement().getValue().toString());
+            if (rt.getElement().compareTo(hi) != 0) {
+                traversed += traverseHelp(rt.getRight(), lo, hi);
             }
             return traversed + 1;
         }
@@ -353,8 +307,7 @@ class BST<K extends Comparable<K>, V>
      *            The upper bound of the range.
      * @return The number of records traversed.
      */
-    public int traverse(K lo, K hi)
-    {
+    public int traverse(K lo, K hi) {
         return traverseHelp(root, lo, hi);
     }
 
@@ -366,10 +319,8 @@ class BST<K extends Comparable<K>, V>
      *            The current node.
      * @return The height of the subtree.
      */
-    private int getHeight(BSTNode<KeyValuePair<K, V>> node)
-    {
-        if (node == null)
-        {
+    private int getHeight(BSTNode<KeyValuePair<K, V>> node) {
+        if (node == null) {
             return 0;
         }
         int leftHeight = getHeight(node.getLeft());
@@ -389,19 +340,17 @@ class BST<K extends Comparable<K>, V>
      * @param height
      *            The height of the tree.
      */
-    private
-        void
-        printhelp(BSTNode<KeyValuePair<K, V>> rt, int level, int height)
-    {
+    private void printhelp(
+        BSTNode<KeyValuePair<K, V>> rt,
+        int level,
+        int height) {
         String space = "";
         int distance = (height - level);
 
-        for (int i = 0; i < distance; i++)
-        {
+        for (int i = 0; i < distance; i++) {
             space += "    ";
         }
-        if (rt == null)
-        {
+        if (rt == null) {
             // Print null nodes with the corresponding indentation.
             System.out.println(space + "(" + "null" + ")");
             space += " ";
@@ -425,8 +374,7 @@ class BST<K extends Comparable<K>, V>
      * @param node
      *            The KeyValuePair node to print.
      */
-    private void printVisit(String space, KeyValuePair<K, V> node)
-    {
+    private void printVisit(String space, KeyValuePair<K, V> node) {
 
         K key = node.getKey();
 
@@ -441,14 +389,11 @@ class BST<K extends Comparable<K>, V>
      * Prints the entire BST in a structured format. If the tree is empty, a
      * message is printed indicating so.
      */
-    public void print()
-    {
-        if (size() == 0)
-        {
+    public void print() {
+        if (size() == 0) {
             System.out.println("This tree is empty");
         }
-        else
-        {
+        else {
             int heightOfTree = getHeight(root);
 
             printhelp(root, 0, heightOfTree);
@@ -462,8 +407,7 @@ class BST<K extends Comparable<K>, V>
      * 
      * @return The count of records in the dictionary.
      */
-    public int size()
-    {
+    public int size() {
         return nodecount;
     }
 }

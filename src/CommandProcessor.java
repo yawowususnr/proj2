@@ -7,12 +7,11 @@ import java.util.Scanner;
 /**
  * Processes commands from a file to perform operations.
  * 
- * @author
+ * @author Chris Nicoue-Beglah
  * @author Yaw Owusu Snr
  * @version <2024-09-20>
  */
-public class CommandProcessor
-{
+public class CommandProcessor {
 
     private String fileName;
     private Controller control;
@@ -25,8 +24,7 @@ public class CommandProcessor
      * @param control
      *            the controller to perform operations
      */
-    public CommandProcessor(String name, Controller control)
-    {
+    public CommandProcessor(String name, Controller control) {
         this.fileName = name;
         this.control = control;
     }
@@ -36,18 +34,14 @@ public class CommandProcessor
     /**
      * Processes input file and all it's commands
      */
-    public void processFile()
-    {
-        try (Scanner sc = new Scanner(new File(fileName)))
-        {
+    public void processFile() {
+        try (Scanner sc = new Scanner(new File(fileName))) {
             String command;
-            while (sc.hasNext())
-            {
+            while (sc.hasNext()) {
                 command = sc.next();
-                switch (command)
-                {
+                switch (command) {
                     case "insert":
-                        String Id = sc.next().trim();
+                        String newId = sc.next().trim();
                         sc.nextLine();
                         String title = sc.nextLine();
 // sc.nextLine();
@@ -59,26 +53,19 @@ public class CommandProcessor
                         String[] keywordArray = keywords.split("\\s+");
 
                         String description = sc.nextLine().trim();
-                        control.insert(
-                            Integer.parseInt(Id),
-                            title,
-                            singleLine[0],
-                            Integer.parseInt(singleLine[1]),
-                            Short.parseShort(singleLine[2]),
-                            Short.parseShort(singleLine[3]),
-                            Integer.parseInt(singleLine[4]),
-                            keywordArray,
-                            keywordArray.length,
-                            description);
+                        control.insert(Integer.parseInt(newId), title,
+                            singleLine[0], Integer.parseInt(singleLine[1]),
+                            Short.parseShort(singleLine[2]), Short.parseShort(
+                                singleLine[3]), Integer.parseInt(singleLine[4]),
+                            keywordArray, keywordArray.length, description);
                         break;
                     case "delete":
-                        String ID = sc.next();
-                        control.delete(Integer.parseInt(ID));
+                        String iD = sc.next();
+                        control.delete(Integer.parseInt(iD));
                         break;
                     case "search":
                         String type = sc.next();
-                        switch (type)
-                        {
+                        switch (type) {
                             case "keyword":
                                 String newWord = sc.next();
                                 control.searchkeyword(newWord);
@@ -88,9 +75,8 @@ public class CommandProcessor
                                 location[0] = sc.next();
                                 location[1] = sc.next();
                                 location[2] = sc.next();
-                                control.searchLocation(
-                                    Short.parseShort(location[0]),
-                                    Short.parseShort(location[1]),
+                                control.searchLocation(Short.parseShort(
+                                    location[0]), Short.parseShort(location[1]),
                                     Short.parseShort(location[2]));
                                 break;
                             case "ID":
@@ -125,8 +111,7 @@ public class CommandProcessor
                 }
             }
         }
-        catch (FileNotFoundException e)
-        {
+        catch (FileNotFoundException e) {
             e.printStackTrace();
         }
     }

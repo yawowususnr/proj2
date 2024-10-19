@@ -1,21 +1,34 @@
 import student.TestCase;
 
 /**
+ * The ControllerTest class is a unit test for the Controller class.
+ * It tests various methods such as insert, search by ID, search by cost,
+ * search by keywords, search by date, search by location, and validity
+ * checking.
  * 
+ * @author Yaw Owusu Snr
+ * @author Chris Nicoue-Beglah
+ * @version 10/9/23
  */
 
 public class ControllerTest extends TestCase {
 
     private Controller controller;
 
+    /**
+     * Sets up the test environment by initializing the Controller object with a
+     * specified capacity.
+     */
     public void setUp() {
         this.controller = new Controller(100);
+
     }
 
 
-    // ----------------------------------------------------------
     /**
-     * tests insert
+     * Tests the insert method of the Controller class by inserting several
+     * records
+     * and verifying that the output matches the expected behavior.
      */
     public void testInsert() {
         String[] keywords = { "Java", "Programming" };
@@ -36,10 +49,12 @@ public class ControllerTest extends TestCase {
     }
 
 
-    // ----------------------------------------------------------
     /**
-     * tests search ID
+     * Tests the search by ID functionality of the Controller class by searching
+     * for existing
+     * and non-existing records and verifying the results.
      */
+
     public void testSearchId() {
         String[] keywords = { "Java", "Programming" };
         controller.insert(1, "Java Seminar", "2024-10-01", 60, (short)10,
@@ -59,12 +74,8 @@ public class ControllerTest extends TestCase {
     }
 
 
-   
-
-
-    // ----------------------------------------------------------
     /**
-     * Tests search Cost
+     * Tests the search by cost range functionality of the Controller class.
      */
     public void testSearchCost() {
         String[] keywords = { "Java", "Programming" };
@@ -85,9 +96,8 @@ public class ControllerTest extends TestCase {
     }
 
 
-    // ----------------------------------------------------------
     /**
-     * test Search keywords
+     * Tests the search by keyword functionality of the Controller class.
      */
     public void testSearchKeyWords() {
         String[] keywords = { "Java", "Programming" };
@@ -107,9 +117,8 @@ public class ControllerTest extends TestCase {
     }
 
 
-    // ----------------------------------------------------------
     /**
-     * test search date
+     * Tests the search by date range functionality of the Controller class.
      */
     public void testSearchdate() {
         String[] keywords = { "Java", "Programming" };
@@ -134,9 +143,9 @@ public class ControllerTest extends TestCase {
     }
 
 
-    // ----------------------------------------------------------
     /**
-     * test serach location
+     * Tests the checkIfValid method, which checks if the given coordinates are
+     * within valid bounds.
      */
     public void testSearchLocation() {
         String[] keywords = { "Java", "Programming" };

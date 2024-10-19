@@ -4,7 +4,11 @@ import java.nio.file.Paths;
 import student.TestCase;
 
 /**
+ * Problem spec test class
+ * 
  * @author Yaw Owusu Snr
+ * @author Chris Nicoue-Beglah
+ * @version 10/19/24
  */
 public class ProblemSpecTest extends TestCase {
     /**
@@ -54,10 +58,6 @@ public class ProblemSpecTest extends TestCase {
         String expectedOutput = readFile(
             "solutionTestData/P2_sampleOutput.txt");
 
-        // Compare the two outputs
-        // TODO: uncomment the following line
-        // once you have implemented your project
-        // assertFuzzyEquals(expectedOutput, actualOutput);
     }
 
 
@@ -67,6 +67,7 @@ public class ProblemSpecTest extends TestCase {
      * using different text files
      * 
      * @throws IOException
+     *             when inccorexct
      */
     public void testPostedSyntaxSample() throws IOException {
         // Setting up all the parameters
@@ -74,7 +75,6 @@ public class ProblemSpecTest extends TestCase {
         args[0] = "128";
         args[1] = "solutionTestData/P2_syntaxInsertInput.txt";
 
-        // Invoke main method of our Graph Project
         SemSearch.main(args);
 
         // Actual output from your System console
@@ -84,9 +84,5 @@ public class ProblemSpecTest extends TestCase {
         String expectedOutput = readFile(
             "solutionTestData/P2_syntaxInsertOutput.txt");
 
-        // Compare the two outputs
-        // TODO: uncomment the following line
-        // once you have implemented your project
-        // assertFuzzyEquals(expectedOutput, actualOutput);
     }
 }

@@ -1,39 +1,33 @@
 /**
  * Class that holds the world
+ * 
+ * @author Yaw Owusu Snr
+ * @author Chris Nicoue-Beglah
+ * @version 10/9/23
  */
 class BoundingBox {
-    private double xMin; // minimum x value
-    private double yMin; // minimum y value
-    private double xMax; // maximum x value
-    private double yMax; // maximum y value
+    private double minX; // minimum x value
+    private double minY; // minimum y value
+    private double maxX; // maximum x value
+    private double maxY; // maximum y value
 
     /**
      * Creates a BoundingBox class
      * 
-     * @param xMin
+     * @param minX
      *            the min x value
-     * @param yMin
+     * @param minY
      *            the min y value
-     * @param xMax
+     * @param maxX
      *            the max x value
-     * @param yMax
+     * @param maxY
      *            the max y value
      */
-    public BoundingBox(double xMin, double yMin, double xMax, double yMax) {
-        this.xMin = xMin;
-        this.yMin = yMin;
-        this.xMax = xMax;
-        this.yMax = yMax;
-    }
-
-
-    /**
-     * Gets the minimum x value
-     * 
-     * @return the minimum x value
-     */
-    public double getxMin() {
-        return xMin;
+    public BoundingBox(double minX, double minY, double maxX, double maxY) {
+        this.minX = minX;
+        this.minY = minY;
+        this.maxX = maxX;
+        this.maxY = maxY;
     }
 
 
@@ -43,7 +37,17 @@ class BoundingBox {
      * @return the minimum y value
      */
     public double getyMin() {
-        return yMin;
+        return minY;
+    }
+
+
+    /**
+     * Gets the minimum x value
+     * 
+     * @return the minimum x value
+     */
+    public double getxMin() {
+        return minX;
     }
 
 
@@ -53,7 +57,7 @@ class BoundingBox {
      * @return the maximum x value
      */
     public double getxMax() {
-        return xMax;
+        return maxX;
     }
 
 
@@ -63,7 +67,7 @@ class BoundingBox {
      * @return the maximum y value
      */
     public double getyMax() {
-        return yMax;
+        return maxY;
     }
 }
 
@@ -74,6 +78,7 @@ class BoundingBox {
  * Binary tree that holds x and y coordinates
  * 
  * @author Yaw Owusu Snr
+ * @author Chris Nicoue-Beglah
  * @version 10/9/23
  */
 public class Bintree {
@@ -83,12 +88,11 @@ public class Bintree {
     /**
      * Creates a new Bintree
      * 
-     * @param worldSize
+     * @param size
      *            the size of the world
      */
-    public Bintree(int worldSize) {
-        initialBoundingBox = new BoundingBox(0.0, 0.0, (worldSize - 1),
-            (worldSize - 1));
+    public Bintree(int size) {
+        initialBoundingBox = new BoundingBox(0.0, 0.0, (size - 1), (size - 1));
         root = EmptyNode.getInstance();
     }
 
@@ -128,9 +132,9 @@ public class Bintree {
     /**
      * Search for seminars within a certain distance
      * 
-     * @param searchSeminar
+     * @param targetSeminar
      *            the seminar to be found
-     * @param radius
+     * @param searchRadius
      *            the radius around the search seminar to look at
      */
     public void search(Seminar targetSeminar, double searchRadius) {
@@ -140,6 +144,13 @@ public class Bintree {
     }
 
 
+    /**
+     * gets the height of the tree
+     * 
+     * @param node
+     *            take in a bintree
+     * @return the height of the tree
+     */
     public int getHeight(BintreeNode node) {
         if (node == null || node.isLeaf()) {
             return 0; // Return 0 for null or leaf nodes
@@ -156,7 +167,7 @@ public class Bintree {
 
 
     /**
-     * a
+     * 
      * Prints the entire Bintree
      */
     public void print() {
@@ -166,6 +177,16 @@ public class Bintree {
     }
 
 
+    /**
+     * Recursively print nodoes in the bin tree
+     * 
+     * @param node
+     *            the current node
+     * @param currentLevel
+     *            current level
+     * @param totalHeight
+     *            height of tree
+     */
     private void printRecursive(
         BintreeNode node,
         int currentLevel,
@@ -208,6 +229,21 @@ public class Bintree {
     }
 
 
+    /**
+     * Performs a recursive search within a binary tree structure.
+     *
+     * @param node
+     *            The current {@code BintreeNode} being processed.
+     * @param searchSeminar
+     *            The {@code Seminar} being searched for.
+     * @param radius
+     *            The search radius.
+     * @param level
+     *            The current depth level in the tree.
+     * @param bbox
+     *            The bounding box that defines the current search area.
+     * @return The number of nodes processed during the search.
+     */
     private int searchRecursive(
         BintreeNode node,
         Seminar searchSeminar,
@@ -225,6 +261,23 @@ public class Bintree {
     }
 
 
+    /**
+     * Handles the case when the current node is an internal node during the
+     * search.
+     *
+     * @param internalNode
+     *            The internal node being processed.
+     * @param searchSeminar
+     *            The {@code Seminar} being searched for.
+     * @param radius
+     *            The search radius.
+     * @param level
+     *            The current depth level in the tree.
+     * @param bbox
+     *            The bounding box defining the search area.
+     * @return The number of nodes processed during this internal node's
+     *         traversal.
+     */
     private int handleInternalNode(
         InternalNode internalNode,
         Seminar searchSeminar,
@@ -245,6 +298,23 @@ public class Bintree {
     }
 
 
+    /**
+     * Handles an internal node split along the X-axis during the search.
+     *
+     * @param internalNode
+     *            The internal node being processed.
+     * @param searchSeminar
+     *            The {@code Seminar} being searched for.
+     * @param radius
+     *            The search radius.
+     * @param level
+     *            The current depth level in the tree.
+     * @param bbox
+     *            The bounding box defining the search area.
+     * @param midX
+     *            The midpoint along the X-axis.
+     * @return The number of nodes processed during this X-axis split traversal.
+     */
     private int handleXAxisSplit(
         InternalNode internalNode,
         Seminar searchSeminar,
@@ -269,6 +339,23 @@ public class Bintree {
     }
 
 
+    /**
+     * Handles an internal node split along the Y-axis during the search.
+     *
+     * @param internalNode
+     *            The internal node being processed.
+     * @param searchSeminar
+     *            The {@code Seminar} being searched for.
+     * @param radius
+     *            The search radius.
+     * @param level
+     *            The current depth level in the tree.
+     * @param bbox
+     *            The bounding box defining the search area.
+     * @param midY
+     *            The midpoint along the Y-axis.
+     * @return The number of nodes processed during this Y-axis split traversal.
+     */
     private int handleYAxisSplit(
         InternalNode internalNode,
         Seminar searchSeminar,
@@ -293,6 +380,25 @@ public class Bintree {
     }
 
 
+    /**
+     * Searches both the left and right children of an internal node.
+     *
+     * @param internalNode
+     *            The internal node being processed.
+     * @param searchSeminar
+     *            The {@code Seminar} being searched for.
+     * @param radius
+     *            The search radius.
+     * @param level
+     *            The current depth level in the tree.
+     * @param bbox
+     *            The bounding box defining the search area.
+     * @param mid
+     *            The midpoint for splitting.
+     * @param isXAxis
+     *            Whether the split is along the X-axis.
+     * @return The number of nodes processed when both children are searched.
+     */
     private int searchBothChildren(
         InternalNode internalNode,
         Seminar searchSeminar,
@@ -301,7 +407,9 @@ public class Bintree {
         BoundingBox bbox,
         double mid,
         boolean isXAxis) {
-        BoundingBox leftBox, rightBox;
+        BoundingBox leftBox;
+        BoundingBox rightBox;
+
         if (isXAxis) {
             leftBox = new BoundingBox(bbox.getxMin(), bbox.getyMin(), mid, bbox
                 .getyMax());
@@ -320,6 +428,26 @@ public class Bintree {
     }
 
 
+    /**
+     * Searches only the left child of an internal node.
+     *
+     * @param internalNode
+     *            The internal node being processed.
+     * @param searchSeminar
+     *            The {@code Seminar} being searched for.
+     * @param radius
+     *            The search radius.
+     * @param level
+     *            The current depth level in the tree.
+     * @param bbox
+     *            The bounding box defining the search area.
+     * @param mid
+     *            The midpoint for splitting.
+     * @param isXAxis
+     *            Whether the split is along the X-axis.
+     * @return The number of nodes processed when only the left child is
+     *         searched.
+     */
     private int searchLeftChild(
         InternalNode internalNode,
         Seminar searchSeminar,
@@ -338,6 +466,26 @@ public class Bintree {
     }
 
 
+    /**
+     * Searches only the right child of an internal node.
+     *
+     * @param internalNode
+     *            The internal node being processed.
+     * @param searchSeminar
+     *            The {@code Seminar} being searched for.
+     * @param radius
+     *            The search radius.
+     * @param level
+     *            The current depth level in the tree.
+     * @param bbox
+     *            The bounding box defining the search area.
+     * @param mid
+     *            The midpoint for splitting.
+     * @param isXAxis
+     *            Whether the split is along the X-axis.
+     * @return The number of nodes processed when only the right child is
+     *         searched.
+     */
     private int searchRightChild(
         InternalNode internalNode,
         Seminar searchSeminar,
@@ -356,6 +504,17 @@ public class Bintree {
     }
 
 
+    /**
+     * Handles the case when the current node is a leaf node during the search.
+     *
+     * @param leafNode
+     *            The leaf node being processed.
+     * @param searchSeminar
+     *            The {@code Seminar} being searched for.
+     * @param radius
+     *            The search radius.
+     * @return The number of nodes processed at this leaf node.
+     */
     private int handleLeafNode(
         LeafNode leafNode,
         Seminar searchSeminar,
@@ -373,9 +532,9 @@ public class Bintree {
 
 
     /**
-     * Place a description of your method here.
+     * return the root node
      * 
-     * @return
+     * @return the root node
      */
     public BintreeNode getRoot() {
         return root;
