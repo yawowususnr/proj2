@@ -1,18 +1,14 @@
 import student.TestCase;
 
-public class CommandProcessorTest
-    extends TestCase
-{
+public class CommandProcessorTest extends TestCase {
 
     private CommandProcessor command;
     private Controller control;
 
-    public void setUp()
-    {
+    public void setUp() {
         this.control = new Controller(100);
         this.command = new CommandProcessor(
-            "solutionTestData/P2_sampleInput.txt",
-            this.control);
+            "solutionTestData/P2_sampleInput.txt", this.control);
 
     }
 
@@ -211,6 +207,7 @@ public class CommandProcessorTest
             + "    (Leaf with 1 objects: 3)";
         
         assertFuzzyEquals(actualOutput, testOutput);
+        
     }
     // TODO Auto-generated constructor stub
 

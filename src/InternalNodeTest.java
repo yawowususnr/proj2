@@ -74,6 +74,7 @@ public class InternalNodeTest extends student.TestCase
 
         // After removing the last seminar, the root should be empty
         assertTrue("The root should be empty after removing the only seminar", tree.getRoot().isEmpty());
+        
     }
 
 

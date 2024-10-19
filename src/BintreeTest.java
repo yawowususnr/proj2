@@ -429,7 +429,7 @@ public class BintreeTest
         assertFuzzyEquals(
             systemOut().getHistory(),
             "1 nodes visited in this search\r\n"
-                + "found a record with key value 1 at 10 10\r\n"
+                + "Found a record with key value 1 at 10 10\r\n"
                 + "found a record with key value 2 at 10 10\r\n"
                 + "4 nodes visited in this search\r\n"
                 + "found a record with key value 10 at 30 10\r\n"
@@ -846,6 +846,7 @@ public class BintreeTest
             4,
             "S4",
             "2023-01-01",
+            
             60,
             (short)75,
             (short)75,

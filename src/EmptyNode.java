@@ -38,7 +38,8 @@ public boolean isEmpty() {
 
 
 public BintreeNode insert(Seminar seminar, int level, BoundingBox bbox) {// Replace the empty node with a leaf node
-    return new LeafNode(seminar);}
+    return new LeafNode(seminar);
+    }
 
 
 
