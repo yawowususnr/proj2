@@ -11,8 +11,8 @@
  * @author Yaw Owusu Jnr
  * @version 10/18/24
  */
-public class KeyValuePair<K extends Comparable<K>, V>
-    implements Comparable<KeyValuePair<K, V>> {
+public class KVPair<K extends Comparable<K>, V>
+    implements Comparable<KVPair<K, V>> {
 
     private K key;
     private V value;
@@ -26,7 +26,7 @@ public class KeyValuePair<K extends Comparable<K>, V>
      * @param newValue
      *            The value for this pair.
      */
-    public KeyValuePair(K newKey, V newValue) {
+    public KVPair(K newKey, V newValue) {
         this.key = newKey;
         this.value = newValue;
     }
@@ -76,7 +76,7 @@ public class KeyValuePair<K extends Comparable<K>, V>
      *            The KeyValuePair to compare against.
      * @return -1, 0, or 1 depending on the result of comparing the keys.
      */
-    public int compareTo(KeyValuePair<K, V> o) {
+    public int compareTo(KVPair<K, V> o) {
         return key.compareTo(o.getKey());
     }
 }
