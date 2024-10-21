@@ -4,7 +4,7 @@ import java.nio.file.Paths;
 import student.TestCase;
 
 /**
- * Problem spec test class
+ * This class is responsible for the ProblemSpec
  * 
  * @author Yaw Agyemang	
  * @author Yaw Owusu Jnr
