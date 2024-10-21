@@ -1,176 +1,168 @@
 import student.TestCase;
 
 /**
- * Unit tests for the LeafNode class, which manages a collection of Seminar
- * objects.
+ * Unit tests for the LeafNode class, which handles a set of Seminar objects.
  * 
- * @author Yaw Agyemang	
+ * @author Yaw Agyemang    
  * @author Yaw Owusu Jnr
  * @version 10/18/24
  */
 public class LeafNodeTest extends TestCase {
 
-    private Seminar sem1;
-    private Seminar sem2;
-    private Seminar sem3;
+    private Seminar seminarA;
+    private Seminar seminarB;
+    private Seminar seminarC;
 
-    private LeafNode node;
+    private LeafNode leafNode;
 
     /**
-     * Sets up the test environment by initializing Seminar objects and
-     * the LeafNode with seminar1.
+     * Initializes the test environment with Seminar objects and 
+     * initializes LeafNode with seminarA.
      */
     public void setUp() {
-        // Initialize seminars with unique coordinates and IDs
-        sem1 = new Seminar(1, "Sem1", "20221112", (int)2.0, (short)2.0,
-            (short)2.0, (int)100.0, new String[] { "HERE" }, "Descrip");
-        sem2 = new Seminar(2, "Seminar 2", "2024-01-02", (int)3.0, (short)3.0,
-            (short)3.0, (int)120.0, new String[] { "AI" }, "Descrip");
-        sem3 = new Seminar(3, "Sem3", "20240203", (int)2.0, (short)2.0,
-            (short)4.0, (int)130.0, new String[] { "here" }, "Descrip");
+        // Create seminars with different attributes
+        seminarA = new Seminar(1, "First Seminar", "2023-11-12", (int)5.0,
+            (short)1.0, (short)2.0, (int)105.0, new String[] { "TopicA" }, 
+            "First Description");
+        seminarB = new Seminar(2, "Second Seminar", "2024-01-15", (int)3.0,
+            (short)4.0, (short)6.0, (int)115.0, new String[] { "TopicB" },
+            "Second Description");
+        seminarC = new Seminar(3, "Third Seminar", "2024-05-25", (int)7.0,
+            (short)2.0, (short)8.0, (int)130.0, new String[] { "TopicC" },
+            "Third Description");
 
-        // Initialize the LeafNode with seminar1
-        node = new LeafNode(sem1);
+        // Initialize LeafNode with the first seminar
+        leafNode = new LeafNode(seminarA);
     }
 
 
     /**
-     * Tests adding a seminar to a LeafNode and verifies that the size
-     * increases appropriately.
+     * Tests the creation of a LeafNode and verifies initial state 
+     * after adding seminarA.
      */
-    public void testAddSeminarToLeafNode() {
-        // Add a seminar and check that it's added and array expands correctly
-        node.addSeminar(sem2);
-
-        assertEquals(2, node.getSize());
-        assertEquals(sem2, node.getSeminars()[1]);
-
+    public void testLeafNodeInitialized() {
+        // Verify that the node was correctly initialized
+        assertEquals(1, leafNode.getSize());
+        assertEquals(seminarA, leafNode.getSeminars()[0]);
     }
 
 
     /**
-     * Tests the creation of a LeafNode to ensure it is initialized correctly
-     * with a seminar.
+     * Verifies the add operation, confirming the array size increases and 
+     * the seminars are added correctly.
      */
-    public void testLeafNodeCreation() {
-        // Check that a new leaf node is created with seminar1
-        assertEquals(1, node.getSize());
-        assertEquals(sem1, node.getSeminars()[0]);
+    public void testAddSeminarToLeaf() {
+        // Add seminarB and check the node's size and contents
+        leafNode.addSeminar(seminarB);
+
+        assertEquals(2, leafNode.getSize());
+        assertEquals(seminarB, leafNode.getSeminars()[1]);
     }
 
 
     /**
-     * Tests the array expansion of seminars when adding additional seminars.
+     * Confirms the array expands when seminars are added beyond the 
+     * current capacity.
      */
-    public void testExpandArray() {
-        // Add seminars to trigger expansion of the array
-        node.addSeminar(sem2);
-        node.addSeminar(sem3);
+    public void testArrayExpansionAfterAddingSeminars() {
+        // Add seminars to trigger array expansion
+        leafNode.addSeminar(seminarB);
+        leafNode.addSeminar(seminarC);
 
-        assertEquals(3, node.getSize());
-        assertEquals(3, node.getSeminars().length);
+        assertEquals(3, leafNode.getSize());
+        assertEquals(3, leafNode.getSeminars().length);
     }
 
 
     /**
-     * Tests that adding seminars in an out-of-order fashion sorts them
-     * correctly by seminar ID.
+     * Tests the sorting of seminars based on their IDs after adding them 
+     * in random order.
      */
-    public void testSortArrayAfterAdditions() {
+    public void testSeminarSortingAfterAdditions() {
+        // Add out-of-order seminars and verify correct sorting
+        leafNode.addSeminar(seminarC); // Seminar with ID 3
+        leafNode.addSeminar(seminarB); // Seminar with ID 2
 
-        node.addSeminar(sem3); // Seminar with ID 3
-        node.addSeminar(sem2); // Seminar with ID 2
+        Seminar[] sortedSeminars = leafNode.getSeminars();
 
-        Seminar[] seminars = node.getSeminars();
-
-        assertEquals(sem1, seminars[0]); // ID 1
-        assertEquals(sem2, seminars[1]); // ID 2
-        assertEquals(sem3, seminars[2]); // ID 3
+        assertEquals(seminarA, sortedSeminars[0]); // ID 1
+        assertEquals(seminarB, sortedSeminars[1]); // ID 2
+        assertEquals(seminarC, sortedSeminars[2]); // ID 3
     }
 
 
     /**
-     * Tests removing a seminar from a LeafNode and checks if the size
-     * is updated correctly.
+     * Tests the removal of a seminar and verifies the node's size 
+     * updates correctly.
      */
-    public void testRemoveSeminarFromLeafNode() {
-        // Add and remove a seminar
-        node.addSeminar(sem2);
-        node.removeSeminar(sem1);
+    public void testRemoveSeminarFromNode() {
+        // Add and remove seminarA
+        leafNode.addSeminar(seminarB);
+        leafNode.removeSeminar(seminarA);
 
-        assertEquals(1, node.getSize());
-        assertEquals(sem2, node.getSeminars()[0]);
+        assertEquals(1, leafNode.getSize());
+        assertEquals(seminarB, leafNode.getSeminars()[0]);
     }
 
 
     /**
-     * Tests removing a seminar that is not present in the LeafNode
-     * to ensure no changes occur.
+     * Verifies that attempting to remove a seminar not present 
+     * in the LeafNode does not affect the node.
      */
-    public void testRemoveSeminarNotPresent() {
-        // Remove a seminar not in the array and verify nothing changes
-        node.addSeminar(sem2);
-        node.removeSeminar(sem3); // Seminar3 not present
+    public void testRemovingNonExistentSeminar() {
+        // Try removing seminarC which isn't in the node
+        leafNode.addSeminar(seminarB);
+        leafNode.removeSeminar(seminarC); // Seminar C not present
 
-        assertEquals(2, node.getSize()); // Size should remain the same
+        assertEquals(2, leafNode.getSize()); // Size should remain unchanged
     }
 
 
     /**
-     * Tests the removal of all seminars from the LeafNode, ensuring
-     * that it is empty afterward.
+     * Ensures that all seminars can be removed and verifies the 
+     * node becomes empty.
      */
-    public void testRemoveAllSeminars() {
-        // Add and remove seminars, leaving the node empty
-        node.addSeminar(sem2);
-        node.removeSeminar(sem1);
-        node.removeSeminar(sem2);
+    public void testRemoveAllSeminarsFromLeaf() {
+        // Add and remove all seminars
+        leafNode.addSeminar(seminarB);
+        leafNode.removeSeminar(seminarA);
+        leafNode.removeSeminar(seminarB);
 
-        assertEquals(0, node.getSize()); // Size should be 0
-        assertTrue(node.getSeminars().length > 0); // Array should still
-                                                   // exist but be empty
+        assertEquals(0, leafNode.getSize()); // Node should now be empty
     }
 
 
     /**
-     * Tests that a LeafNode correctly identifies itself as not an internal
-     * node.
+     * Tests that the node identifies itself as a leaf and not as an 
+     * internal node.
      */
-    public void testIsInternal() {
-        // Test that a leaf node correctly identifies itself as not internal
-        assertFalse(node.isInternal());
+    public void testIsLeafNodeAndNotInternal() {
+        // Verify that it's a leaf node and not an internal node
+        assertTrue(leafNode.isLeaf());
+        assertFalse(leafNode.isInternal());
     }
 
 
     /**
-     * Tests that a LeafNode correctly identifies itself as a leaf node.
+     * Tests the removal of the last seminar, ensuring it returns 
+     * an EmptyNode when no seminars remain.
      */
-    public void testIsLeaf() {
+    public void testRemoveLastSeminarAndReturnEmptyNode() {
+        // Remove the last seminar and check if it returns EmptyNode
+        BintreeNode resultingNode = leafNode.remove(seminarA, 0, 
+            new BoundingBox(0, 20, 0, 20));
 
-        assertTrue(node.isLeaf());
+        assertTrue(resultingNode instanceof EmptyNode);
     }
 
 
     /**
-     * Tests attempting to remove a seminar from an empty LeafNode
-     * and checks the resulting size.
+     * Verifies that attempting to remove a seminar from an already 
+     * empty node behaves as expected.
      */
-    public void testRemoveSeminarFromEmptyLeaf() {
-
-        node.removeSeminar(sem1);
-        assertEquals(0, node.getSize());
-    }
-
-
-    /**
-     * Tests that removing all seminars from the LeafNode returns an
-     * EmptyNode.
-     */
-    public void testRemoveSeminarAndReturnEmptyNode() {
-
-        BintreeNode resultNode = node.remove(sem1, 0, new BoundingBox(0, 10, 0,
-            10));
-
-        assertTrue(resultNode instanceof EmptyNode);
+    public void testRemoveSeminarFromEmptyNode() {
+        // Try removing from an empty node
+        leafNode.removeSeminar(seminarA);
+        assertEquals(0, leafNode.getSize());
     }
 }

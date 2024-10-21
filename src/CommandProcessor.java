@@ -7,7 +7,7 @@ import java.util.Scanner;
 /**
  * Processes commands from a file to perform operations.
  * 
- * @author Yaw Agyemang	
+ * @author Yaw Agyemang
  * @author Yaw Owusu Jnr
  * @version 10/18/24
  */
@@ -32,82 +32,86 @@ public class CommandProcessor {
 
     // ----------------------------------------------------------
     /**
-     * Processes input file and all it's commands
+     * Processes input file and all its commands.
      */
     public void processFile() {
-        try (Scanner sc = new Scanner(new File(fileName))) {
-            String command;
-            while (sc.hasNext()) {
-                command = sc.next();
-                switch (command) {
-                    case "insert":
-                        String newId = sc.next().trim();
-                        sc.nextLine();
-                        String title = sc.nextLine();
-// sc.nextLine();
-                        String chunkOfInfo = sc.nextLine().trim();
-                        String[] singleLine = chunkOfInfo.split("\\s+");
+        try (Scanner fileScanner = new Scanner(new File(fileName))) {
+            String operation;
+            while (fileScanner.hasNext()) {
+                operation = fileScanner.next();
 
-                        String keywords = sc.nextLine().trim();
+                // Handle 'insert' operation
+                if (operation.equals("insert")) {
+                    String itemId = fileScanner.next().trim();
+                    fileScanner.nextLine();
+                    String itemTitle = fileScanner.nextLine();
+                    String detailsLine = fileScanner.nextLine().trim();
+                    String[] detailsArray = detailsLine.split("\\s+");
+                    String keywordString = fileScanner.nextLine().trim();
+                    String[] keywordList = keywordString.split("\\s+");
+                    String itemDescription = fileScanner.nextLine().trim();
 
-                        String[] keywordArray = keywords.split("\\s+");
+                    control.insert(Integer.parseInt(itemId), itemTitle,
+                        detailsArray[0], Integer.parseInt(detailsArray[1]),
+                        Short.parseShort(detailsArray[2]), Short.parseShort(
+                            detailsArray[3]), Integer.parseInt(detailsArray[4]),
+                        keywordList, keywordList.length, itemDescription);
+                }
+                // Handle 'delete' operation
+                else if (operation.equals("delete")) {
+                    String deleteId = fileScanner.next();
+                    control.delete(Integer.parseInt(deleteId));
+                }
+                // Handle 'search' operation
+                else if (operation.equals("search")) {
+                    String searchType = fileScanner.next();
 
-                        String description = sc.nextLine().trim();
-                        control.insert(Integer.parseInt(newId), title,
-                            singleLine[0], Integer.parseInt(singleLine[1]),
-                            Short.parseShort(singleLine[2]), Short.parseShort(
-                                singleLine[3]), Integer.parseInt(singleLine[4]),
-                            keywordArray, keywordArray.length, description);
-                        break;
-                    case "delete":
-                        String iD = sc.next();
-                        control.delete(Integer.parseInt(iD));
-                        break;
-                    case "search":
-                        String type = sc.next();
-                        switch (type) {
-                            case "keyword":
-                                String newWord = sc.next();
-                                control.searchkeyword(newWord);
-                                break;
-                            case "location":
-                                String[] location = new String[3];
-                                location[0] = sc.next();
-                                location[1] = sc.next();
-                                location[2] = sc.next();
-                                control.searchLocation(Short.parseShort(
-                                    location[0]), Short.parseShort(location[1]),
-                                    Short.parseShort(location[2]));
-                                break;
-                            case "ID":
-                                String id = sc.next();
-                                control.searchId(Integer.parseInt(id));
-                                break;
-                            case "date":
-                                String[] dates = new String[2];
-                                dates[0] = sc.next();
-                                dates[1] = sc.next();
-                                control.searchDate(dates[0], dates[1]);
-                                break;
-                            case "cost":
-                                String[] cost = new String[2];
-                                cost[0] = sc.next();
-                                cost[1] = sc.next();
-                                int lowerCost = Integer.parseInt(cost[0]);
-                                int upperCost = Integer.parseInt(cost[1]);
-                                control.searchCost(lowerCost, upperCost);
-                                break;
-                            default:
-                                break;
-                        }
-                        break;
-                    case "print":
-                        String printType = sc.next();
-                        control.print(printType);
-                        break;
-                    default:
-                        System.out.println("Unknown command: " + command);
-                        break;
+                    // Search by keyword
+                    if (searchType.equals("keyword")) {
+                        String searchKeyword = fileScanner.next();
+                        control.searchkeyword(searchKeyword);
+                    }
+                    // Search by location
+                    else if (searchType.equals("location")) {
+                        String[] locationDetails = new String[3];
+                        locationDetails[0] = fileScanner.next();
+                        locationDetails[1] = fileScanner.next();
+                        locationDetails[2] = fileScanner.next();
+                        control.searchLocation(Short.parseShort(
+                            locationDetails[0]), Short.parseShort(
+                                locationDetails[1]), Short.parseShort(
+                                    locationDetails[2]));
+                    }
+                    // Search by ID
+                    else if (searchType.equals("ID")) {
+                        String searchId = fileScanner.next();
+                        control.searchId(Integer.parseInt(searchId));
+                    }
+                    // Search by date
+                    else if (searchType.equals("date")) {
+                        String[] dateRange = new String[2];
+                        dateRange[0] = fileScanner.next();
+                        dateRange[1] = fileScanner.next();
+                        control.searchDate(dateRange[0], dateRange[1]);
+                    }
+                    // Search by cost
+                    else if (searchType.equals("cost")) {
+                        String[] costRange = new String[2];
+                        costRange[0] = fileScanner.next();
+                        costRange[1] = fileScanner.next();
+                        int minCost = Integer.parseInt(costRange[0]);
+                        int maxCost = Integer.parseInt(costRange[1]);
+                        control.searchCost(minCost, maxCost);
+                    }
+                }
+                // Handle 'print' operation
+                else if (operation.equals("print")) {
+                    String printCategory = fileScanner.next();
+                    control.print(printCategory);
+                }
+                // Handle unknown operation
+                else {
+                    System.out.println("Unknown command: " + operation);
                 }
             }
         }
@@ -115,4 +119,5 @@ public class CommandProcessor {
             e.printStackTrace();
         }
     }
+
 }

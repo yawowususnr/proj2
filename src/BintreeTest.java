@@ -3,7 +3,7 @@ import student.TestCase;
 /**
  * This class is designed to test Bintree functionality.
  * 
- * @author Kwame Asare
+ * @author Yaw Agyemang
  * @author Yaw Owusu Jnr
  * @version 10/20/24
  */
@@ -14,7 +14,6 @@ public class BintreeTest extends TestCase {
     private Seminar eventC;
     private Seminar eventD;
     private Seminar eventE;
-    private Bintree nullTree;
     private Bintree smallTree;
     private Bintree secondaryTree;
     private Seminar evt1;
@@ -41,7 +40,6 @@ public class BintreeTest extends TestCase {
         eventE = new Seminar(5, "Seminar Echo", "2021-07-08", 50, (short)60,
             (short)70, 110, new String[] { "Science" }, "A scientific event.");
 
-        nullTree = new Bintree(100);
         smallTree = new Bintree(50);
         secondaryTree = new Bintree(200);
 

@@ -4,13 +4,13 @@
  * and removal of seminars while maintaining the order of the seminars
  * based on their IDs.
  * 
- * @author Yaw Agyemang	
+ * @author Yaw Agyemang    
  * @author Yaw Owusu Jnr
  * @version 10/18/24
  */
 class LeafNode implements BintreeNode {
-    private int size; // size of the array holding seminars
-    private Seminar[] seminars; // array of seminars
+    private int seminarCount; // size of the array holding seminars
+    private Seminar[] seminarList; // array of seminars
 
     /**
      * Creates a new leaf node
@@ -19,41 +19,36 @@ class LeafNode implements BintreeNode {
      *            the first seminar to hold in the node
      */
     public LeafNode(Seminar seminar) {
-        size = 0;
-        seminars = new Seminar[1];
+        seminarCount = 0;
+        seminarList = new Seminar[1];
         addSeminar(seminar);
     }
-
 
     /**
      * Expands the array of seminars to accommodate additional seminars.
      */
-    private void expandArray() {
-        Seminar[] newArray = new Seminar[seminars.length + 1];
-
-        for (int i = 0; i < seminars.length; i++) {
-            newArray[i] = seminars[i];
+    private void growSeminarArray() {
+        Seminar[] expandedArray = new Seminar[seminarList.length + 1];
+        for (int index = 0; index < seminarList.length; index++) {
+            expandedArray[index] = seminarList[index];
         }
-
-        seminars = newArray;
+        seminarList = expandedArray;
     }
-
 
     /**
      * Sorts the array of seminars in ascending order based on their IDs.
      */
-    private void sortArray() {
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                if (seminars[i].id() < seminars[j].id()) {
-                    Seminar tempValue = seminars[j];
-                    seminars[j] = seminars[i];
-                    seminars[i] = tempValue;
+    private void orderSeminarArray() {
+        for (int firstIndex = 0; firstIndex < seminarCount; firstIndex++) {
+            for (int secondIndex = 0; secondIndex < seminarCount; secondIndex++) {
+                if (seminarList[firstIndex].id() < seminarList[secondIndex].id()) {
+                    Seminar tempSeminar = seminarList[secondIndex];
+                    seminarList[secondIndex] = seminarList[firstIndex];
+                    seminarList[firstIndex] = tempSeminar;
                 }
             }
         }
     }
-
 
     /**
      * Adds a new seminar to the array. If the array is full, it expands
@@ -63,37 +58,33 @@ class LeafNode implements BintreeNode {
      *            the seminar to add to the node
      */
     public void addSeminar(Seminar seminar) {
-        if (size == seminars.length) {
-            expandArray();
+        if (seminarCount == seminarList.length) {
+            growSeminarArray();
         }
-
-        seminars[size] = seminar;
-        size++;
-
-        sortArray();
+        seminarList[seminarCount] = seminar;
+        seminarCount++;
+        orderSeminarArray();
     }
-
 
     /**
      * Removes a seminar from the array. If the seminar is found, it
-     * shifts the subsequent seminars in the array and decreases the size.
+     * shifts the subsequent seminars in the array and decreases the count.
      * 
      * @param seminar
      *            the seminar to remove from the node
      */
     public void removeSeminar(Seminar seminar) {
-        for (int i = 0; i < size; i++) {
-            if (seminars[i].id() == seminar.id()) {
-                for (int j = i; j < size - 1; j++) {
-                    seminars[j] = seminars[j + 1];
+        for (int index = 0; index < seminarCount; index++) {
+            if (seminarList[index].id() == seminar.id()) {
+                for (int shiftIndex = index; shiftIndex < seminarCount - 1; shiftIndex++) {
+                    seminarList[shiftIndex] = seminarList[shiftIndex + 1];
                 }
-                size--;
+                seminarCount--;
+                break;
             }
         }
-
-        sortArray();
+        orderSeminarArray();
     }
-
 
     @Override
     /**
@@ -105,7 +96,6 @@ class LeafNode implements BintreeNode {
         return false;
     }
 
-
     @Override
     /**
      * Checks if the node is a leaf node.
@@ -116,16 +106,14 @@ class LeafNode implements BintreeNode {
         return true;
     }
 
-
     /**
      * Checks if the node is empty (contains no seminars).
      * 
      * @return true if there are no seminars in the node
      */
     public boolean isEmpty() {
-        return false;
+        return seminarCount == 0;
     }
-
 
     @Override
     /**
@@ -142,29 +130,18 @@ class LeafNode implements BintreeNode {
      * @return a node holding the data
      */
     public BintreeNode insert(Seminar seminar, int level, BoundingBox bbox) {
-        // If the coordinates of the first seminar match the new seminar's
-        // coordinates
-        if (seminars[0].x() == seminar.x() && seminars[0].y() == seminar.y()) {
-            addSeminar(seminar); // Add the new seminar to the current leaf node
-            return this; // Return the current leaf node
+        if (seminarList[0].x() == seminar.x() && seminarList[0].y() == seminar.y()) {
+            addSeminar(seminar);
+            return this;
         }
 
-        // Create a new internal node to replace the current leaf node
-        InternalNode newInternalNode = new InternalNode();
-
-        // Transfer all existing seminars to the new internal node using a
-        // numeric for loop
-        for (int i = 0; i < seminars.length; i++) {
-            newInternalNode.insert(seminars[i], level, bbox);
+        InternalNode internalNode = new InternalNode();
+        for (int index = 0; index < seminarList.length; index++) {
+            internalNode.insert(seminarList[index], level, bbox);
         }
-
-        // Insert the new seminar into the internal node
-        newInternalNode.insert(seminar, level, bbox);
-
-        // Return the newly created internal node
-        return newInternalNode;
+        internalNode.insert(seminar, level, bbox);
+        return internalNode;
     }
-
 
     @Override
     /**
@@ -181,31 +158,27 @@ class LeafNode implements BintreeNode {
      */
     public BintreeNode remove(Seminar seminar, int level, BoundingBox bbox) {
         removeSeminar(seminar);
-
-        if (size == 0) {
+        if (seminarCount == 0) {
             return EmptyNode.getInstance();
         }
-
         return this;
     }
 
-
     /**
-     * Gets the array
+     * Gets the array of seminars.
      * 
-     * @return the array of seminar
+     * @return the array of seminars
      */
     public Seminar[] getSeminars() {
-        return seminars;
+        return seminarList;
     }
 
-
     /**
-     * Gets the size of the array
+     * Gets the count of seminars in the array.
      * 
-     * @return the size of the array
+     * @return the number of seminars in the node
      */
     public int getSize() {
-        return size;
+        return seminarCount;
     }
 }

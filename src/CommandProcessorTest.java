@@ -34,9 +34,9 @@ public class CommandProcessorTest extends TestCase {
     public void testCommand() {
         this.command.processFile();
 
-        String actualOutput = systemOut().getHistory();
+        String output = systemOut().getHistory();
 
-        String testOutput = "Location Tree:\r\n" + "" + "(E)\r\n"
+        String input = "Location Tree:\r\n" + "" + "(E)\r\n"
             + "ID Tree:\r\n" + "This tree is empty\r\n"
             + "Search FAILED -- There is no record with ID 1\r\n"
             + "Seminars matching keyword VT:\r\n"
@@ -247,7 +247,7 @@ public class CommandProcessorTest extends TestCase {
             + "    (Leaf with 1 objects: 2)\r\n"
             + "    (Leaf with 1 objects: 3)";
 
-        assertFuzzyEquals(actualOutput, testOutput);
+        assertFuzzyEquals(output, input);
 
     }
 
