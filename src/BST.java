@@ -9,8 +9,8 @@
  * @version 10/18/24
  */
 class BST<K extends Comparable<K>, V> {
-	private BSTNode<KVPair<K, V>> root; // Root of the BST
-	private int totalNodes; // Number of nodes in the BST
+	private BSTNode<KVPair<K, V>> root;
+	private int totalNodes;
 
 	/**
 	 * Constructs an empty Binary Search Tree.
@@ -98,31 +98,6 @@ class BST<K extends Comparable<K>, V> {
 	}
 
 	/**
-	 * Removes a KeyValuePair from the BST using the specified key.
-	 * 
-	 * @param key The key value of the KeyValuePair to remove.
-	 * @return The KeyValuePair removed, or null if none exists.
-	 */
-	public KVPair<K, V> remove(K key) {
-		KVPair<K, V> temp = findhelp(root, key); // First find it
-		if (temp != null) {
-			root = removehelp(root, key); // Now remove it
-			totalNodes--;
-		}
-		return temp;
-	}
-
-	/**
-	 * Removes a specified KeyValuePair from the BST.
-	 * 
-	 * @param pair The KeyValuePair to remove.
-	 */
-	public void remove(KVPair<K, V> pair) {
-		root = removehelp(root, pair);
-		totalNodes--;
-	}
-
-	/**
 	 * Helper method to remove a KeyValuePair starting from a given node.
 	 * 
 	 * @param rt   The current node where removal occurs.
@@ -152,6 +127,31 @@ class BST<K extends Comparable<K>, V> {
 			}
 		}
 		return rt;
+	}
+
+	/**
+	 * Removes a KeyValuePair from the BST using the specified key.
+	 * 
+	 * @param key The key value of the KeyValuePair to remove.
+	 * @return The KeyValuePair removed, or null if none exists.
+	 */
+	public KVPair<K, V> remove(K key) {
+		KVPair<K, V> temp = findhelp(root, key);
+		if (temp != null) {
+			root = removehelp(root, key);
+			totalNodes--;
+		}
+		return temp;
+	}
+
+	/**
+	 * Removes a specified KeyValuePair from the BST.
+	 * 
+	 * @param pair The KeyValuePair to remove.
+	 */
+	public void remove(KVPair<K, V> pair) {
+		root = removehelp(root, pair);
+		totalNodes--;
 	}
 
 	/**
@@ -186,6 +186,19 @@ class BST<K extends Comparable<K>, V> {
 	}
 
 	/**
+	 * Retrieves the maximum node from a subtree.
+	 * 
+	 * @param rt The root of the subtree.
+	 * @return The maximum node.
+	 */
+	private BSTNode<KVPair<K, V>> getMax(BSTNode<KVPair<K, V>> rt) {
+		if (rt.getRight() == null) {
+			return rt;
+		}
+		return getMax(rt.getRight());
+	}
+
+	/**
 	 * Deletes the maximum node from a subtree.
 	 * 
 	 * @param rt The root of the subtree.
@@ -197,19 +210,6 @@ class BST<K extends Comparable<K>, V> {
 		}
 		rt.setRight(deleteMax(rt.getRight()));
 		return rt;
-	}
-
-	/**
-	 * Retrieves the maximum node from a subtree.
-	 * 
-	 * @param rt The root of the subtree.
-	 * @return The maximum node.
-	 */
-	private BSTNode<KVPair<K, V>> getMax(BSTNode<KVPair<K, V>> rt) {
-		if (rt.getRight() == null) {
-			return rt;
-		}
-		return getMax(rt.getRight());
 	}
 
 	/**
@@ -278,7 +278,7 @@ class BST<K extends Comparable<K>, V> {
 		}
 		int leftHeight = getHeight(node.getLeft());
 		int rightHeight = getHeight(node.getRight());
-		return 1 + Math.max(leftHeight, rightHeight); // Height is max of left or right subtree + 1
+		return 1 + Math.max(leftHeight, rightHeight);
 	}
 
 	/**
@@ -296,7 +296,6 @@ class BST<K extends Comparable<K>, V> {
 			space += "    ";
 		}
 		if (rt == null) {
-			// Print null nodes with the corresponding indentation.
 			System.out.println(space + "(" + "null" + ")");
 			space += " ";
 			return;
