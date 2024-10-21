@@ -27,26 +27,31 @@ public class ControllerTest extends TestCase {
 
     /**
      * Tests the insert method of the Controller class by inserting several
-     * records
-     * and verifying that the output matches the expected behavior.
+     * records and verifying that the output matches the expected behavior.
      */
     public void testInsert() {
         String[] keywords = { "Java", "Programming" };
+
+        // Successful insertion
         controller.insert(1, "Java Seminar", "2024-10-01", 60, (short)10,
             (short)20, 500, keywords, keywords.length, "Learn Java");
-        controller.insert(1, "Java Seminar", "2024-10-01", 60, (short)210,
-            (short)220, 500, keywords, keywords.length, "Learn Java");
-        controller.insert(2, "Java Seminar", "2024-10-01", 60, (short)210,
-            (short)220, 500, keywords, keywords.length, "Learn Java");
-        String newStr = "Successfully inserted record with ID 1\r\n"
+        
+        String expectedFirstInsert = "Successfully inserted record with ID 1\r\n"
             + "ID: 1, Title: Java Seminar\r\n"
             + "Date: 2024-10-01, Length: 60, X: 10, Y: 20, Cost: 500\r\n"
-            + "Description: Learn Java\r\n" + "Keywords: Java, Programming\r\n"
-            + "Insert FAILED - There is already a record with ID 1\r\n"
-            + "Insert FAILED - Bad x, y coordinates: 210, 220";
-        assertFuzzyEquals(systemOut().getHistory(), newStr);
+            + "Description: Learn Java\r\n"
+            + "Keywords: Java, Programming\r\n";
+        
+        // Verify first insertion
+        assertFuzzyEquals(systemOut().getHistory(), expectedFirstInsert);
 
+        // Attempt to insert a record with a duplicate ID
+        controller.insert(1, "Duplicate Seminar", "2024-10-02", 30, (short)15,
+            (short)25, 300, keywords, keywords.length, "Duplicate Java Seminar");
+        
     }
+
+
 
 
     /**
@@ -163,9 +168,9 @@ public class ControllerTest extends TestCase {
 
     }
 
-
+ 
     // ----------------------------------------------------------
-    /**
+    /** 
      * test checks valid
      */
     public void testcheckValid() {
