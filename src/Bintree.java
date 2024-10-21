@@ -255,13 +255,19 @@ public class Bintree {
 	 */
 	private int handleXAxisSplit(InternalNode internalNode, Seminar targetSeminar, double searchRadius, int treeDepth,
 			BoundingBox boundingBox, double midX) {
+
 		if (targetSeminar.x() - searchRadius < midX && targetSeminar.x() + searchRadius >= midX) {
 			return searchBothChildren(internalNode, targetSeminar, searchRadius, treeDepth, boundingBox, midX, true);
-		} else if (targetSeminar.x() - searchRadius < midX) {
+		}
+
+		else if (targetSeminar.x() - searchRadius < midX) {
 			return searchLeftChild(internalNode, targetSeminar, searchRadius, treeDepth, boundingBox, midX, true);
-		} else if (targetSeminar.x() + searchRadius >= midX) {
+		}
+
+		else if (targetSeminar.x() + searchRadius >= midX) {
 			return searchRightChild(internalNode, targetSeminar, searchRadius, treeDepth, boundingBox, midX, true);
 		}
+
 		return 1;
 	}
 
@@ -280,13 +286,19 @@ public class Bintree {
 	 */
 	private int handleYAxisSplit(InternalNode internalNode, Seminar targetSeminar, double searchRadius, int treeDepth,
 			BoundingBox boundingBox, double midY) {
+
 		if (targetSeminar.y() - searchRadius < midY && targetSeminar.y() + searchRadius >= midY) {
 			return searchBothChildren(internalNode, targetSeminar, searchRadius, treeDepth, boundingBox, midY, false);
-		} else if (targetSeminar.y() - searchRadius < midY) {
+		}
+
+		else if (targetSeminar.y() - searchRadius < midY) {
 			return searchLeftChild(internalNode, targetSeminar, searchRadius, treeDepth, boundingBox, midY, false);
-		} else if (targetSeminar.y() + searchRadius >= midY) {
+		}
+
+		else if (targetSeminar.y() + searchRadius >= midY) {
 			return searchRightChild(internalNode, targetSeminar, searchRadius, treeDepth, boundingBox, midY, false);
 		}
+
 		return 1;
 	}
 
@@ -345,29 +357,6 @@ public class Bintree {
 	}
 
 	/**
-	 * Searches only the left child of the internal node during the search
-	 * operation.
-	 *
-	 * @param internalNode  The internal node currently being processed.
-	 * @param targetSeminar The seminar being searched for.
-	 * @param searchRadius  The radius within which to search for the target
-	 *                      seminar.
-	 * @param treeDepth     The current depth of the node in the tree.
-	 * @param boundingBox   The bounding box defining the current search area.
-	 * @param mid           The midpoint (either along X-axis or Y-axis) where the
-	 *                      split occurs.
-	 * @param isXAxis       Boolean indicating if the split is along the X-axis.
-	 * @return The number of nodes processed when only the left child is traversed.
-	 */
-	private int searchLeftChild(InternalNode internalNode, Seminar targetSeminar, double searchRadius, int treeDepth,
-			BoundingBox boundingBox, double mid, boolean isXAxis) {
-		BoundingBox leftBoundingBox = isXAxis
-				? new BoundingBox(boundingBox.getxMin(), boundingBox.getyMin(), mid, boundingBox.getyMax())
-				: new BoundingBox(boundingBox.getxMin(), boundingBox.getyMin(), boundingBox.getxMax(), mid);
-		return searchRecursive(internalNode.left(), targetSeminar, searchRadius, treeDepth + 1, leftBoundingBox) + 1;
-	}
-
-	/**
 	 * Processes the leaf node during the search and checks for seminars within the
 	 * search radius.
 	 *
@@ -378,15 +367,67 @@ public class Bintree {
 	 * @return The number of nodes processed at this leaf node.
 	 */
 	private int handleLeafNode(LeafNode leafNode, Seminar targetSeminar, double radius) {
-		for (Seminar semObjecet : leafNode.getSeminars()) {
-			double searchDistance = Math.sqrt(
-					Math.pow(targetSeminar.x() - semObjecet.x(), 2) + Math.pow(targetSeminar.y() - semObjecet.y(), 2));
-			if (searchDistance <= radius) {
-				System.out.println("Found a record with key value " + semObjecet.id() + " at " + semObjecet.x() + ", "
-						+ semObjecet.y());
+		Seminar[] seminars = leafNode.getSeminars();
+
+		for (Seminar seminar : seminars) {
+			if (isWithinRadius(targetSeminar, seminar, radius)) {
+				printFoundRecord(seminar);
 			}
 		}
+
 		return 1;
+	}
+
+	/**
+	 * Checks if a seminar is within a specified radius of a target seminar.
+	 *
+	 * @param targetSeminar The seminar used as a reference point for distance
+	 *                      measurement.
+	 * @param seminar       The seminar to check against the target seminar.
+	 * @param radius        The radius within which to check for proximity.
+	 * @return true if the seminar is within the specified radius; false otherwise.
+	 */
+	private boolean isWithinRadius(Seminar targetSeminar, Seminar seminar, double radius) {
+		double deltaX = targetSeminar.x() - seminar.x();
+		double deltaY = targetSeminar.y() - seminar.y();
+		double distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+		return distance <= radius;
+	}
+
+	/**
+	 * Prints the details of a seminar that has been found within the specified
+	 * radius.
+	 *
+	 * @param seminar The seminar whose details are to be printed.
+	 */
+	private void printFoundRecord(Seminar seminar) {
+		System.out.println("Found a record with key value " + seminar.id() + " at " + seminar.x() + ", " + seminar.y());
+	}
+
+	/**
+	 * Searches the left child of an internal node in the binary tree for a target
+	 * seminar within a specified search radius.
+	 *
+	 * @param internalNode  The internal node being searched.
+	 * @param targetSeminar The seminar object being searched for.
+	 * @param searchRadius  The radius within which to search for the target
+	 *                      seminar.
+	 * @param treeDepth     The current depth of the tree during the search.
+	 * @param boundingBox   The bounding box that defines the current search area.
+	 * @param mid           The midpoint used for defining the left bounding box.
+	 * @param isXAxis       A boolean indicating whether the search is based on the
+	 *                      X-axis or Y-axis.
+	 * @return The total number of nodes visited during the search, incremented by
+	 *         one.
+	 */
+	private int searchLeftChild(InternalNode internalNode, Seminar targetSeminar, double searchRadius, int treeDepth,
+			BoundingBox boundingBox, double mid, boolean isXAxis) {
+		BoundingBox leftChildBoundingBox = isXAxis
+				? new BoundingBox(boundingBox.getxMin(), boundingBox.getyMin(), mid, boundingBox.getyMax())
+				: new BoundingBox(boundingBox.getxMin(), boundingBox.getyMin(), boundingBox.getxMax(), mid);
+
+		return searchRecursive(internalNode.left(), targetSeminar, searchRadius, treeDepth + 1, leftChildBoundingBox)
+				+ 1;
 	}
 
 	/**
