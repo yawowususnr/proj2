@@ -1,542 +1,400 @@
 /**
- * Class that holds the world
+ * A class that defines a bounding box in a 2D space, represented by its minimum
+ * and maximum x and y coordinates.
  * 
- * @author Yaw Agyemang	
+ * <p>
+ * This class allows querying the boundaries of the box through getter methods
+ * and provides a simple structure for managing a rectangular region in a
+ * two-dimensional world.
+ * </p>
+ * 
+ * @author Yaw Agyemang
  * @author Yaw Owusu Jnr
  * @version 10/18/24
  */
 class BoundingBox {
-    private double minX; // minimum x value
-    private double minY; // minimum y value
-    private double maxX; // maximum x value
-    private double maxY; // maximum y value
+	private double minimumX;
+	private double minimumY;
+	private double maximumX;
+	private double maximumY;
 
-    /**
-     * Creates a BoundingBox class
-     * 
-     * @param minX
-     *            the min x value
-     * @param minY
-     *            the min y value
-     * @param maxX
-     *            the max x value
-     * @param maxY
-     *            the max y value
-     */
-    public BoundingBox(double minX, double minY, double maxX, double maxY) {
-        this.minX = minX;
-        this.minY = minY;
-        this.maxX = maxX;
-        this.maxY = maxY;
-    }
+	/**
+	 * Constructs a BoundingBox object with the specified minimum and maximum x and
+	 * y coordinates.
+	 * 
+	 * @param minX the minimum x-coordinate
+	 * @param minY the minimum y-coordinate
+	 * @param maxX the maximum x-coordinate
+	 * @param maxY the maximum y-coordinate
+	 */
+	public BoundingBox(double minX, double minY, double maxX, double maxY) {
+		this.minimumX = minX;
+		this.minimumY = minY;
+		this.maximumX = maxX;
+		this.maximumY = maxY;
+	}
 
+	/**
+	 * Returns the maximum y-coordinate of the bounding box.
+	 * 
+	 * @return the maximum y-coordinate
+	 */
+	public double getMaxY() {
+		return maximumY;
+	}
 
-    /**
-     * Gets the minimum y value
-     * 
-     * @return the minimum y value
-     */
-    public double getyMin() {
-        return minY;
-    }
+	/**
+	 * Returns the maximum x-coordinate of the bounding box.
+	 * 
+	 * @return the maximum x-coordinate
+	 */
+	public double getMaxX() {
+		return maximumX;
+	}
 
+	/**
+	 * Returns the minimum x-coordinate of the bounding box.
+	 * 
+	 * @return the minimum x-coordinate
+	 */
+	public double getMinX() {
+		return minimumX;
+	}
 
-    /**
-     * Gets the minimum x value
-     * 
-     * @return the minimum x value
-     */
-    public double getxMin() {
-        return minX;
-    }
+	/**
+	 * Returns the minimum y-coordinate of the bounding box.
+	 * 
+	 * @return the minimum y-coordinate
+	 */
+	public double getMinY() {
+		return minimumY;
+	}
 
-
-    /**
-     * Gets the maximum x value
-     * 
-     * @return the maximum x value
-     */
-    public double getxMax() {
-        return maxX;
-    }
-
-
-    /**
-     * Gets the maximum y value
-     * 
-     * @return the maximum y value
-     */
-    public double getyMax() {
-        return maxY;
-    }
 }
 
-
-
-
 /**
- * Binary tree that holds x and y coordinates
+ * A binary tree that stores nodes containing x and y coordinates. This tree is
+ * designed for efficient spatial queries, using a bounding box to define the
+ * search area.
  * 
- * @author Yaw Owusu Snr
- * @author Chris Nicoue-Beglah
- * @version 10/9/23
+ * @author Yaw Agyemang
+ * @author Yaw Owusu Jnr
+ * @version 10/18/24
  */
 public class Bintree {
-    private BintreeNode root; // the root node
-    private BoundingBox initialBoundingBox; // the starting bounding box
+	private BintreeNode root;
+	private BoundingBox rootBbox;
 
-    /**
-     * Creates a new Bintree
-     * 
-     * @param size
-     *            the size of the world
-     */
-    public Bintree(int size) {
-        initialBoundingBox = new BoundingBox(0.0, 0.0, (size - 1), (size - 1));
-        root = EmptyNode.getInstance();
-    }
+	/**
+	 * Initialize a new Bintree object
+	 * 
+	 * @param size of the world
+	 */
+	public Bintree(int size) {
+		rootBbox = new BoundingBox(0.0, 0.0, (size - 1), (size - 1));
+		root = EmptyNode.getInstance();
+	}
 
+	/**
+	 * Returns the instantiated bounding box object
+	 * 
+	 * @return the initial bounding box
+	 */
+	public BoundingBox getWorld() {
+		return rootBbox;
+	}
 
-    /**
-     * Gets the bounding box
-     * 
-     * @return the initial bounding box
-     */
-    public BoundingBox getWorld() {
-        return initialBoundingBox;
-    }
+	/**
+	 * Add a new seminar object in the Bintree
+	 * 
+	 * @param semObject the seminar to be added
+	 */
+	public void insert(Seminar semObject) {
+		root = root.insert(semObject, 0, rootBbox);
+	}
 
+	/**
+	 * Remove a seminar object from the Bintree
+	 * 
+	 * @param semObject the seminar to be removed
+	 */
+	public void remove(Seminar semObject) {
+		root = root.remove(semObject, 0, rootBbox);
+	}
 
-    /**
-     * Insert a new seminar into the Bintree
-     * 
-     * @param seminar
-     *            the seminar to be inserted
-     */
-    public void insert(Seminar seminar) {
-        root = root.insert(seminar, 0, initialBoundingBox);
-    }
+	/**
+	 * Finds seminar objects that fall within a range
+	 * 
+	 * @param targetSemObject the seminar find
+	 * @param radius          the radius around the seminar object to find
+	 */
+	public void search(Seminar targetSemObject, double radius) {
+		int nodesVisited = searchRecursive(root, targetSemObject, radius, 0, rootBbox);
+		System.out.println(nodesVisited + " nodes visited in this search");
+	}
 
+	/**
+	 * Returns the height of the bintree
+	 * 
+	 * @param root root of the bintree
+	 * @return the height of the bintree
+	 */
+	public int getHeight(BintreeNode root) {
+		if (root == null || root.isLeaf()) {
+			return 0;
+		}
+		if (root.isInternal()) {
+			InternalNode internalNode = (InternalNode) root;
+			int heightOfLeft = getHeight(internalNode.left());
+			int heightOfRight = getHeight(internalNode.right());
+			return Math.max(heightOfLeft, heightOfRight) + 1;
+		}
+		return 0;
+	}
 
-    /**
-     * Remove a seminar from the Bintree
-     * 
-     * @param seminar
-     *            the seminar to be removed
-     */
-    public void remove(Seminar seminar) {
-        root = root.remove(seminar, 0, initialBoundingBox);
-    }
+	/**
+	 * Prints the reverse InOrder traversal of the Bintree
+	 */
+	public void print() {
+		int heightOfTree = getHeight(root);
+		printRecursive(root, 0, heightOfTree);
+	}
 
+	/**
+	 * Recursively print seminarObjects in the bintree in a reverse inOrder manner
+	 * 
+	 * @param node        current node being visited
+	 * @param nodeDepth   current depth of the node being visited
+	 * @param totalHeight height of the bintree
+	 */
+	private void printRecursive(BintreeNode node, int nodeDepth, int heightOfTree) {
 
-    /**
-     * Search for seminars within a certain distance
-     * 
-     * @param targetSeminar
-     *            the seminar to be found
-     * @param searchRadius
-     *            the radius around the search seminar to look at
-     */
-    public void search(Seminar targetSeminar, double searchRadius) {
-        int nodesVisited = searchRecursive(root, targetSeminar, searchRadius, 0,
-            initialBoundingBox);
-        System.out.println(nodesVisited + " nodes visited in this search");
-    }
+		StringBuilder spacing = new StringBuilder();
+		for (int i = 0; i < heightOfTree - nodeDepth; i++) {
+			spacing.append("    ");
 
+		}
 
-    /**
-     * gets the height of the tree
-     * 
-     * @param node
-     *            take in a bintree
-     * @return the height of the tree
-     */
-    public int getHeight(BintreeNode node) {
-        if (node == null || node.isLeaf()) {
-            return 0; // Return 0 for null or leaf nodes
-        }
-        if (node.isInternal()) {
-            InternalNode internalNode = (InternalNode)node;
-            int leftHeight = getHeight(internalNode.left());
-            int rightHeight = getHeight(internalNode.right());
-            return Math.max(leftHeight, rightHeight) + 1; // Height of an
-                                                          // internal node
-        }
-        return 0; // Should not reach here, but added for completeness
-    }
+		if (node.isInternal()) {
+			InternalNode internalNode = (InternalNode) node;
+			System.out.println(spacing + "(I)");
 
+			printRecursive(internalNode.right(), nodeDepth + 1, heightOfTree);
 
-    /**
-     * 
-     * Prints the entire Bintree
-     */
-    public void print() {
-        int treeHeight = getHeight(root);
-        // Get the height of the tree
-        printRecursive(root, 0, treeHeight);
-    }
+			printRecursive(internalNode.left(), nodeDepth + 1, heightOfTree);
+		} else if (node.isLeaf()) {
+			LeafNode leafNode = (LeafNode) node;
+			Seminar[] seminarObjects = leafNode.getSeminars();
+			StringBuilder leafStringBuilder = new StringBuilder("(Leaf with " + leafNode.getSize() + " objects:");
 
+			for (int i = 0; i < leafNode.getSize(); i++) {
+				leafStringBuilder.append(" ").append(seminarObjects[i].id());
+			}
 
-    /**
-     * Recursively print nodoes in the bin tree
-     * 
-     * @param node
-     *            the current node
-     * @param currentLevel
-     *            current level
-     * @param totalHeight
-     *            height of tree
-     */
-    private void printRecursive(
-        BintreeNode node,
-        int currentLevel,
-        int totalHeight) {
-        // Calculate the indentation based on the current level in relation to
-        // the total height
-        StringBuilder indentation = new StringBuilder();
-        int depth = totalHeight - currentLevel;
-        for (int i = 0; i < depth; i++) {
-            indentation.append("    ");
+			System.out.println(spacing + leafStringBuilder.toString() + ')');
+		} else {
+			System.out.println(spacing + "(E)");
+		}
+	}
 
-        }
+	/**
+	 * Recursively searches the bintree based on seminar Object and search radius
+	 *
+	 * @param node          The current seminar object being visited.
+	 * @param targetSeminar The target seminar object being searched for.
+	 * @param radius        Search radius.
+	 * @param depth         Current depth of seminar object being visited.
+	 * @param bbox          Bounding box of the current search area.
+	 * @return number of nodes visited during the search
+	 */
+	private int searchRecursive(BintreeNode node, Seminar targetSeminar, double radius, int depth, BoundingBox bbox) {
+		if (node.isInternal()) {
+			return handleInternalNode((InternalNode) node, targetSeminar, radius, depth, bbox);
+		} else if (node.isLeaf()) {
+			return handleLeafNode((LeafNode) node, targetSeminar, radius);
+		}
+		return 1;
+	}
 
-        if (node.isInternal()) {
-            InternalNode internalNode = (InternalNode)node;
-            System.out.println(indentation + "(I)");
+	/**
+	 * Processes an internal node during the search operation.
+	 *
+	 * @param currentNode   The current internal node being traversed.
+	 * @param targetSeminar The target seminar object being searched for.
+	 * @param searchRadius  The radius within which to search for the target.
+	 * @param depthLevel    The current depth level in the binary tree.
+	 * @param currentBox    The bounding box representing the search area at the
+	 *                      current depth.
+	 * @return The number of nodes examined during the traversal of this internal
+	 *         node.
+	 */
+	private int handleInternalNode(InternalNode currentNode, Seminar targetSeminar, double searchRadius, int depthLevel,
+			BoundingBox currentBox) {
+		double centerX = (currentBox.getMinX() + currentBox.getMaxX()) / 2.0;
+		double centerY = (currentBox.getMinY() + currentBox.getMaxY()) / 2.0;
 
-            // Recursively print the right child first
-            printRecursive(internalNode.right(), currentLevel + 1, totalHeight);
+		if (depthLevel % 2 == 0) {
+			return handleXAxisSplit(currentNode, targetSeminar, searchRadius, depthLevel, currentBox, centerX);
+		} else {
+			return handleYAxisSplit(currentNode, targetSeminar, searchRadius, depthLevel, currentBox, centerY);
+		}
+	}
 
-            // Recursively print the left child next
-            printRecursive(internalNode.left(), currentLevel + 1, totalHeight);
-        }
-        else if (node.isLeaf()) {
-            LeafNode leafNode = (LeafNode)node;
-            Seminar[] seminars = leafNode.getSeminars();
-            StringBuilder leafInfo = new StringBuilder("(Leaf with " + leafNode
-                .getSize() + " objects:");
+	/**
+	 * Handles the traversal of an internal node when the split is along the X-axis
+	 * during the search operation.
+	 *
+	 * @param internalNode  The internal node currently being processed.
+	 * @param targetSeminar The seminar being searched for.
+	 * @param searchRadius  The radius within which to search for the target
+	 *                      seminar.
+	 * @param treeDepth     The current depth of the node in the tree.
+	 * @param boundingBox   The bounding box defining the current search area.
+	 * @param midX          The midpoint along the X-axis where the split occurs.
+	 * @return The number of nodes processed during this traversal along the X-axis.
+	 */
+	private int handleXAxisSplit(InternalNode internalNode, Seminar targetSeminar, double searchRadius, int treeDepth,
+			BoundingBox boundingBox, double midX) {
+		if (targetSeminar.x() - searchRadius < midX && targetSeminar.x() + searchRadius >= midX) {
+			return searchBothChildren(internalNode, targetSeminar, searchRadius, treeDepth, boundingBox, midX, true);
+		} else if (targetSeminar.x() - searchRadius < midX) {
+			return searchLeftChild(internalNode, targetSeminar, searchRadius, treeDepth, boundingBox, midX, true);
+		} else if (targetSeminar.x() + searchRadius >= midX) {
+			return searchRightChild(internalNode, targetSeminar, searchRadius, treeDepth, boundingBox, midX, true);
+		}
+		return 1;
+	}
 
-            for (int i = 0; i < leafNode.getSize(); i++) {
-                leafInfo.append(" ").append(seminars[i].id());
-            }
+	/**
+	 * Handles the traversal of an internal node when the split is along the Y-axis
+	 * during the search operation.
+	 *
+	 * @param internalNode  The internal node currently being processed.
+	 * @param targetSeminar The seminar being searched for.
+	 * @param searchRadius  The radius within which to search for the target
+	 *                      seminar.
+	 * @param treeDepth     The current depth of the node in the tree.
+	 * @param boundingBox   The bounding box defining the current search area.
+	 * @param midY          The midpoint along the Y-axis where the split occurs.
+	 * @return The number of nodes processed during this traversal along the Y-axis.
+	 */
+	private int handleYAxisSplit(InternalNode internalNode, Seminar targetSeminar, double searchRadius, int treeDepth,
+			BoundingBox boundingBox, double midY) {
+		if (targetSeminar.y() - searchRadius < midY && targetSeminar.y() + searchRadius >= midY) {
+			return searchBothChildren(internalNode, targetSeminar, searchRadius, treeDepth, boundingBox, midY, false);
+		} else if (targetSeminar.y() - searchRadius < midY) {
+			return searchLeftChild(internalNode, targetSeminar, searchRadius, treeDepth, boundingBox, midY, false);
+		} else if (targetSeminar.y() + searchRadius >= midY) {
+			return searchRightChild(internalNode, targetSeminar, searchRadius, treeDepth, boundingBox, midY, false);
+		}
+		return 1;
+	}
 
-            // Convert leafInfo to String and append ')'
-            System.out.println(indentation + leafInfo.toString() + ')');
-        }
-        else {
-            System.out.println(indentation + "(E)"); // Represents an empty node
-        }
-    }
+	/**
+	 * Searches both left and right children of the internal node during the search.
+	 *
+	 * @param internalNode  The internal node currently being processed.
+	 * @param targetSeminar The seminar being searched for.
+	 * @param searchRadius  The radius within which to search for the target
+	 *                      seminar.
+	 * @param treeDepth     The current depth of the node in the tree.
+	 * @param boundingBox   The bounding box defining the current search area.
+	 * @param mid           The midpoint (either along X-axis or Y-axis) where the
+	 *                      split occurs.
+	 * @param isXAxis       Boolean indicating if the split is along the X-axis.
+	 * @return The total number of nodes processed when both child nodes are
+	 *         traversed.
+	 */
+	private int searchBothChildren(InternalNode internalNode, Seminar targetSeminar, double searchRadius, int treeDepth,
+			BoundingBox boundingBox, double mid, boolean isXAxis) {
+		BoundingBox leftBox;
+		BoundingBox rightBox;
 
+		if (isXAxis) {
+			leftBox = new BoundingBox(boundingBox.getMinX(), boundingBox.getMinY(), mid, boundingBox.getMaxY());
+			rightBox = new BoundingBox(mid, boundingBox.getMinY(), boundingBox.getMaxX(), boundingBox.getMaxY());
+		} else {
+			leftBox = new BoundingBox(boundingBox.getMinX(), boundingBox.getMinY(), boundingBox.getMaxX(), mid);
+			rightBox = new BoundingBox(boundingBox.getMinX(), mid, boundingBox.getMaxX(), boundingBox.getMaxY());
+		}
+		return searchRecursive(internalNode.left(), targetSeminar, searchRadius, treeDepth + 1, leftBox)
+				+ searchRecursive(internalNode.right(), targetSeminar, searchRadius, treeDepth + 1, rightBox) + 1;
+	}
 
-    /**
-     * Performs a recursive search within a binary tree structure.
-     *
-     * @param node
-     *            The current {@code BintreeNode} being processed.
-     * @param searchSeminar
-     *            The {@code Seminar} being searched for.
-     * @param radius
-     *            The search radius.
-     * @param level
-     *            The current depth level in the tree.
-     * @param bbox
-     *            The bounding box that defines the current search area.
-     * @return The number of nodes processed during the search.
-     */
-    private int searchRecursive(
-        BintreeNode node,
-        Seminar searchSeminar,
-        double radius,
-        int level,
-        BoundingBox bbox) {
-        if (node.isInternal()) {
-            return handleInternalNode((InternalNode)node, searchSeminar, radius,
-                level, bbox);
-        }
-        else if (node.isLeaf()) {
-            return handleLeafNode((LeafNode)node, searchSeminar, radius);
-        }
-        return 1;
-    }
+	/**
+	 * Searches only the left child of the internal node during the search
+	 * operation.
+	 *
+	 * @param internalNode  The internal node currently being processed.
+	 * @param targetSeminar The seminar being searched for.
+	 * @param searchRadius  The radius within which to search for the target
+	 *                      seminar.
+	 * @param treeDepth     The current depth of the node in the tree.
+	 * @param boundingBox   The bounding box defining the current search area.
+	 * @param mid           The midpoint (either along X-axis or Y-axis) where the
+	 *                      split occurs.
+	 * @param isXAxis       Boolean indicating if the split is along the X-axis.
+	 * @return The number of nodes processed when only the left child is traversed.
+	 */
+	private int searchLeftChild(InternalNode internalNode, Seminar targetSeminar, double searchRadius, int treeDepth,
+			BoundingBox boundingBox, double mid, boolean isXAxis) {
+		BoundingBox leftBoundingBox = isXAxis
+				? new BoundingBox(boundingBox.getMinX(), boundingBox.getMinY(), mid, boundingBox.getMaxY())
+				: new BoundingBox(boundingBox.getMinX(), boundingBox.getMinY(), boundingBox.getMaxX(), mid);
+		return searchRecursive(internalNode.left(), targetSeminar, searchRadius, treeDepth + 1, leftBoundingBox) + 1;
+	}
 
+	/**
+	 * Searches only the right child of the internal node during the search
+	 * operation.
+	 *
+	 * @param internalNode  The internal node currently being processed.
+	 * @param targetSeminar The seminar being searched for.
+	 * @param searchRadius  The radius within which to search for the target
+	 *                      seminar.
+	 * @param treeDepth     The current depth of the node in the tree.
+	 * @param boundingBox   The bounding box defining the current search area.
+	 * @param mid           The midpoint (either along X-axis or Y-axis) where the
+	 *                      split occurs.
+	 * @param isXAxis       Boolean indicating if the split is along the X-axis.
+	 * @return The number of nodes processed when only the right child is traversed.
+	 */
+	private int searchRightChild(InternalNode internalNode, Seminar targetSeminar, double searchRadius, int treeDepth,
+			BoundingBox boundingBox, double mid, boolean isXAxis) {
+		BoundingBox rightBoundingBox = isXAxis
+				? new BoundingBox(mid, boundingBox.getMinY(), boundingBox.getMaxX(), boundingBox.getMaxY())
+				: new BoundingBox(boundingBox.getMinX(), mid, boundingBox.getMaxX(), boundingBox.getMaxY());
+		return searchRecursive(internalNode.right(), targetSeminar, searchRadius, treeDepth + 1, rightBoundingBox) + 1;
+	}
 
-    /**
-     * Handles the case when the current node is an internal node during the
-     * search.
-     *
-     * @param internalNode
-     *            The internal node being processed.
-     * @param searchSeminar
-     *            The {@code Seminar} being searched for.
-     * @param radius
-     *            The search radius.
-     * @param level
-     *            The current depth level in the tree.
-     * @param bbox
-     *            The bounding box defining the search area.
-     * @return The number of nodes processed during this internal node's
-     *         traversal.
-     */
-    private int handleInternalNode(
-        InternalNode internalNode,
-        Seminar searchSeminar,
-        double radius,
-        int level,
-        BoundingBox bbox) {
-        double midX = (bbox.getxMin() + bbox.getxMax()) / 2.0;
-        double midY = (bbox.getyMin() + bbox.getyMax()) / 2.0;
+	/**
+	 * Processes the leaf node during the search and checks for seminars within the
+	 * search radius.
+	 *
+	 * @param leafNode      The leaf node currently being processed.
+	 * @param targetSeminar The seminar being searched for.
+	 * @param searchRadius  The radius within which to search for the target
+	 *                      seminar.
+	 * @return The number of nodes processed at this leaf node.
+	 */
+	private int handleLeafNode(LeafNode leafNode, Seminar targetSeminar, double radius) {
+		for (Seminar semObjecet : leafNode.getSeminars()) {
+			double searchDistance = Math.sqrt(
+					Math.pow(targetSeminar.x() - semObjecet.x(), 2) + Math.pow(targetSeminar.y() - semObjecet.y(), 2));
+			if (searchDistance <= radius) {
+				System.out.println("Found a record with key value " + semObjecet.id() + " at " + semObjecet.x() + ", "
+						+ semObjecet.y());
+			}
+		}
+		return 1;
+	}
 
-        if (level % 2 == 0) {
-            return handleXAxisSplit(internalNode, searchSeminar, radius, level,
-                bbox, midX);
-        }
-        else {
-            return handleYAxisSplit(internalNode, searchSeminar, radius, level,
-                bbox, midY);
-        }
-    }
-
-
-    /**
-     * Handles an internal node split along the X-axis during the search.
-     *
-     * @param internalNode
-     *            The internal node being processed.
-     * @param searchSeminar
-     *            The {@code Seminar} being searched for.
-     * @param radius
-     *            The search radius.
-     * @param level
-     *            The current depth level in the tree.
-     * @param bbox
-     *            The bounding box defining the search area.
-     * @param midX
-     *            The midpoint along the X-axis.
-     * @return The number of nodes processed during this X-axis split traversal.
-     */
-    private int handleXAxisSplit(
-        InternalNode internalNode,
-        Seminar searchSeminar,
-        double radius,
-        int level,
-        BoundingBox bbox,
-        double midX) {
-        if (searchSeminar.x() - radius < midX && searchSeminar.x()
-            + radius >= midX) {
-            return searchBothChildren(internalNode, searchSeminar, radius,
-                level, bbox, midX, true);
-        }
-        else if (searchSeminar.x() - radius < midX) {
-            return searchLeftChild(internalNode, searchSeminar, radius, level,
-                bbox, midX, true);
-        }
-        else if (searchSeminar.x() + radius >= midX) {
-            return searchRightChild(internalNode, searchSeminar, radius, level,
-                bbox, midX, true);
-        }
-        return 1;
-    }
-
-
-    /**
-     * Handles an internal node split along the Y-axis during the search.
-     *
-     * @param internalNode
-     *            The internal node being processed.
-     * @param searchSeminar
-     *            The {@code Seminar} being searched for.
-     * @param radius
-     *            The search radius.
-     * @param level
-     *            The current depth level in the tree.
-     * @param bbox
-     *            The bounding box defining the search area.
-     * @param midY
-     *            The midpoint along the Y-axis.
-     * @return The number of nodes processed during this Y-axis split traversal.
-     */
-    private int handleYAxisSplit(
-        InternalNode internalNode,
-        Seminar searchSeminar,
-        double radius,
-        int level,
-        BoundingBox bbox,
-        double midY) {
-        if (searchSeminar.y() - radius < midY && searchSeminar.y()
-            + radius >= midY) {
-            return searchBothChildren(internalNode, searchSeminar, radius,
-                level, bbox, midY, false);
-        }
-        else if (searchSeminar.y() - radius < midY) {
-            return searchLeftChild(internalNode, searchSeminar, radius, level,
-                bbox, midY, false);
-        }
-        else if (searchSeminar.y() + radius >= midY) {
-            return searchRightChild(internalNode, searchSeminar, radius, level,
-                bbox, midY, false);
-        }
-        return 1;
-    }
-
-
-    /**
-     * Searches both the left and right children of an internal node.
-     *
-     * @param internalNode
-     *            The internal node being processed.
-     * @param searchSeminar
-     *            The {@code Seminar} being searched for.
-     * @param radius
-     *            The search radius.
-     * @param level
-     *            The current depth level in the tree.
-     * @param bbox
-     *            The bounding box defining the search area.
-     * @param mid
-     *            The midpoint for splitting.
-     * @param isXAxis
-     *            Whether the split is along the X-axis.
-     * @return The number of nodes processed when both children are searched.
-     */
-    private int searchBothChildren(
-        InternalNode internalNode,
-        Seminar searchSeminar,
-        double radius,
-        int level,
-        BoundingBox bbox,
-        double mid,
-        boolean isXAxis) {
-        BoundingBox leftBox;
-        BoundingBox rightBox;
-
-        if (isXAxis) {
-            leftBox = new BoundingBox(bbox.getxMin(), bbox.getyMin(), mid, bbox
-                .getyMax());
-            rightBox = new BoundingBox(mid, bbox.getyMin(), bbox.getxMax(), bbox
-                .getyMax());
-        }
-        else {
-            leftBox = new BoundingBox(bbox.getxMin(), bbox.getyMin(), bbox
-                .getxMax(), mid);
-            rightBox = new BoundingBox(bbox.getxMin(), mid, bbox.getxMax(), bbox
-                .getyMax());
-        }
-        return searchRecursive(internalNode.left(), searchSeminar, radius, level
-            + 1, leftBox) + searchRecursive(internalNode.right(), searchSeminar,
-                radius, level + 1, rightBox) + 1;
-    }
-
-
-    /**
-     * Searches only the left child of an internal node.
-     *
-     * @param internalNode
-     *            The internal node being processed.
-     * @param searchSeminar
-     *            The {@code Seminar} being searched for.
-     * @param radius
-     *            The search radius.
-     * @param level
-     *            The current depth level in the tree.
-     * @param bbox
-     *            The bounding box defining the search area.
-     * @param mid
-     *            The midpoint for splitting.
-     * @param isXAxis
-     *            Whether the split is along the X-axis.
-     * @return The number of nodes processed when only the left child is
-     *         searched.
-     */
-    private int searchLeftChild(
-        InternalNode internalNode,
-        Seminar searchSeminar,
-        double radius,
-        int level,
-        BoundingBox bbox,
-        double mid,
-        boolean isXAxis) {
-        BoundingBox newBox = isXAxis
-            ? new BoundingBox(bbox.getxMin(), bbox.getyMin(), mid, bbox
-                .getyMax())
-            : new BoundingBox(bbox.getxMin(), bbox.getyMin(), bbox.getxMax(),
-                mid);
-        return searchRecursive(internalNode.left(), searchSeminar, radius, level
-            + 1, newBox) + 1;
-    }
-
-
-    /**
-     * Searches only the right child of an internal node.
-     *
-     * @param internalNode
-     *            The internal node being processed.
-     * @param searchSeminar
-     *            The {@code Seminar} being searched for.
-     * @param radius
-     *            The search radius.
-     * @param level
-     *            The current depth level in the tree.
-     * @param bbox
-     *            The bounding box defining the search area.
-     * @param mid
-     *            The midpoint for splitting.
-     * @param isXAxis
-     *            Whether the split is along the X-axis.
-     * @return The number of nodes processed when only the right child is
-     *         searched.
-     */
-    private int searchRightChild(
-        InternalNode internalNode,
-        Seminar searchSeminar,
-        double radius,
-        int level,
-        BoundingBox bbox,
-        double mid,
-        boolean isXAxis) {
-        BoundingBox newBox = isXAxis
-            ? new BoundingBox(mid, bbox.getyMin(), bbox.getxMax(), bbox
-                .getyMax())
-            : new BoundingBox(bbox.getxMin(), mid, bbox.getxMax(), bbox
-                .getyMax());
-        return searchRecursive(internalNode.right(), searchSeminar, radius,
-            level + 1, newBox) + 1;
-    }
-
-
-    /**
-     * Handles the case when the current node is a leaf node during the search.
-     *
-     * @param leafNode
-     *            The leaf node being processed.
-     * @param searchSeminar
-     *            The {@code Seminar} being searched for.
-     * @param radius
-     *            The search radius.
-     * @return The number of nodes processed at this leaf node.
-     */
-    private int handleLeafNode(
-        LeafNode leafNode,
-        Seminar searchSeminar,
-        double radius) {
-        for (Seminar seminar : leafNode.getSeminars()) {
-            double distance = Math.sqrt(Math.pow(searchSeminar.x() - seminar
-                .x(), 2) + Math.pow(searchSeminar.y() - seminar.y(), 2));
-            if (distance <= radius) {
-                System.out.println("Found a record with key value " + seminar
-                    .id() + " at " + seminar.x() + ", " + seminar.y());
-            }
-        }
-        return 1;
-    }
-
-
-    /**
-     * return the root node
-     * 
-     * @return the root node
-     */
-    public BintreeNode getRoot() {
-        return root;
-    }
+	/**
+	 * Returns the root of the Bintree.
+	 * 
+	 * @return Root node of the Bintree.
+	 */
+	public BintreeNode getRoot() {
+		return root;
+	}
 }
