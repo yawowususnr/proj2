@@ -3,8 +3,6 @@ import student.TestCase;
 /**
  * This class tests the functionality of the Binary Search Tree (BST)
  * implementation.
- * It contains test cases for inserting, removing, and traversing elements in
- * the BST.
  * 
  * @author Yaw Agyemang	
  * @author Yaw Owusu Jnr
@@ -15,193 +13,146 @@ public class BSTTest extends TestCase {
     private BST<Integer, String> bstTree;
 
     /**
-     * Sets up the initial state of the BST by inserting a root node.
-     * This method is called before each test case.
+     * Creates a new instance of a BST
      */
     public void setUp() {
-
         this.bstTree = new BST<>();
-        KVPair<Integer, String> root = new KVPair<>(5, "Five");
+        KVPair<Integer, String> root = new KVPair<>(10, "Ten");
         this.bstTree.insert(root);
 
         assertEquals(1, bstTree.size());
-        assertEquals(root, bstTree.find(5));
-
+        assertEquals(root, bstTree.find(10));
     }
 
-
     /**
-     * Tests the insertion of elements into the BST.
-     * It verifies that nodes can be inserted and found correctly,
-     * and ensures the size of the tree is updated.
+     * Test insert method of the BST class
      */
-    public void testInsertElement() {
-        this.bstTree.insert(new KVPair<>(4, "Four"));
-        this.bstTree.insert(new KVPair<>(6, "Six"));
-        this.bstTree.insert(new KVPair<>(7, "Seven"));
+    public void testInsert() {
+        this.bstTree.insert(new KVPair<>(9, "Nine"));
+        this.bstTree.insert(new KVPair<>(11, "Eleven"));
+        this.bstTree.insert(new KVPair<>(12, "Twelve"));
 
         assertEquals(4, this.bstTree.size());
+        assertNull(this.bstTree.find(20));
 
-        assertNull(this.bstTree.find(10));
-
-        KVPair<Integer, String> kvp = this.bstTree.find(4);
-
+        KVPair<Integer, String> kvp = this.bstTree.find(9);
         assertNotNull(kvp);
-        assertEquals(kvp.getValue(), "Four");
+        assertEquals(kvp.getValue(), "Nine");
 
-        KVPair<Integer, String> kvp2 = this.bstTree.find(6);
-
+        KVPair<Integer, String> kvp2 = this.bstTree.find(11);
         assertNotNull(kvp2);
-        assertEquals(kvp2.getValue(), "Six");
+        assertEquals(kvp2.getValue(), "Eleven");
     }
 
-
     /**
-     * Tests the removal of elements from the BST.
-     * It verifies that non-existent nodes return null and ensures that
-     * the tree size is updated correctly after removing nodes.
+     * Test remove method of the BST class
      */
-    public void testRemove() {
+    public void testRemoveSingle() {
         KVPair<Integer, String> nullNode = this.bstTree.remove(100);
-
         assertNull(nullNode);
 
-        this.bstTree.insert(new KVPair<>(7, "Seven"));
-
-        KVPair<Integer, String> removedNode = this.bstTree.remove(7);
-
+        this.bstTree.insert(new KVPair<>(12, "Twelve"));
+        KVPair<Integer, String> removedNode = this.bstTree.remove(12);
         assertNotNull(removedNode);
-
-        assertEquals(removedNode.getValue(), "Seven");
+        assertEquals(removedNode.getValue(), "Twelve");
         assertEquals(1, this.bstTree.size());
-
-        assertEquals(this.bstTree.find(7), null);
-
+        assertEquals(this.bstTree.find(12), null);
     }
 
-
     /**
-     * Tests a more complex removal scenario, removing nodes with different
-     * characteristics.
-     * It includes cases where nodes have no children, one child, or two
-     * children.
+     * Test remove method of the BST class for edge cases
      */
-    public void testRemove2() {
+    public void testRemoveComplex() {
+        this.bstTree.remove(10);
+        assertNull(this.bstTree.remove(10));
 
-        this.bstTree.remove(5);
-        assertNull(this.bstTree.remove(5));
-        // Step 1: Insert nodes into the tree
-        this.bstTree.insert(new KVPair<>(6, "Six"));
-        this.bstTree.insert(new KVPair<>(3, "Three"));
-        this.bstTree.insert(new KVPair<>(9, "Nine"));
-        this.bstTree.insert(new KVPair<>(2, "Two"));
-        this.bstTree.insert(new KVPair<>(5, "Five"));
+        this.bstTree.insert(new KVPair<>(11, "Eleven"));
         this.bstTree.insert(new KVPair<>(8, "Eight"));
+        this.bstTree.insert(new KVPair<>(12, "Twelve"));
+        this.bstTree.insert(new KVPair<>(7, "Seven"));
         this.bstTree.insert(new KVPair<>(10, "Ten"));
-        this.bstTree.insert(new KVPair<>(1, "One"));
+        this.bstTree.insert(new KVPair<>(13, "Thirteen"));
+        this.bstTree.insert(new KVPair<>(15, "Fifteen"));
+        this.bstTree.insert(new KVPair<>(6, "Six"));
 
-        // Verify initial size is 8
         assertEquals(8, this.bstTree.size());
 
-        // Step 2: Remove nodes that will trigger deleteMax and getMax
-        this.bstTree.remove(9); // Should trigger getMax and deleteMax as 9 has
-                                // two children
+        this.bstTree.remove(12);
         assertEquals(7, this.bstTree.size());
 
-        // Step 3: Remove a leaf node (no children)
-        this.bstTree.remove(5); // Removing a node with no children
+        this.bstTree.remove(10);
         assertEquals(6, this.bstTree.size());
 
-        // Step 4: Remove nodes with only one child
-        this.bstTree.remove(3); // Node 3 has two children, should invoke getMax
-                                // and deleteMax
+        this.bstTree.remove(8);
         assertEquals(5, this.bstTree.size());
 
-        // Step 5: Remove the root (6) to further test rebalancing
-        this.bstTree.remove(6); // Root removal, should also trigger
-                                // reorganization
+        this.bstTree.remove(11);
         assertEquals(4, this.bstTree.size());
 
-        // Step 6: Attempt to remove a non-existent node (edge case)
-        assertNull(this.bstTree.remove(4)); // Node 4 does not exist
+        assertNull(this.bstTree.remove(9));
     }
 
-
     /**
-     * Tests the traversal of the BST within a specified range.
-     * It verifies that the correct number of nodes are traversed.
+     * Test traverse method of BST class
      */
-    public void testTraverse() {
-        // Insert nodes into the tree
-        this.bstTree.insert(new KVPair<>(6, "Six"));
-        this.bstTree.insert(new KVPair<>(3, "Three"));
-        this.bstTree.insert(new KVPair<>(9, "Nine"));
-        this.bstTree.insert(new KVPair<>(2, "Two"));
-        this.bstTree.insert(new KVPair<>(5, "Five"));
+    public void testTraverseNodes() {
+        this.bstTree.insert(new KVPair<>(11, "Eleven"));
         this.bstTree.insert(new KVPair<>(8, "Eight"));
+        this.bstTree.insert(new KVPair<>(12, "Twelve"));
+        this.bstTree.insert(new KVPair<>(7, "Seven"));
         this.bstTree.insert(new KVPair<>(10, "Ten"));
-        this.bstTree.insert(new KVPair<>(1, "One"));
+        this.bstTree.insert(new KVPair<>(13, "Thirteen"));
+        this.bstTree.insert(new KVPair<>(15, "Fifteen"));
+        this.bstTree.insert(new KVPair<>(6, "Six"));
 
-        // Test traversal between 3 and 8
-        int traversedNodes = this.bstTree.traverse(3, 8);
-        assertEquals(12, traversedNodes); // Nodes traversed: 3, 6, 8, 2, 7
+        int traversedNodes = this.bstTree.traverse(8, 12);
+        assertEquals(16, traversedNodes); 
     }
 
-
     /**
-     * Tests the height of an empty tree and verifies the correct printed
-     * output.
+     * Test getHeight method of the BST class
      */
-    public void testEmptyHeight() {
-        this.bstTree.remove(5);
+    public void testHeightEmpty() {
+        this.bstTree.remove(10);
         this.bstTree.print();
 
         String actualStringOutput = systemOut().getHistory();
         String printedStringOutput = "This tree is empty";
-
         assertFuzzyEquals(actualStringOutput, printedStringOutput);
-
     }
 
-
     /**
-     * Tests the height of the BST by printing its structure.
-     * Verifies that the correct tree structure is printed.
+     * test print method of the BST class
      */
-    public void testgetHeight() {
-        this.bstTree.insert(new KVPair<>(6, "Six"));
-        this.bstTree.insert(new KVPair<>(3, "Three"));
-        this.bstTree.insert(new KVPair<>(9, "Nine"));
+    public void testHeightStructure() {
+        this.bstTree.insert(new KVPair<>(11, "Eleven"));
+        this.bstTree.insert(new KVPair<>(8, "Eight"));
+        this.bstTree.insert(new KVPair<>(12, "Twelve"));
 
         this.bstTree.print();
         String treeStructure = systemOut().getHistory();
-        String printedTreeStructre = "    (null)\r\n" + "        \\\r\n"
-            + "        (3)\r\n" + "        /\r\n" + "    (null)\r\n"
-            + "            \\\r\n" + "            (5)\r\n" + "            /\r\n"
-            + "    (null)\r\n" + "        \\\r\n" + "        (6)\r\n"
-            + "        /\r\n" + "(null)\r\n" + "    \\\r\n" + "    (9)\r\n"
+        String printedTreeStructure = "    (null)\r\n" + "        \\\r\n"
+            + "        (10)\r\n" + "        /\r\n" + "    (null)\r\n"
+            + "            \\\r\n" + "            (11)\r\n" + "            /\r\n"
+            + "    (null)\r\n" + "        \\\r\n" + "        (12)\r\n"
+            + "        /\r\n" + "(null)\r\n" + "    \\\r\n" + "    (8)\r\n"
             + "    /\r\n" + "(null)\r\n" + "Number of records: 4";
 
-        assertFuzzyEquals(treeStructure, printedTreeStructre);
-
+        assertFuzzyEquals(treeStructure, printedTreeStructure);
     }
 
-
     /**
-     * Tests the clearing of the BST, ensuring all nodes are removed and the
-     * size is reset.
+     * Test clear method of the BST class
      */
-    public void testClear() {
-        this.bstTree.insert(new KVPair<>(4, "Four"));
-        this.bstTree.insert(new KVPair<>(6, "Six"));
-        this.bstTree.insert(new KVPair<>(7, "Seven"));
+    public void testClearTree() {
+        this.bstTree.insert(new KVPair<>(9, "Nine"));
+        this.bstTree.insert(new KVPair<>(11, "Eleven"));
+        this.bstTree.insert(new KVPair<>(12, "Twelve"));
 
         assertEquals(this.bstTree.size(), 4);
-
         this.bstTree.clear();
 
         assertEquals(this.bstTree.size(), 0);
-        assertEquals(this.bstTree.find(5), null);
+        assertEquals(this.bstTree.find(10), null);
     }
-
 }
