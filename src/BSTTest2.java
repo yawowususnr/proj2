@@ -1,190 +1,138 @@
 import student.TestCase;
 
 /**
- * This class contains unit tests for the Binary Search Tree (BST)
- * implementation.
- * It tests different scenarios of node removal, including removing nodes with
- * zero, one, or two children,
- * and attempting to remove non-existent nodes or nodes with the same key but
- * different values.
+ * Unit tests for the Binary Search Tree (BST) implementation. Tests various
+ * removal scenarios for nodes in the BST.
  * 
- * @author Yaw Agyemang	
+ * @author Yaw Agyemang
  * @author Yaw Owusu Jnr
  * @version 10/18/24
  */
 public class BSTTest2 extends TestCase {
 
-    private BSTNode<KVPair<Integer, Seminar>> root;
-    private BSTNode<KVPair<Integer, Seminar>> node1;
-    private BSTNode<KVPair<Integer, Seminar>> node2;
-    private BSTNode<KVPair<Integer, Seminar>> node3;
-    private BSTNode<KVPair<Integer, Seminar>> node4;
-    private BSTNode<KVPair<Integer, Seminar>> node5;
-    private BST<Integer, Seminar> bst;
+	private BSTNode<KVPair<Integer, Seminar>> root;
+	private BSTNode<KVPair<Integer, Seminar>> node1;
+	private BSTNode<KVPair<Integer, Seminar>> node2;
+	private BSTNode<KVPair<Integer, Seminar>> node3;
+	private BSTNode<KVPair<Integer, Seminar>> node4;
+	private BSTNode<KVPair<Integer, Seminar>> node5;
+	private BST<Integer, Seminar> bst;
 
-    /**
-     * Sets up the initial state of the BST with a few seminar nodes.
-     * This method is called before each test case to create a sample tree with
-     * five nodes.
-     */
-    public void setUp() {
-        bst = new BST<Integer, Seminar>();
+	/**
+	 * Initializes the BST with sample seminar nodes before each test. This setup
+	 * allows the removal methods to be tested on a pre-defined tree structure.
+	 */
+	public void setUp() {
+		bst = new BST<>();
 
-        // Initialize seminars with unique ids
-        Seminar seminar1 = new Seminar(1, "Seminar 1", "2024-01-01", (int)2.0,
-            (short)2.0, (short)2.0, (int)100.0, new String[] { "AI" },
-            "Description 1");
-        Seminar seminar2 = new Seminar(2, "Seminar 2", "2024-01-02", (int)3.0,
-            (short)3.0, (short)3.0, (int)120.0, new String[] { "ML" },
-            "Description 2");
-        Seminar seminar3 = new Seminar(3, "Seminar 3", "2024-01-03", (int)4.0,
-            (short)4.0, (short)4.0, (int)130.0, new String[] { "Cloud" },
-            "Description 3");
-        Seminar seminar4 = new Seminar(4, "Seminar 4", "2024-01-04", (int)5.0,
-            (short)5.0, (short)5.0, (int)140.0, new String[] { "DevOps" },
-            "Description 4");
-        Seminar seminar5 = new Seminar(5, "Seminar 5", "2024-01-05", (int)6.0,
-            (short)6.0, (short)6.0, (int)150.0, new String[] { "Security" },
-            "Description 5");
+		Seminar seminar1 = new Seminar(11, "Advanced AI", "2024-02-01", (int) 2.5, (short) 3.5, (short) 1.5,
+				(int) 110.0, new String[] { "AI" }, "Advanced concepts in AI");
+		Seminar seminar2 = new Seminar(12, "Machine Learning Basics", "2024-02-02", (int) 3.5, (short) 4.5, (short) 2.5,
+				(int) 120.0, new String[] { "ML" }, "Introductory course on ML");
+		Seminar seminar3 = new Seminar(13, "Cloud Computing", "2024-02-03", (int) 4.5, (short) 2.0, (short) 5.0,
+				(int) 130.0, new String[] { "Cloud" }, "Understanding cloud infrastructure");
+		Seminar seminar4 = new Seminar(14, "DevOps Practices", "2024-02-04", (int) 5.5, (short) 6.5, (short) 4.5,
+				(int) 140.0, new String[] { "DevOps" }, "Essentials of DevOps");
+		Seminar seminar5 = new Seminar(15, "Cybersecurity Essentials", "2024-02-05", (int) 6.5, (short) 5.5,
+				(short) 6.5, (int) 150.0, new String[] { "Security" }, "Basics of cybersecurity");
 
-        // Create nodes
-        node1 = new BSTNode<>(new KVPair<>(1, seminar1));
-        node2 = new BSTNode<>(new KVPair<>(2, seminar2));
-        node3 = new BSTNode<>(new KVPair<>(3, seminar3));
-        node4 = new BSTNode<>(new KVPair<>(4, seminar4));
-        node5 = new BSTNode<>(new KVPair<>(5, seminar5));
+		node1 = new BSTNode<>(new KVPair<>(11, seminar1));
+		node2 = new BSTNode<>(new KVPair<>(12, seminar2));
+		node3 = new BSTNode<>(new KVPair<>(13, seminar3));
+		node4 = new BSTNode<>(new KVPair<>(14, seminar4));
+		node5 = new BSTNode<>(new KVPair<>(15, seminar5));
 
-        // Build a simple tree manually
-        root = node3; // root is node3 (seminar 3)
-        root.setLeft(node2); // node2 on the left
-        root.setRight(node4); // node4 on the right
-        node2.setLeft(node1); // node1 on the left of node2
-        node4.setRight(node5); // node5 on the right of node4
-    }
+		root = node3;
+		root.setLeft(node2);
+		root.setRight(node4);
+		node2.setLeft(node1);
+		node4.setRight(node5);
+	}
 
+	/**
+	 * Test removing a leaf node (node1) from the tree. Verifies that node1 is
+	 * removed correctly.
+	 */
+	public void testRemoveLeaf() {
+		root = bst.removehelp(root, node1.getElement());
 
-    /**
-     * Tests the removal of a node from an empty tree.
-     * It verifies that removing from an empty tree returns null.
-     */
-    public void testRemoveNodeFromEmptyTree() {
-        // Attempting to remove from an empty tree
-        BSTNode<KVPair<Integer, Seminar>> result = bst.removehelp(null,
-            new KVPair<>(1, node1.getElement().getValue()));
-        assertNull(result); // Tree should remain empty
-    }
+		assertNull(root.getLeft().getLeft());
+		assertEquals(node2, root.getLeft());
+	}
 
+	/**
+	 * Test removing a node (node2) that has only a left child (node1). Verifies
+	 * that node1 takes node2's place.
+	 */
+	public void testRemoveOneChildLeft() {
+		root = bst.removehelp(root, node2.getElement());
 
-    /**
-     * Tests the removal of a leaf node (a node with no children).
-     * Verifies that the leaf node is properly removed from the tree.
-     */
-    public void testRemoveLeafNode() {
-        // Remove a leaf node (node1, which has no children)
-        root = bst.removehelp(root, node1.getElement());
+		assertEquals(node1, root.getLeft());
+		assertEquals(node3, root);
+		assertEquals(node4, root.getRight());
+	}
 
-        // Assert node1 is removed and not in the tree
-        assertNull(root.getLeft().getLeft());
+	/**
+	 * Test removing a node (node4) that has only a right child (node5). Verifies
+	 * that node5 takes node4's place.
+	 */
+	public void testRemoveOneChildRight() {
+		root = bst.removehelp(root, node4.getElement());
 
-        // Tree structure and remaining nodes
-        assertEquals(node2, root.getLeft()); // node2 remains in the left
-                                             // subtree
-    }
+		assertEquals(node5, root.getRight());
+		assertEquals(node3, root);
+		assertEquals(node2, root.getLeft());
+	}
 
+	/**
+	 * Test removing the root node (node3) that has two children. Verifies that it
+	 * is replaced correctly.
+	 */
+	public void testRemoveTwoChildren() {
+		root = bst.removehelp(root, node3.getElement());
 
-    /**
-     * Tests the removal of a node with only a left child.
-     * It ensures that the left child takes the place of the removed node.
-     */
-    public void testRemoveNodeWithOneChildLeftChild() {
-        // Remove node2, which has only a left child (node1)
-        root = bst.removehelp(root, node2.getElement());
+		assertEquals(node2.getElement(), root.getElement());
+		assertEquals(node1, root.getLeft());
+		assertEquals(node4, root.getRight());
+	}
 
-        // Assert node2 is removed and node1 has taken its place
-        assertEquals(node1, root.getLeft());
+	/**
+	 * Test attempting to remove a non-existent node. Verifies that the tree remains
+	 * unchanged.
+	 */
+	public void testRemoveNonExistent() {
+		// Create a non-existent seminar.
+		Seminar nonExistentSeminar = new Seminar(999, "Not Available Seminar", "2024-02-06", (int) 7.5, (short) 1.0,
+				(short) 2.0, (int) 160.0, new String[] { "Quantum" }, "Details not found");
+		KVPair<Integer, Seminar> nonExistentPair = new KVPair<>(999, nonExistentSeminar);
 
-        // Ensure other nodes remain in place
-        assertEquals(node3, root); // Root remains node3
-        assertEquals(node4, root.getRight()); // node4 remains in right subtree
-    }
+		root = bst.removehelp(root, nonExistentPair);
 
+		assertEquals(node3, root);
+	}
 
-    /**
-     * Tests the removal of a node with only a right child.
-     * It ensures that the right child takes the place of the removed node.
-     */
-    public void testRemoveNodeWithOneChildRightChild() {
-        // Remove node4, which has only a right child (node5)
-        root = bst.removehelp(root, node4.getElement());
+	/**
+	 * Test removing a node with the same key but different value. Verifies that the
+	 * original node remains in the tree.
+	 */
+	public void testRemoveSameKeyDifferentValue() {
+		Seminar newSeminar = new Seminar(11, "New AI Seminar", "2024-02-07", (int) 8.0, (short) 8.0, (short) 8.0,
+				(int) 170.0, new String[] { "AI" }, "Updated AI seminar description");
+		KVPair<Integer, Seminar> newPair = new KVPair<>(11, newSeminar);
 
-        // Assert node4 is removed and node5 has taken its place
-        assertEquals(node5, root.getRight());
+		root = bst.removehelp(root, newPair);
 
-        // Ensure other nodes remain in place
-        assertEquals(node3, root); // Root remains node3
-        assertEquals(node2, root.getLeft()); // node2 remains in left subtree
-    }
+		assertEquals(node1, root.getLeft().getLeft());
+	}
 
+	/**
+	 * Test attempting to remove a node from an empty tree. Verifies that the result
+	 * is null.
+	 */
+	public void testRemoveFromEmptyTree() {
 
-    /**
-     * Tests the removal of a node with two children.
-     * Verifies that the removed node is replaced by the maximum element in the
-     * left subtree.
-     */
-    public void testRemoveNodeWithTwoChildren() {
-        // Remove the root node (node3), which has two children
-        root = bst.removehelp(root, node3.getElement());
-
-        // Check that the root has been replaced by the maximum element in the
-        // left subtree (node2)
-        assertEquals(node2.getElement(), root.getElement());
-
-        // Ensure the remaining tree is structured correctly
-        assertEquals(node1, root.getLeft()); // node1 remains in left subtree
-        assertEquals(node4, root.getRight()); // node4 remains in right subtree
-    }
-
-
-    /**
-     * Tests the scenario where an attempt is made to remove a non-existent
-     * node.
-     * Verifies that the tree remains unchanged when the node to be removed is
-     * not present.
-     */
-    public void testRemoveNonExistentNode() {
-        // Try to remove a node that doesn't exist in the tree
-        Seminar nonExistentSeminar = new Seminar(999, "Non-existent Seminar",
-            "2024-01-06", (int)7.0, (short)7.0, (short)7.0, (int)160.0,
-            new String[] { "Quantum" }, "Non-existent description");
-        KVPair<Integer, Seminar> nonExistentPair = new KVPair<>(999,
-            nonExistentSeminar);
-
-        root = bst.removehelp(root, nonExistentPair);
-
-        // The tree should remain unchanged
-        assertEquals(node3, root); // Root remains node3
-        assertEquals(node2, root.getLeft()); // Left subtree remains unchanged
-        assertEquals(node4, root.getRight()); // Right subtree remains unchanged
-    }
-
-
-    /**
-     * Tests removing a node that has the same key as an existing node but a
-     * different value.
-     * Verifies that the node is not removed because the values do not match.
-     */
-    public void testRemoveNodeWithSameKeyDifferentValue() {
-        // Add a node with the same key as node1 but different value
-        Seminar newSeminar = new Seminar(1, "New Seminar", "2024-02-01",
-            (int)8.0, (short)8.0, (short)8.0, (int)170.0, new String[] { "AI" },
-            "New Description");
-        KVPair<Integer, Seminar> newPair = new KVPair<>(1,
-            newSeminar);
-
-        // Try to remove the original node1 by specifying a different value
-        root = bst.removehelp(root, newPair);
-
-        // Node1 should not be removed since the value is different
-// assertEquals(node1, root.getLeft().getLeft());
-    }
+		BSTNode<KVPair<Integer, Seminar>> result = bst.removehelp(null,
+				new KVPair<>(11, node1.getElement().getValue()));
+		assertNull(result);
+	}
 }
