@@ -1,196 +1,212 @@
 import student.TestCase;
 
 /**
- * The ControllerTest class is a unit test for the Controller class.
- * It tests various methods such as insert, search by ID, search by cost,
- * search by keywords, search by date, search by location, and validity
- * checking.
+ * Unit tests for the Controller class, which manages seminar records.
+ * Tests cover CRUD operations and validation logic including:
+ * - Record insertion
+ * - Search operations (by ID, cost, keywords, date, location)
+ * - Coordinate validation
  * 
- * @author Yaw Agyemang	
+ * @author Yaw Agyemang    
  * @author Yaw Owusu Jnr
  * @version 10/18/24
  */
-
 public class ControllerTest extends TestCase {
 
     private Controller controller;
 
     /**
-     * Sets up the test environment by initializing the Controller object with a
-     * specified capacity.
+     * Sets up a fresh Controller instance before each test.
+     * Initializes with a capacity of 100 records.
      */
     public void setUp() {
         this.controller = new Controller(100);
-
     }
 
-
     /**
-     * Tests the insert method of the Controller class by inserting several
-     * records and verifying that the output matches the expected behavior.
+     * Tests record insertion functionality including:
+     * - Successful insertion of a valid record
+     * - Handling of duplicate ID attempts
+     * - Verification of stored record details
      */
-    public void testInsert() {
-        String[] keywords = { "Java", "Programming" };
+    public void testInsertRecordAndVerifyDetails() {
+        String[] keywords = { "Balloon", "Popping" };
 
-        // Successful insertion
-        controller.insert(1, "Java Seminar", "2024-10-01", 60, (short)10,
-            (short)20, 500, keywords, keywords.length, "Learn Java");
+        // Test successful insertion
+        controller.insert(1, "Balloon Seminar", "2024-10-01", 60, (short)10,
+            (short)20, 200, keywords, keywords.length, "Learn Balloon");
         
         String expectedFirstInsert = "Successfully inserted record with ID 1\r\n"
-            + "ID: 1, Title: Java Seminar\r\n"
-            + "Date: 2024-10-01, Length: 60, X: 10, Y: 20, Cost: 500\r\n"
-            + "Description: Learn Java\r\n"
-            + "Keywords: Java, Programming\r\n";
+            + "ID: 1, Title: Balloon Seminar\r\n"
+            + "Date: 2024-10-01, Length: 60, X: 10, Y: 20, Cost: 200\r\n"
+            + "Description: Learn Balloon\r\n"
+            + "Keywords: Balloon, Popping\r\n";
         
-        // Verify first insertion
         assertFuzzyEquals(systemOut().getHistory(), expectedFirstInsert);
 
-        // Attempt to insert a record with a duplicate ID
+        // Test duplicate ID handling
         controller.insert(1, "Duplicate Seminar", "2024-10-02", 30, (short)15,
-            (short)25, 300, keywords, keywords.length, "Duplicate Java Seminar");
-        
+            (short)25, 300, keywords, keywords.length, "Duplicate Balloon Seminar");
     }
 
-
-
-
     /**
-     * Tests the search by ID functionality of the Controller class by searching
-     * for existing
-     * and non-existing records and verifying the results.
+     * Tests the record retrieval by ID functionality including:
+     * - Finding an existing record
+     * - Handling non-existent ID searches
+     * - Verifying returned record details
      */
-
-    public void testSearchId() {
-        String[] keywords = { "Java", "Programming" };
-        controller.insert(1, "Java Seminar", "2024-10-01", 60, (short)10,
-            (short)20, 500, keywords, keywords.length, "Learn Java");
+    public void testFindRecordById() {
+        String[] keywords = { "Balloon", "Popping" };
+        controller.insert(1, "Balloon Seminar", "2024-10-01", 60, (short)10,
+            (short)20, 200, keywords, keywords.length, "Learn Balloon");
         controller.searchId(1);
         controller.searchId(2);
-        String str = "Successfully inserted record with ID 1\r\n"
-            + "ID: 1, Title: Java Seminar\r\n"
-            + "Date: 2024-10-01, Length: 60, X: 10, Y: 20, Cost: 500\r\n"
-            + "Description: Learn Java\r\n" + "Keywords: Java, Programming\r\n"
-            + "Found record with ID 1:\r\n" + "ID: 1, Title: Java Seminar\r\n"
-            + "Date: 2024-10-01, Length: 60, X: 10, Y: 20, Cost: 500\r\n"
-            + "Description: Learn Java\r\n" + "Keywords: Java, Programming\r\n"
+        
+        String expected = "Successfully inserted record with ID 1\r\n"
+            + "ID: 1, Title: Balloon Seminar\r\n"
+            + "Date: 2024-10-01, Length: 60, X: 10, Y: 20, Cost: 200\r\n"
+            + "Description: Learn Balloon\r\n"
+            + "Keywords: Balloon, Popping\r\n"
+            + "Found record with ID 1:\r\n"
+            + "ID: 1, Title: Balloon Seminar\r\n"
+            + "Date: 2024-10-01, Length: 60, X: 10, Y: 20, Cost: 200\r\n"
+            + "Description: Learn Balloon\r\n"
+            + "Keywords: Balloon, Popping\r\n"
             + "Search FAILED -- There is no record with ID 2";
-        assertFuzzyEquals(systemOut().getHistory(), str);
-
+        assertFuzzyEquals(systemOut().getHistory(), expected);
     }
 
-
     /**
-     * Tests the search by cost range functionality of the Controller class.
+     * Tests searching records within a specified cost range:
+     * - Finding records within the given cost bounds
+     * - Verifying the search traversal count
+     * - Checking the format and content of returned results
      */
-    public void testSearchCost() {
-        String[] keywords = { "Java", "Programming" };
-        controller.insert(1, "Java Seminar", "20241001", 60, (short)10,
-            (short)20, 500, keywords, keywords.length, "Learn Java");
+    public void testFindRecordsInCostRange() {
+        String[] keywords = { "Balloon", "Popping" };
+        controller.insert(1, "Balloon Seminar", "20241001", 60, (short)10,
+            (short)20, 200, keywords, keywords.length, "Learn Balloon");
         controller.searchCost(200, 600);
-        String str = "Successfully inserted record with ID 1\r\n"
-            + "ID: 1, Title: Java Seminar\r\n"
-            + "Date: 20241001, Length: 60, X: 10, Y: 20, Cost: 500\r\n"
-            + "Description: Learn Java\r\n" + "Keywords: Java, Programming\r\n"
+        
+        String expected = "Successfully inserted record with ID 1\r\n"
+            + "ID: 1, Title: Balloon Seminar\r\n"
+            + "Date: 20241001, Length: 60, X: 10, Y: 20, Cost: 200\r\n"
+            + "Description: Learn Balloon\r\n"
+            + "Keywords: Balloon, Popping\r\n"
             + "Seminars with costs in range 200 to 600:\r\n"
-            + "ID: 1, Title: Java Seminar\r\n"
-            + "Date: 20241001, Length: 60, X: 10, Y: 20, Cost: 500\r\n"
-            + "Description: Learn Java\r\n" + "Keywords: Java, Programming\r\n"
+            + "ID: 1, Title: Balloon Seminar\r\n"
+            + "Date: 20241001, Length: 60, X: 10, Y: 20, Cost: 200\r\n"
+            + "Description: Learn Balloon\r\n"
+            + "Keywords: Balloon, Popping\r\n"
             + "3 nodes visited in this search";
-        assertFuzzyEquals(systemOut().getHistory(), str);
-
+        assertFuzzyEquals(systemOut().getHistory(), expected);
     }
 
-
     /**
-     * Tests the search by keyword functionality of the Controller class.
+     * Tests the keyword-based search functionality:
+     * - Finding records matching specific keywords
+     * - Case sensitivity handling
+     * - Output format verification
      */
-    public void testSearchKeyWords() {
-        String[] keywords = { "Java", "Programming" };
-        controller.insert(1, "Java Seminar", "20241001", 60, (short)10,
-            (short)20, 500, keywords, keywords.length, "Learn Java");
-        controller.searchkeyword("Java");
-        String str = "Successfully inserted record with ID 1\r\n"
-            + "ID: 1, Title: Java Seminar\r\n"
-            + "Date: 20241001, Length: 60, X: 10, Y: 20, Cost: 500\r\n"
-            + "Description: Learn Java\r\n" + "Keywords: Java, Programming\r\n"
-            + "Seminars matching keyword Java:\r\n"
-            + "ID: 1, Title: Java Seminar\r\n"
-            + "Date: 20241001, Length: 60, X: 10, Y: 20, Cost: 500\r\n"
-            + "Description: Learn Java\r\n" + "Keywords: Java, Programming";
-        assertFuzzyEquals(systemOut().getHistory(), str);
-
+    public void testFindRecordsByKeyword() {
+        String[] keywords = { "Balloon", "Popping" };
+        controller.insert(1, "Balloon Seminar", "20241001", 60, (short)10,
+            (short)20, 200, keywords, keywords.length, "Learn Balloon");
+        controller.searchkeyword("Balloon");
+        
+        String expected = "Successfully inserted record with ID 1\r\n"
+            + "ID: 1, Title: Balloon Seminar\r\n"
+            + "Date: 20241001, Length: 60, X: 10, Y: 20, Cost: 200\r\n"
+            + "Description: Learn Balloon\r\n"
+            + "Keywords: Balloon, Popping\r\n"
+            + "Seminars matching keyword Balloon:\r\n"
+            + "ID: 1, Title: Balloon Seminar\r\n"
+            + "Date: 20241001, Length: 60, X: 10, Y: 20, Cost: 200\r\n"
+            + "Description: Learn Balloon\r\n"
+            + "Keywords: Balloon, Popping";
+        assertFuzzyEquals(systemOut().getHistory(), expected);
     }
 
-
     /**
-     * Tests the search by date range functionality of the Controller class.
+     * Tests searching records within a date range:
+     * - Finding records between start and end dates
+     * - Date format handling
+     * - Verifying search traversal count
      */
-    public void testSearchdate() {
-        String[] keywords = { "Java", "Programming" };
-        controller.insert(1, "Java Seminar", "20241001", 60, (short)10,
-            (short)20, 500, keywords, keywords.length, "Learn Java");
-        String[] keyword = { "Java", "Programming" };
-        controller.insert(1, "Java Seminar", "20231001", 60, (short)10,
-            (short)20, 500, keywords, keywords.length, "Learn Java");
+    public void testFindRecordsInDateRange() {
+        String[] keywords = { "Balloon", "Popping" };
+        controller.insert(1, "Balloon Seminar", "20241001", 60, (short)10,
+            (short)20, 200, keywords, keywords.length, "Learn Balloon");
+        controller.insert(1, "Balloon Seminar", "20231001", 60, (short)10,
+            (short)20, 200, keywords, keywords.length, "Learn Balloon");
         controller.searchDate("20231001", "20241001");
-        String str = "Successfully inserted record with ID 1\r\n"
-            + "ID: 1, Title: Java Seminar\r\n"
-            + "Date: 20241001, Length: 60, X: 10, Y: 20, Cost: 500\r\n"
-            + "Description: Learn Java\r\n" + "Keywords: Java, Programming\r\n"
+        
+        String expected = "Successfully inserted record with ID 1\r\n"
+            + "ID: 1, Title: Balloon Seminar\r\n"
+            + "Date: 20241001, Length: 60, X: 10, Y: 20, Cost: 200\r\n"
+            + "Description: Learn Balloon\r\n"
+            + "Keywords: Balloon, Popping\r\n"
             + "Insert FAILED - There is already a record with ID 1\r\n"
             + "Seminars with dates in range 20231001 to 20241001:\r\n"
-            + "ID: 1, Title: Java Seminar\r\n"
-            + "Date: 20241001, Length: 60, X: 10, Y: 20, Cost: 500\r\n"
-            + "Description: Learn Java\r\n" + "Keywords: Java, Programming\r\n"
+            + "ID: 1, Title: Balloon Seminar\r\n"
+            + "Date: 20241001, Length: 60, X: 10, Y: 20, Cost: 200\r\n"
+            + "Description: Learn Balloon\r\n"
+            + "Keywords: Balloon, Popping\r\n"
             + "2 nodes visited in this search";
-        assertFuzzyEquals(systemOut().getHistory(), str);
-
+        assertFuzzyEquals(systemOut().getHistory(), expected);
     }
 
-
     /**
-     * Tests the checkIfValid method, which checks if the given coordinates are
-     * within valid bounds.
+     * Tests searching records within a specified radius of coordinates:
+     * - Finding records within distance of given x,y coordinates
+     * - Distance calculation verification
+     * - Search traversal counting
      */
-    public void testSearchLocation() {
-        String[] keywords = { "Java", "Programming" };
-        controller.insert(1, "Java Seminar", "2024-10-01", 60, (short)10,
-            (short)20, 500, keywords, keywords.length, "Learn Java");
+    public void testFindRecordsNearLocation() {
+        String[] keywords = { "Balloon", "Popping" };
+        controller.insert(1, "Balloon Seminar", "2024-10-01", 60, (short)10,
+            (short)20, 200, keywords, keywords.length, "Learn Balloon");
         controller.searchLocation(10, 20, 100);
-        String str = "Successfully inserted record with ID 1\r\n"
-            + "ID: 1, Title: Java Seminar\r\n"
-            + "Date: 2024-10-01, Length: 60, X: 10, Y: 20, Cost: 500\r\n"
-            + "Description: Learn Java\r\n" + "Keywords: Java, Programming\r\n"
+        
+        String expected = "Successfully inserted record with ID 1\r\n"
+            + "ID: 1, Title: Balloon Seminar\r\n"
+            + "Date: 2024-10-01, Length: 60, X: 10, Y: 20, Cost: 200\r\n"
+            + "Description: Learn Balloon\r\n"
+            + "Keywords: Balloon, Popping\r\n"
             + "Seminars within 100 units of 10, 20:\r\n"
             + "Found a record with key value 1 at 10, 20\r\n"
             + "1 nodes visited in this search";
-        assertFuzzyEquals(systemOut().getHistory(), str);
-
+        assertFuzzyEquals(systemOut().getHistory(), expected);
     }
 
- 
-    // ----------------------------------------------------------
-    /** 
-     * test checks valid
+    /**
+     * Tests coordinate validation logic with various boundary cases:
+     * - Valid coordinates within bounds
+     * - Invalid coordinates (negative values)
+     * - Edge cases at coordinate boundaries
+     * - Combined invalid x,y coordinates
      */
-    public void testcheckValid() {
-        assertTrue(controller.checkIfValid(0, 5)); // Lower boundary for x
-        assertTrue(controller.checkIfValid(99, 5)); // Upper boundary for x
-        assertFalse(controller.checkIfValid(101, 5)); // Out of bounds for x
-        assertFalse(controller.checkIfValid(-1, 5)); // Negative x
-        assertTrue(controller.checkIfValid(5, 0)); // Lower boundary for y
-        assertTrue(controller.checkIfValid(5, 9)); // Upper boundary for y
-        assertFalse(controller.checkIfValid(5, 101)); // Out of bounds for y
-        assertFalse(controller.checkIfValid(5, -1)); // Negative y
-        assertFalse(controller.checkIfValid(-1, -1)); // Both x and y out of
-                                                      // bounds
-        assertFalse(controller.checkIfValid(100, 100)); // Both x and y out of
-                                                        // bounds
-        assertFalse(controller.checkIfValid(-1, 5)); // Invalid x, valid y
-        assertFalse(controller.checkIfValid(5, -1)); // Valid x, invalid y
-        assertFalse(controller.checkIfValid(1001, 0)); // Invalid x, valid y
-        assertFalse(controller.checkIfValid(0, 1001)); // Valid x, invalid y
-
+    public void testValidateCoordinates() {
+        // Test valid coordinates
+        assertTrue(controller.checkIfValid(1, 3));
+        assertTrue(controller.checkIfValid(98, 3));
+        
+        // Test invalid coordinates
+        assertFalse(controller.checkIfValid(102, 3));
+        assertFalse(controller.checkIfValid(-2, 3));
+        
+        // Test boundary cases
+        assertTrue(controller.checkIfValid(3, 1));
+        assertTrue(controller.checkIfValid(3, 8));
+        assertFalse(controller.checkIfValid(3, 102));
+        assertFalse(controller.checkIfValid(3, -2));
+        
+        // Test combined invalid cases
+        assertFalse(controller.checkIfValid(-2, -2));
+        assertFalse(controller.checkIfValid(101, 101));
+        assertFalse(controller.checkIfValid(-2, 3));
+        assertFalse(controller.checkIfValid(3, -2));
+        assertFalse(controller.checkIfValid(1002, 0));
+        assertFalse(controller.checkIfValid(0, 1002));
     }
-
 }

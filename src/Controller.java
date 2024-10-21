@@ -1,89 +1,85 @@
 import javax.xml.crypto.dsig.keyinfo.KeyValue;
 
-// -------------------------------------------------------------------------
 /**
- * Controller class to handle inputs
+ * Controller class to handle inputs and manage seminar data structures.
+ * Coordinates operations across multiple BSTs and a Bintree for efficient
+ * seminar record management and retrieval.
  * 
  * @author Yaw Agyemang
  * @author Yaw Owusu Jnr
  * @version 10/18/24
  */
 public class Controller {
-
-    // Binary Search Trees (BSTs) to store Seminar objects based on different
-    // attributes
-    private BST<Integer, Seminar> idBST; // BST for storing Seminars by ID
-    private BST<Integer, Seminar> costBST; // BST for storing Seminars by cost
-    private BST<String, Seminar> dateBST; // BST for storing Seminars by date
-    private BST<String, Seminar> keywordsBST; // BST for storing Seminars by
-                                              // keywords
-
-    private Bintree bintree; // Bintree to handle location-based searches (by x,
-                             // y coordinates)
-    private int size; // The size of the grid for seminar locations
+    private BST<Integer, Seminar> idBST;
+    private BST<Integer, Seminar> costBST;
+    private BST<String, Seminar> dateBST;
+    private BST<String, Seminar> keywordsBST;
+    private Bintree bintree;
+    private int size;
 
     /**
      * Create a new Controller object.
      * 
-     * @param size
-     *            the size of contrller
+     * @param size the size of controller grid
      */
     public Controller(int size) {
+        initializeDataStructures(size);
+    }
+
+    /**
+     * Initializes all data structures used by the controller.
+     * 
+     * @param size the size of the location grid
+     */
+    private void initializeDataStructures(int size) {
         this.idBST = new BST<Integer, Seminar>();
         this.costBST = new BST<Integer, Seminar>();
         this.dateBST = new BST<String, Seminar>();
         this.keywordsBST = new BST<String, Seminar>();
-        this.size = size; // Set the size of the location grid
-        this.bintree = new Bintree(this.size); // Initialize Bintree with grid
-                                               // size
+        this.size = size;
+        this.bintree = new Bintree(this.size);
     }
 
-
-    // ----------------------------------------------------------
     /**
-     * Returns the size of the location grid
-     * 
-     * @return size of grid
+     * Retrieves the current size of the record collection.
+     *
+     * @return the number of records in the collection.
      */
     public int getSize() {
         return this.size;
     }
 
-
     /**
-     * Getter methods to retrieve the cost BST for different attributes
-     * 
-     * @return costbst
+     * Retrieves the binary search tree (BST) used for storing seminars by cost.
+     *
+     * @return the BST of seminars organized by cost.
      */
     public BST<Integer, Seminar> getcostBSTree() {
         return this.costBST;
     }
 
-
     /**
-     * Getter methods to retrieve the date BST for different attributes
-     * 
-     * @return costbst
+     * Retrieves the binary search tree (BST) used for storing seminars by date.
+     *
+     * @return the BST of seminars organized by date.
      */
     public BST<String, Seminar> getdateBSTree() {
         return this.dateBST;
     }
 
-
     /**
-     * Getter methods to retrieve the keyword BST for different attributes
-     * 
-     * @return keyword BST
+     * Retrieves the binary search tree (BST) used for storing seminars by keywords.
+     *
+     * @return the BST of seminars organized by keywords.
      */
     public BST<String, Seminar> getkeyWordsBSTree() {
         return this.keywordsBST;
     }
 
-
     /**
-     * Getter methods to retrieve the id BST for different attributes
-     * 
-     * @return id bst
+     * Retrieves the binary search tree (BST) used for storing seminars by ID.
+     *
+     * @return the BST of seminars organized by ID.
      */
     public BST<Integer, Seminar> getidBSTree() {
         return this.idBST;
@@ -91,45 +87,30 @@ public class Controller {
 
 
     /**
-     * Check if the given x, y coordinates are within the grid boundaries Place
-     * a description of your method here.
+     * Validates if given coordinates are within grid boundaries.
      * 
-     * @param x
-     *            dimension
-     * @param y
-     *            dimension
-     * @return true if valid
+     * @param x x-coordinate
+     * @param y y-coordinate
+     * @return true if coordinates are valid
      */
     public boolean checkIfValid(int x, int y) {
         return (x >= 0 && x < this.size && y >= 0 && y < this.size);
     }
 
-
     /**
-     * Insert a Seminar record into the system. It checks for duplicate ID and
-     * valid x, y coordinates. If valid, it inserts the Seminar into all
-     * relevant BSTs and the Bintree.
-     * 
-     * @param id
-     *            Seminar ID
-     * @param title
-     *            Seminar title
-     * @param date
-     *            Seminar date
-     * @param length
-     *            Seminar length
-     * @param x
-     *            Seminar x-coordinate
-     * @param y
-     *            Seminar y-coordinate
-     * @param cost
-     *            Seminar cost
-     * @param keywords
-     *            Array of keywords related to the Seminar
-     * @param keywordsLength
-     *            Number of keywords
-     * @param desc
-     *            Seminar description
+     * Inserts a new record into the system with the specified details.
+     *
+     * @param id           the unique identifier for the record (must be greater than 0).
+     * @param title        the title of the event (must not be null or empty).
+     * @param date         the date of the event in the format "YYYY-MM-DD" (must be valid).
+     * @param length       the duration of the event in minutes (must be greater than 0).
+     * @param x            the x-coordinate for the event location (must be within valid bounds).
+     * @param y            the y-coordinate for the event location (must be within valid bounds).
+     * @param cost         the cost of attending the event (must be greater than or equal to 0).
+     * @param keywords     an array of keywords associated with the event (must not be null).
+     * @param keywordsLength the number of keywords in the array (must match the array length).
+     * @param desc         a description of the event (must not be null or empty).
+     *
      */
     public void insert(
         int id,
@@ -143,49 +124,94 @@ public class Controller {
         int keywordsLength,
         String desc) {
 
-        // Check if a Seminar with the same ID already exists
-        KVPair<Integer, Seminar> foundNode = this.idBST.find(id);
-
-        if (foundNode != null) {
-            System.out.println(
-                "Insert FAILED - There is already a record with ID " + id);
+        if (!validateInsertParameters(id, x, y)) {
             return;
         }
 
-        // Validate the x, y coordinates
-        if (this.checkIfValid(x, y) == false) {
-            System.out.println("Insert FAILED - Bad x, y coordinates: " + String
-                .valueOf(x) + ", " + String.valueOf(y));
-            return;
-        }
-
-        // Create a new Seminar object with the given data
-        Seminar seminarNode = new Seminar(id, title, date, length, x, y, cost,
-            keywords, desc);
-
-        // Insert the Seminar into all the BSTs based on different attributes
-        // (id, cost, date, keywords)
-        this.idBST.insert(new KVPair<Integer, Seminar>(id, seminarNode));
-        this.costBST.insert(new KVPair<Integer, Seminar>(cost,
-            seminarNode));
-        this.dateBST.insert(new KVPair<String, Seminar>(date,
-            seminarNode));
-
-        // Insert each keyword associated with the Seminar into the keywords BST
-        for (int i = 0; i < keywordsLength; i++) {
-            this.keywordsBST.insert(new KVPair<String, Seminar>(
-                keywords[i], seminarNode));
-        }
-
-        // Insert the Seminar into the Bintree for location-based search
-        this.bintree.insert(seminarNode);
-
-        // Confirm successful insertion
-        System.out.println("Successfully inserted record with ID " + id);
-        System.out.println(seminarNode.toString());
+        Seminar seminarNode = new Seminar(id, title, date, length, x, y, 
+            cost, keywords, desc);
+        insertIntoDataStructures(seminarNode, keywords, keywordsLength);
+        printInsertionSuccess(id, seminarNode);
     }
 
+    /**
+     * Validates parameters for insertion.
+     * 
+     * @return true if parameters are valid
+     */
+    private boolean validateInsertParameters(int id, short x, short y) {
+        if (isDuplicateId(id)) {
+            System.out.println(
+                "Insert FAILED - There is already a record with ID " + id);
+            return false;
+        }
 
+        if (!checkIfValid(x, y)) {
+            System.out.println("Insert FAILED - Bad x, y coordinates: " + 
+                String.valueOf(x) + ", " + String.valueOf(y));
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Checks if a seminar with given ID already exists.
+     */
+    private boolean isDuplicateId(int id) {
+        return this.idBST.find(id) != null;
+    }
+
+    /**
+     * Inserts seminar into all data structures.
+     */
+    private void insertIntoDataStructures(
+        Seminar seminar, 
+        String[] keywords,
+        int keywordsLength) {
+        
+        insertIntoBSTs(seminar);
+        insertKeywords(seminar, keywords, keywordsLength);
+        this.bintree.insert(seminar);
+    }
+
+    /**
+     * Inserts seminar into main BSTs.
+     */
+    private void insertIntoBSTs(Seminar seminar) {
+        this.idBST.insert(new KVPair<Integer, Seminar>(
+            seminar.id(), seminar));
+        this.costBST.insert(new KVPair<Integer, Seminar>(
+            seminar.cost(), seminar));
+        this.dateBST.insert(new KVPair<String, Seminar>(
+            seminar.date(), seminar));
+    }
+
+    /**
+     * Inserts keywords for a seminar.
+     */
+    private void insertKeywords(
+        Seminar seminar, 
+        String[] keywords,
+        int keywordsLength) {
+        
+        for (int i = 0; i < keywordsLength; i++) {
+            this.keywordsBST.insert(new KVPair<String, Seminar>(
+                keywords[i], seminar));
+        }
+    }
+
+    /**
+     * Prints success message after insertion.
+     */
+    private void printInsertionSuccess(int id, Seminar seminar) {
+        System.out.println("Successfully inserted record with ID " + id);
+        System.out.println(seminar.toString());
+    }
+
+    /**
+     * Delete a seminar record by ID.
+     */
     public void delete(int id) {
         KVPair<Integer, Seminar> removedNode = removeFromIdBST(id);
         
@@ -199,21 +225,10 @@ public class Controller {
         printDeletionSuccess(seminarObject.id());
     }
 
-    /**
-     * Attempts to remove a seminar from the ID BST.
-     *
-     * @param id The ID of the seminar to remove
-     * @return The removed KVPair or null if not found
-     */
     private KVPair<Integer, Seminar> removeFromIdBST(int id) {
         return this.idBST.remove(id);
     }
 
-    /**
-     * Removes the seminar from all secondary data structures.
-     *
-     * @param seminarObject The seminar to remove from all structures
-     */
     private void removeFromAllStructures(Seminar seminarObject) {
         removeFromCostBST(seminarObject);
         removeFromDateBST(seminarObject);
@@ -221,27 +236,18 @@ public class Controller {
         removeFromBintree(seminarObject);
     }
 
-    /**
-     * Removes the seminar from the cost BST.
-     */
     private void removeFromCostBST(Seminar seminarObject) {
         KVPair<Integer, Seminar> costPair = 
             new KVPair<>(seminarObject.cost(), seminarObject);
         this.costBST.remove(costPair);
     }
 
-    /**
-     * Removes the seminar from the date BST.
-     */
     private void removeFromDateBST(Seminar seminarObject) {
         KVPair<String, Seminar> datePair = 
             new KVPair<>(seminarObject.date(), seminarObject);
         this.dateBST.remove(datePair);
     }
 
-    /**
-     * Removes the seminar from the keywords BST for each keyword.
-     */
     private void removeFromKeywordsBST(Seminar seminarObject) {
         for (String keyword : seminarObject.keywords()) {
             KVPair<String, Seminar> keywordPair = 
@@ -250,158 +256,126 @@ public class Controller {
         }
     }
 
-    /**
-     * Removes the seminar from the spatial bintree.
-     */
     private void removeFromBintree(Seminar seminarObject) {
         this.bintree.remove(seminarObject);
     }
 
-    /**
-     * Prints a success message for seminar deletion.
-     */
     private void printDeletionSuccess(int id) {
         System.out.println(
             "Record with ID " + id + 
             " successfully deleted from the database");
     }
 
-    /**
-     * Prints a failure message when seminar deletion fails.
-     */
     private void printDeletionFailure(int id) {
         System.out.println(
             "Delete FAILED -- There is no record with ID " + id);
     }
 
-
     /**
-     * Search for a Seminar by ID and display its details if found.
-     * 
-     * @param id
-     *            The ID to search for
+     * Search for a Seminar by ID.
      */
     public void searchId(int id) {
-        // Search the idBST for a Seminar with the given ID
         KVPair<Integer, Seminar> foundNode = this.idBST.find(id);
+        printSearchIdResult(foundNode, id);
+    }
+
+    /**
+     * Prints the result of an ID search.
+     */
+    private void printSearchIdResult(
+        KVPair<Integer, Seminar> foundNode, 
+        int id) {
+        
         if (foundNode != null) {
             System.out.println("Found record with ID " + id + ":");
-            Seminar foundNodeSeminar = foundNode.getValue();
-            System.out.println(foundNodeSeminar.toString());
+            System.out.println(foundNode.getValue().toString());
         }
         else {
-            System.out.println("Search FAILED -- There is no record with ID "
-                + id);
+            System.out.println(
+                "Search FAILED -- There is no record with ID " + id);
         }
     }
 
-
     /**
-     * Search for Seminars within a given cost range.
-     * 
-     * @param firstCost
-     *            Lower bound of the cost range
-     * @param secCost
-     *            Upper bound of the cost range
+     * Search for Seminars within a cost range.
      */
     public void searchCost(int firstCost, int secCost) {
-        System.out.println("Seminars with costs in range " + String.valueOf(
-            firstCost) + " to " + String.valueOf(secCost) + ":");
-        int count = this.costBST.traverse(firstCost, secCost); // Traverse
-                                                               // costBST for
-                                                               // Seminars in
-                                                               // cost range
-        System.out.println(String.valueOf(count)
-            + " nodes visited in this search");
+        printCostRangeHeader(firstCost, secCost);
+        int visitedNodes = this.costBST.traverse(firstCost, secCost);
+        printVisitedNodesCount(visitedNodes);
     }
 
+    private void printCostRangeHeader(int firstCost, int secCost) {
+        System.out.println("Seminars with costs in range " + 
+            String.valueOf(firstCost) + " to " + 
+            String.valueOf(secCost) + ":");
+    }
+
+    private void printVisitedNodesCount(int count) {
+        System.out.println(String.valueOf(count) + 
+            " nodes visited in this search");
+    }
 
     /**
-     * Search for Seminars within a given date range.
-     * 
-     * @param firstDate
-     *            Starting date range
-     * @param secDate
-     *            Ending date range
+     * Search for Seminars within a date range.
      */
     public void searchDate(String firstDate, String secDate) {
-        System.out.println("Seminars with dates in range " + firstDate + " to "
-            + secDate + ":");
-        int count = this.dateBST.traverse(firstDate, secDate); // Traverse
-                                                               // dateBST for
-                                                               // Seminars in
-                                                               // date range
-        System.out.println(String.valueOf(count)
-            + " nodes visited in this search");
-
+        printDateRangeHeader(firstDate, secDate);
+        int visitedNodes = this.dateBST.traverse(firstDate, secDate);
+        printVisitedNodesCount(visitedNodes);
     }
 
+    private void printDateRangeHeader(String firstDate, String secDate) {
+        System.out.println("Seminars with dates in range " + 
+            firstDate + " to " + secDate + ":");
+    }
 
     /**
-     * Search for Seminars by a specific keyword.
-     * 
-     * @param keyword
-     *            The keyword to search for
+     * Search for Seminars by keyword.
      */
     public void searchkeyword(String keyword) {
         System.out.println("Seminars matching keyword " + keyword + ":");
-        int count = this.keywordsBST.traverse(keyword, keyword);
-
+        this.keywordsBST.traverse(keyword, keyword);
     }
 
-
     /**
-     * Search for Seminars within a given radius of the x, y coordinates.
-     * 
-     * @param x
-     *            X-coordinate
-     * @param y
-     *            Y-coordinate
-     * @param rad
-     *            The radius to search within
+     * Search for Seminars within a radius of coordinates.
      */
     public void searchLocation(int x, int y, int rad) {
-        System.out.println("Seminars within " + rad + " units of " + x + ", "
-            + y + ":");
-        bintree.search(new Seminar(0, "", "", 0, (short)x, (short)y, 0,
-            new String[] {}, ""), rad);
+        printLocationSearchHeader(x, y, rad);
+        Seminar searchPoint = createSearchPoint(x, y);
+        bintree.search(searchPoint, rad);
     }
 
+    private void printLocationSearchHeader(int x, int y, int rad) {
+        System.out.println("Seminars within " + rad + 
+            " units of " + x + ", " + y + ":");
+    }
+
+    private Seminar createSearchPoint(int x, int y) {
+        return new Seminar(0, "", "", 0, (short)x, (short)y, 0,
+            new String[] {}, "");
+    }
 
     /**
-     * Print the specified BST or Bintree (based on ID, cost, date, keyword, or
-     * location).
-     * 
-     * @param s
-     *            The type of tree to print ("ID", "cost", "date", "keyword", or
-     *            "location")
+     * Print specified tree structure.
      */
     public void print(String s) {
         switch (s) {
             case "ID":
-                System.out.println("ID Tree:");
-                this.idBST.print();
+                printTree("ID Tree:", this.idBST);
                 break;
             case "cost":
-                System.out.println("Cost Tree:");
-                this.costBST.print();
+                printTree("Cost Tree:", this.costBST);
                 break;
             case "date":
-                System.out.println("Date Tree:");
-                this.dateBST.print();
+                printTree("Date Tree:", this.dateBST);
                 break;
             case "keyword":
-                System.out.println("Keyword Tree:");
-                this.keywordsBST.print();
+                printTree("Keyword Tree:", this.keywordsBST);
                 break;
             case "location":
-                System.out.println("Location Tree:");
-                if (idBST.size() == 0) {
-                    System.out.println("E");
-                }
-                else {
-                    this.bintree.print();
-                }
+                printLocationTree();
                 break;
             default:
                 System.out.println("Invalid tree type.");
@@ -409,4 +383,24 @@ public class Controller {
         }
     }
 
+    /**
+     * Helper method to print any BST.
+     */
+    private void printTree(String header, BST<?, ?> tree) {
+        System.out.println(header);
+        tree.print();
+    }
+
+    /**
+     * Prints the location tree (Bintree).
+     */
+    private void printLocationTree() {
+        System.out.println("Location Tree:");
+        if (idBST.size() == 0) {
+            System.out.println("E");
+        }
+        else {
+            this.bintree.print();
+        }
+    }
 }
