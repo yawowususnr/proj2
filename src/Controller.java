@@ -4,7 +4,7 @@ import javax.xml.crypto.dsig.keyinfo.KeyValue;
 /**
  * Controller class to handle inputs
  * 
- * @author Yaw Agyemang	
+ * @author Yaw Agyemang
  * @author Yaw Owusu Jnr
  * @version 10/18/24
  */
@@ -186,43 +186,92 @@ public class Controller {
     }
 
 
-    /**
-     * Deletes a Seminar record by ID. Removes the corresponding entry from all
-     * BSTs and the Bintree.
-     * 
-     * @param id
-     *            The ID of the Seminar to be deleted
-     */
     public void delete(int id) {
-        // Remove the Seminar from the idBST based on ID
-        KeyValuePair<Integer, Seminar> removedNode = this.idBST.remove(id);
-
-        if (removedNode != null) {
-            Seminar seminarObject = removedNode.getValue();
-
-            // Remove the Seminar from the other BSTs (cost, date, keywords)
-            this.costBST.remove(new KeyValuePair<Integer, Seminar>(seminarObject
-                .cost(), seminarObject));
-            this.dateBST.remove(new KeyValuePair<String, Seminar>(seminarObject
-                .date(), seminarObject));
-
-            for (String word : seminarObject.keywords()) {
-                this.keywordsBST.remove(new KeyValuePair<String, Seminar>(word,
-                    seminarObject));
-            }
-
-            // Remove the Seminar from the Bintree
-            this.bintree.remove(seminarObject);
-
-            // Confirm successful deletion
-            System.out.println("Record with ID " + seminarObject.id()
-                + " successfully deleted from the database");
-
+        KeyValuePair<Integer, Seminar> removedNode = removeFromIdBST(id);
+        
+        if (removedNode == null) {
+            printDeletionFailure(id);
+            return;
         }
-        else {
-            System.out.println("Delete FAILED -- There is no record with ID "
-                + id);
+        
+        Seminar seminarObject = removedNode.getValue();
+        removeFromAllStructures(seminarObject);
+        printDeletionSuccess(seminarObject.id());
+    }
+
+    /**
+     * Attempts to remove a seminar from the ID BST.
+     *
+     * @param id The ID of the seminar to remove
+     * @return The removed KeyValuePair or null if not found
+     */
+    private KeyValuePair<Integer, Seminar> removeFromIdBST(int id) {
+        return this.idBST.remove(id);
+    }
+
+    /**
+     * Removes the seminar from all secondary data structures.
+     *
+     * @param seminarObject The seminar to remove from all structures
+     */
+    private void removeFromAllStructures(Seminar seminarObject) {
+        removeFromCostBST(seminarObject);
+        removeFromDateBST(seminarObject);
+        removeFromKeywordsBST(seminarObject);
+        removeFromBintree(seminarObject);
+    }
+
+    /**
+     * Removes the seminar from the cost BST.
+     */
+    private void removeFromCostBST(Seminar seminarObject) {
+        KeyValuePair<Integer, Seminar> costPair = 
+            new KeyValuePair<>(seminarObject.cost(), seminarObject);
+        this.costBST.remove(costPair);
+    }
+
+    /**
+     * Removes the seminar from the date BST.
+     */
+    private void removeFromDateBST(Seminar seminarObject) {
+        KeyValuePair<String, Seminar> datePair = 
+            new KeyValuePair<>(seminarObject.date(), seminarObject);
+        this.dateBST.remove(datePair);
+    }
+
+    /**
+     * Removes the seminar from the keywords BST for each keyword.
+     */
+    private void removeFromKeywordsBST(Seminar seminarObject) {
+        for (String keyword : seminarObject.keywords()) {
+            KeyValuePair<String, Seminar> keywordPair = 
+                new KeyValuePair<>(keyword, seminarObject);
+            this.keywordsBST.remove(keywordPair);
         }
+    }
+
+    /**
+     * Removes the seminar from the spatial bintree.
+     */
+    private void removeFromBintree(Seminar seminarObject) {
+        this.bintree.remove(seminarObject);
+    }
+
+    /**
+     * Prints a success message for seminar deletion.
+     */
+    private void printDeletionSuccess(int id) {
+        System.out.println(
+            "Record with ID " + id + 
+            " successfully deleted from the database");
+    }
+
+    /**
+     * Prints a failure message when seminar deletion fails.
+     */
+    private void printDeletionFailure(int id) {
+        System.out.println(
+            "Delete FAILED -- There is no record with ID " + id);
     }
 
 
@@ -308,15 +357,14 @@ public class Controller {
      *            X-coordinate
      * @param y
      *            Y-coordinate
-     * @param radius
+     * @param rad
      *            The radius to search within
      */
-    public void searchLocation(int x, int y, int radius) {
-        System.out.println("Seminars within " + radius + " units of " + x + ", "
+    public void searchLocation(int x, int y, int rad) {
+        System.out.println("Seminars within " + rad + " units of " + x + ", "
             + y + ":");
         bintree.search(new Seminar(0, "", "", 0, (short)x, (short)y, 0,
-            new String[] {}, ""), radius); // Perform Bintree search based on
-                                           // location
+            new String[] {}, ""), rad);
     }
 
 
@@ -329,29 +377,36 @@ public class Controller {
      *            "location")
      */
     public void print(String s) {
-        if (s.equals("ID")) {
-            System.out.println("ID Tree:");
-            this.idBST.print();
-        }
-        else if (s.equals("cost")) {
-            System.out.println("Cost Tree:");
-            this.costBST.print();
-        }
-        else if (s.equals("date")) {
-            System.out.println("Date Tree:");
-            this.dateBST.print();
-        }
-        else if (s.equals("keyword")) {
-            System.out.println("Keyword Tree:");
-            this.keywordsBST.print();
-        }
-        else if (s.equals("location")) {
-            System.out.println("Location Tree:");
-            if (idBST.size() == 0)
-                System.out.println("E");
-            else {
-                this.bintree.print();
-            }
+        switch (s) {
+            case "ID":
+                System.out.println("ID Tree:");
+                this.idBST.print();
+                break;
+            case "cost":
+                System.out.println("Cost Tree:");
+                this.costBST.print();
+                break;
+            case "date":
+                System.out.println("Date Tree:");
+                this.dateBST.print();
+                break;
+            case "keyword":
+                System.out.println("Keyword Tree:");
+                this.keywordsBST.print();
+                break;
+            case "location":
+                System.out.println("Location Tree:");
+                if (idBST.size() == 0) {
+                    System.out.println("E");
+                }
+                else {
+                    this.bintree.print();
+                }
+                break;
+            default:
+                System.out.println("Invalid tree type.");
+                break;
         }
     }
+
 }
