@@ -4,9 +4,9 @@
  * and removal of seminars while maintaining the order of the seminars
  * based on their IDs.
  * 
+ * @author Yaw Agyemang	
  * @author Yaw Owusu Jnr
- * @author Chris Nicoue-Beglah
- * @version 10/9/23
+ * @version 10/18/24
  */
 class LeafNode implements BintreeNode {
     private int size; // size of the array holding seminars

@@ -8,9 +8,9 @@
  * to represent non-existent nodes. It provides default implementations
  * for the methods defined in the bion tree interface.
  * 
- * @author Yaw Owusu Snr
- * @author Chris Nicoue-Beglah
- * @version 10/9/23
+ * @author Yaw Agyemang	
+ * @author Yaw Owusu Jnr
+ * @version 10/18/24
  * 
  **/
 class EmptyNode implements BintreeNode {

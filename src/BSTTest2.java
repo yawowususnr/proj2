@@ -8,9 +8,9 @@ import student.TestCase;
  * and attempting to remove non-existent nodes or nodes with the same key but
  * different values.
  * 
- * @author Yaw Owusu Snr
- * @author Chris Nicoue-Beglah
- * @version 10/9/23
+ * @author Yaw Agyemang	
+ * @author Yaw Owusu Jnr
+ * @version 10/18/24
  */
 public class BSTTest2 extends TestCase {
 

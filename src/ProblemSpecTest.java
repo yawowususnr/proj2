@@ -6,9 +6,9 @@ import student.TestCase;
 /**
  * Problem spec test class
  * 
- * @author Yaw Owusu Snr
- * @author Chris Nicoue-Beglah
- * @version 10/19/24
+ * @author Yaw Agyemang	
+ * @author Yaw Owusu Jnr
+ * @version 10/18/24
  */
 public class ProblemSpecTest extends TestCase {
     /**

@@ -4,9 +4,9 @@ import student.TestCase;
  * Test class for the BSTNode functionality.
  * This class extends TestCase and provides unit tests for the BSTNode class.
  * 
- * @author Chris Nicoue-Beglah
- * @author Yaw Owusu Snr
- * @version 10/19/24
+ * @author Yaw Agyemang	
+ * @author Yaw Owusu Jnr
+ * @version 10/18/24
  */
 public class BSTNodeTest extends TestCase {
 

@@ -3,9 +3,9 @@ import student.TestCase;
 /**
  * test Binary tree clas
  * 
- * @author Yaw Owusu Snr
- * @author Chris Nicoue-Beglah
- * @version 10/9/23
+ * @author Yaw Agyemang	
+ * @author Yaw Owusu Jnr
+ * @version 10/18/24
  */
 public class BintreeTest extends TestCase {
     private Bintree tree;

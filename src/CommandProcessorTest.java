@@ -5,9 +5,9 @@ import student.TestCase;
  * It tests the processFile method and verifies that the output matches the
  * expected behavior for specific commands processed from a file.
  * 
- * @author Yaw Owusu Snr
- * @author Chris Nicoue-Beglah
- * @version 10/9/23
+ * @author Yaw Agyemang	
+ * @author Yaw Owusu Jnr
+ * @version 10/18/24
  */
 public class CommandProcessorTest extends TestCase {
 

@@ -7,9 +7,9 @@ import student.TestCase;
  * Test class for the SemSearch functionality.
  * This class extends TestCase and provides unit tests for the SemSearch class.
  * 
- * @author Yaw Owusu Snr
- * @author Chris Nicoue-Beglah
- * @version 10/19/24
+ * @author Yaw Agyemang	
+ * @author Yaw Owusu Jnr
+ * @version 10/18/24
  */
 public class SemSearchTest extends TestCase {
     /**

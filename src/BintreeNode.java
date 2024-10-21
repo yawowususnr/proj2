@@ -1,8 +1,9 @@
 /**
  * Bintree node interface
  * 
- * @author Yaw Owusu Snr
- * @version 10/9/23
+ * @author Yaw Agyemang	
+ * @author Yaw Owusu Jnr
+ * @version 10/18/24
  */
 interface BintreeNode {
     /**

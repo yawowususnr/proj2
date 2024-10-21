@@ -4,8 +4,8 @@ import javax.xml.crypto.dsig.keyinfo.KeyValue;
 /**
  * Controller class to handle inputs
  * 
- * @author Yaw Owusu Snr
- * @author Chris Nicoue-Beglah
+ * @author Yaw Agyemang	
+ * @author Yaw Owusu Jnr
  * @version 10/18/24
  */
 public class Controller {

@@ -4,8 +4,8 @@ import student.TestCase;
  * Unit tests for the LeafNode class, which manages a collection of Seminar
  * objects.
  * 
- * @author Yaw Owusu Snr
- * @author Chris Nicoue-Beglah
+ * @author Yaw Agyemang	
+ * @author Yaw Owusu Jnr
  * @version 10/18/24
  */
 public class LeafNodeTest extends TestCase {

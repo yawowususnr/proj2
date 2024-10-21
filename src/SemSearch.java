@@ -6,9 +6,9 @@
 /**
  * The class containing the main method.
  *
- * @author Yaw Owusu Snr
- * @author Chris Nicoue-beglah
- * @version 10/19/24
+ * @author Yaw Agyemang	
+ * @author Yaw Owusu Jnr
+ * @version 10/18/24
  */
 
 // On my honor:

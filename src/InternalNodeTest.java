@@ -3,9 +3,9 @@
  * This test suite verifies the functionality of inserting, removing,
  * and searching for seminars within the Bintree.
  * 
- * @author Yaw Owusu Snr
- * @author Chris NICOUE-bEGLAH
- * @version 10/9/23
+ * @author Yaw Agyemang	
+ * @author Yaw Owusu Jnr
+ * @version 10/18/24
  */
 public class InternalNodeTest extends student.TestCase {
 

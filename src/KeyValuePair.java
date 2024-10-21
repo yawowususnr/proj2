@@ -7,8 +7,9 @@
  * @param <V>
  *            value
  * 
- * @author Yaw Owusu Snr
- * @version Oct 2, 2024
+ * @author Yaw Agyemang	
+ * @author Yaw Owusu Jnr
+ * @version 10/18/24
  */
 public class KeyValuePair<K extends Comparable<K>, V>
     implements Comparable<KeyValuePair<K, V>> {

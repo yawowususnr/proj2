@@ -2,9 +2,9 @@
 /**
  * A generic Binary Search Tree (BST) implementation.
  * 
- * @author Yaw Owusu Snr
- * @author Chris Nicoue-Beglah
- * @version 10/9/23
+ * @author Yaw Agyemang	
+ * @author Yaw Owusu Jnr
+ * @version 10/18/24
  * 
  * @param <K>
  *            The type of keys maintained by this BST, which must be comparable.

@@ -6,9 +6,9 @@
  * as well as perform insertions and removals of seminars based on their spatial
  * coordinates.
  * 
- * @author Yaw Owusu Snr
- * @author Chris Nicoue-Beglah
- * @version 10/9/23
+ * @author Yaw Agyemang	
+ * @author Yaw Owusu Jnr
+ * @version 10/18/24
  */
 class InternalNode implements BintreeNode {
     private BintreeNode lNode; // the right node
