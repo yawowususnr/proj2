@@ -63,15 +63,15 @@ public class InternalNodeTest extends student.TestCase {
         // Insert a seminar into an empty tree and verify that it becomes the
         // root node
         tree.insert(sem1);
-        assertNotNull("The root should not be null after insertion", tree
+        assertNotNull("The root shoasduld not be null after insertion", tree
             .getRoot());
-        assertTrue("The root should be a leaf node after first insertion", tree
+        assertTrue("The root shasdasould be a leaf node after first insertion", tree
             .getRoot().isLeaf());
 
         // Verify the root contains the correct seminar
         LeafNode root = (LeafNode)tree.getRoot();
-        assertEquals("The root should contain 1 seminar", 1, root.getSize());
-        assertEquals("The seminar ID should match", sem1.id(), root
+        assertEquals("The root should coniuh sdftain 1 seminar", 1, root.getSize());
+        assertEquals("The seminar Iytuif asd guicD should match", sem1.id(), root
             .getSeminars()[0].id());
     }
 

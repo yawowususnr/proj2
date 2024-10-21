@@ -1,189 +1,160 @@
 /**
- * A modified node class for internal nodes in a binary tree.
+ * Represents an internal node in a binary space partitioning tree (bintree).
  * 
- * This class represents an internal node that can contain left and right child
- * nodes,
- * as well as perform insertions and removals of seminars based on their spatial
- * coordinates.
+ * Internal nodes divide the 2D space alternately by x and y coordinates as the tree
+ * descends, with even levels partitioning on x-coordinate and odd levels on y-coordinate.
+ * Each internal node maintains two children: left/top and right/bottom, depending on
+ * the current partitioning dimension.
  * 
- * @author Yaw Agyemang	
+ * @author Yaw Agyemang 
  * @author Yaw Owusu Jnr
- * @version 10/18/24
+ * @version 10/20/24
  */
 class InternalNode implements BintreeNode {
-    private BintreeNode lNode; // the right node
-    private BintreeNode rNode; // the left node
+    private BintreeNode lNode; // Left/top child node
+    private BintreeNode rNode; // Right/bottom child node
 
     /**
-     * Creates a new internal node initialized to empty nodes for both children.
+     * Constructs a new internal node with empty children.
+     * Both children are initialized as empty nodes using the singleton pattern.
      */
     public InternalNode() {
         this.lNode = EmptyNode.getInstance();
         this.rNode = EmptyNode.getInstance();
     }
 
-
     @Override
-    /**
-     * Checks if the node is an internal node.
-     * 
-     * @return true since this is an internal node.
-     */
     public boolean isInternal() {
         return true;
     }
 
-
     @Override
-    /**
-     * Checks if the node is a leaf node.
-     * 
-     * @return false since this is not a leaf node.
-     */
     public boolean isLeaf() {
         return false;
     }
 
-
-    /**
-     * Checks if the node is empty.
-     * 
-     * @return false since this is an internal node.
-     */
+    @Override
     public boolean isEmpty() {
         return false;
     }
 
-
     /**
-     * Returns the left child node.
+     * Retrieves the left/top child node.
      * 
-     * @return the left child node.
+     * @return the left or top child node depending on the level
      */
     public BintreeNode left() {
         return lNode;
     }
 
-
     /**
-     * Returns the right child node.
+     * Retrieves the right/bottom child node.
      * 
-     * @return the right child node.
+     * @return the right or bottom child node depending on the level
      */
     public BintreeNode right() {
         return rNode;
     }
 
-
     @Override
     /**
-     * Inserts a seminar into the node based on its spatial coordinates.
+     * Inserts a seminar into the appropriate subtree based on spatial partitioning.
      * 
-     * The method determines the appropriate child node based on the level
-     * of the node and the seminar's x or y coordinate.
-     * 
-     * @param seminar
-     *            the seminar to insert.
-     * @param level
-     *            the current level in the binary tree.
-     * @param boundry
-     *            the bounding box at this level.
-     * @return the node holding the data after insertion.
+     * @param seminar  the seminar to be inserted
+     * @param level    current tree level (0-based) determining partition dimension
+     * @param boundry  the spatial boundary for this node's region
+     * @return the current node after insertion
      */
     public BintreeNode insert(Seminar seminar, int level, BoundingBox boundry) {
-        // Calculate midpoints for x and y dimensions based on the bounding box
-        double midX = (boundry.getxMin() + boundry.getxMax()) * 0.5;
-        double midY = (boundry.getyMin() + boundry.getyMax()) * 0.5;
+        boolean isXPartition = (level % 2 == 0);
+        double mid = isXPartition 
+            ? (boundry.getxMin() + boundry.getxMax()) * 0.5
+            : (boundry.getyMin() + boundry.getyMax()) * 0.5;
+        
+        BoundingBox leftBox = createLeftBoundingBox(boundry, mid, isXPartition);
+        BoundingBox rightBox = createRightBoundingBox(boundry, mid, isXPartition);
 
-        // Determine which dimension to use for insertion based on the level
-        if (level % 2 == 0) { // Even level: use x dimension
-            BoundingBox leftBBox = new BoundingBox(boundry.getxMin(), boundry
-                .getyMin(), midX, boundry.getyMax());
-            BoundingBox rightBBox = new BoundingBox(midX, boundry.getyMin(),
-                boundry.getxMax(), boundry.getyMax());
-
-            if (seminar.x() < midX) {
-                lNode = lNode.insert(seminar, level + 1, leftBBox);
-            }
-            else {
-                rNode = rNode.insert(seminar, level + 1, rightBBox);
-            }
+        double compareValue = isXPartition ? seminar.x() : seminar.y();
+        if (compareValue < mid) {
+            lNode = lNode.insert(seminar, level + 1, leftBox);
         }
-        else { // Odd level: use y dimension
-            BoundingBox topBBox = new BoundingBox(boundry.getxMin(), boundry
-                .getyMin(), boundry.getxMax(), midY);
-            BoundingBox bottomBBox = new BoundingBox(boundry.getxMin(), midY,
-                boundry.getxMax(), boundry.getyMax());
-
-            if (seminar.y() < midY) {
-                lNode = lNode.insert(seminar, level + 1, topBBox);
-            }
-            else {
-                rNode = rNode.insert(seminar, level + 1, bottomBBox);
-            }
+        else {
+            rNode = rNode.insert(seminar, level + 1, rightBox);
         }
 
         return this;
     }
 
-
     @Override
     /**
-     * Removes a seminar from the node based on its spatial coordinates.
+     * Removes a seminar from the appropriate subtree based on spatial partitioning.
+     * After removal, consolidates the tree if possible by removing unnecessary internal nodes.
      * 
-     * The method determines the appropriate child node for removal based on the
-     * level
-     * of the node and the seminar's x or y coordinate.
-     * 
-     * @param seminar
-     *            the seminar to remove.
-     * @param level
-     *            the current level in the binary tree.
-     * @param bbox
-     *            the bounding box at this level.
-     * @return the node without the seminar after removal.
+     * @param seminar  the seminar to be removed
+     * @param level    current tree level (0-based) determining partition dimension
+     * @param bbox     the spatial boundary for this node's region
+     * @return the modified node or its replacement after removal and consolidation
      */
     public BintreeNode remove(Seminar seminar, int level, BoundingBox bbox) {
-        // Calculate midpoints for x and y dimensions based on the bounding box
-        double midX = (bbox.getxMin() + bbox.getxMax()) * 0.5;
-        double midY = (bbox.getyMin() + bbox.getyMax()) * 0.5;
+        boolean isXPartition = (level % 2 == 0);
+        double mid = isXPartition 
+            ? (bbox.getxMin() + bbox.getxMax()) * 0.5
+            : (bbox.getyMin() + bbox.getyMax()) * 0.5;
 
-        // Determine which dimension to use for removal based on the level
-        if (level % 2 == 0) { // Even level: x dimension
-            BoundingBox leftBBox = new BoundingBox(bbox.getxMin(), bbox
-                .getyMin(), midX, bbox.getyMax());
-            BoundingBox rightBBox = new BoundingBox(midX, bbox.getyMin(), bbox
-                .getxMax(), bbox.getyMax());
+        BoundingBox leftBox = createLeftBoundingBox(bbox, mid, isXPartition);
+        BoundingBox rightBox = createRightBoundingBox(bbox, mid, isXPartition);
 
-            if (seminar.x() < midX) {
-                lNode = lNode.remove(seminar, level + 1, leftBBox);
-            }
-            else {
-                rNode = rNode.remove(seminar, level + 1, rightBBox);
-            }
+        double compareValue = isXPartition ? seminar.x() : seminar.y();
+        if (compareValue < mid) {
+            lNode = lNode.remove(seminar, level + 1, leftBox);
         }
-        else { // Odd level: y dimension
-            BoundingBox upperBBox = new BoundingBox(bbox.getxMin(), bbox
-                .getyMin(), bbox.getxMax(), midY);
-            BoundingBox lowerBBox = new BoundingBox(bbox.getxMin(), midY, bbox
-                .getxMax(), bbox.getyMax());
-
-            if (seminar.y() < midY) {
-                lNode = lNode.remove(seminar, level + 1, upperBBox);
-            }
-            else {
-                rNode = rNode.remove(seminar, level + 1, lowerBBox);
-            }
+        else {
+            rNode = rNode.remove(seminar, level + 1, rightBox);
         }
 
-        // Check for cases where one child node can be returned directly
+        return consolidateNode();
+    }
+
+    /**
+     * Creates a bounding box for the left/top child node.
+     */
+    private BoundingBox createLeftBoundingBox(
+        BoundingBox parent, 
+        double mid, 
+        boolean isXPartition) {
+        return isXPartition
+            ? new BoundingBox(parent.getxMin(), parent.getyMin(), 
+                mid, parent.getyMax())
+            : new BoundingBox(parent.getxMin(), parent.getyMin(), 
+                parent.getxMax(), mid);
+    }
+
+    /**
+     * Creates a bounding box for the right/bottom child node.
+     */
+    private BoundingBox createRightBoundingBox(
+        BoundingBox parent, 
+        double mid, 
+        boolean isXPartition) {
+        return isXPartition
+            ? new BoundingBox(mid, parent.getyMin(), 
+                parent.getxMax(), parent.getyMax())
+            : new BoundingBox(parent.getxMin(), mid, 
+                parent.getxMax(), parent.getyMax());
+    }
+
+    /**
+     * Consolidates the node by removing unnecessary internal nodes.
+     * 
+     * @return the consolidated node or its replacement
+     */
+    private BintreeNode consolidateNode() {
         if (!lNode.isInternal() && !lNode.isLeaf() && rNode.isLeaf()) {
-            return rNode; // Return right node if left is not valid
+            return rNode;
         }
-        else if (!rNode.isInternal() && !rNode.isLeaf() && lNode.isLeaf()) {
-            return lNode; // Return left node if right is not valid
+        if (!rNode.isInternal() && !rNode.isLeaf() && lNode.isLeaf()) {
+            return lNode;
         }
-
-        return this; // Default case: return the current node
+        return this;
     }
 }

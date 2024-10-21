@@ -1,13 +1,13 @@
 // -------------------------------------------------------------------------
 /**
- * Key value pair where value is seminar object
+ * Key-value pair where the value is a seminar object.
  * 
  * @param <K>
- *            key
+ *            The key type, which must be comparable.
  * @param <V>
- *            value
+ *            The value type.
  * 
- * @author Yaw Agyemang	
+ * @author Yaw Agyemang    
  * @author Yaw Owusu Jnr
  * @version 10/18/24
  */
@@ -19,12 +19,12 @@ public class KeyValuePair<K extends Comparable<K>, V>
 
     // ----------------------------------------------------------
     /**
-     * Create a new KeyValuePair object.
+     * Constructs a new KeyValuePair object with the given key and value.
      * 
      * @param newKey
-     *            a new key
+     *            The key for this pair.
      * @param newValue
-     *            a new value
+     *            The value for this pair.
      */
     public KeyValuePair(K newKey, V newValue) {
         this.key = newKey;
@@ -34,9 +34,9 @@ public class KeyValuePair<K extends Comparable<K>, V>
 
     // ----------------------------------------------------------
     /**
-     * gets the key
+     * Returns the key of this KeyValuePair.
      * 
-     * @return key of KV pair
+     * @return The key.
      */
     public K getKey() {
         return this.key;
@@ -45,9 +45,9 @@ public class KeyValuePair<K extends Comparable<K>, V>
 
     // ----------------------------------------------------------
     /**
-     * gets value
+     * Returns the value of this KeyValuePair.
      * 
-     * @return value of KV pair
+     * @return The value.
      */
     public V getValue() {
         return this.value;
@@ -56,11 +56,12 @@ public class KeyValuePair<K extends Comparable<K>, V>
 
     // ----------------------------------------------------------
     /**
-     * compares keys
+     * Compares this KeyValuePair's key to another key.
      * 
      * @param o
-     *            object to compare to
-     * @return -1, 0 or 1 depending on which object is larger in magnitde
+     *            The key to compare against.
+     * @return -1, 0, or 1 depending on whether this key is less than,
+     *         equal to, or greater than the specified key.
      */
     public int compareTo(K o) {
         return key.compareTo(o);
@@ -69,12 +70,13 @@ public class KeyValuePair<K extends Comparable<K>, V>
 
     @Override
     /**
-     * compare key value pair
+     * Compares this KeyValuePair to another KeyValuePair by comparing their keys.
      * 
-     * @return return -1, 0 m1 dependign on the object
+     * @param o
+     *            The KeyValuePair to compare against.
+     * @return -1, 0, or 1 depending on the result of comparing the keys.
      */
     public int compareTo(KeyValuePair<K, V> o) {
         return key.compareTo(o.getKey());
     }
-
 }

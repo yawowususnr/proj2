@@ -1,85 +1,92 @@
 /**
+ * A singleton class representing an empty node in a binary tree.
+ * This class implements the Flyweight design pattern, ensuring that
+ * there is only one instance of the EmptyNode shared across the tree,
+ * thus conserving memory.
  * 
- * A singleton class representing an empty node in a binary tree,
- * implementing the Flyweight design pattern to conserve memory
- * by sharing a single instance of the empty node.
+ * The EmptyNode class is used to signify the absence of data within the 
+ * binary tree and acts as a placeholder for non-existent nodes. It provides
+ * default implementations for the methods in the BintreeNode interface,
+ * allowing seamless integration with the binary tree structure.
  * 
- * This class is part of the binary tree structure and is used
- * to represent non-existent nodes. It provides default implementations
- * for the methods defined in the bion tree interface.
+ * Since this node represents an empty space, its methods are designed
+ * to return neutral results, such as no modifications or indicating
+ * the node's emptiness.
  * 
- * @author Yaw Agyemang	
+ * @author Yaw Agyemang
  * @author Yaw Owusu Jnr
  * @version 10/18/24
- * 
- **/
+ */
 class EmptyNode implements BintreeNode {
-    /** The singleton instance of the EmptyNode. */
-    private static EmptyNode instance; // the empty node instance
+    /** Singleton instance of the EmptyNode. */
+    private static EmptyNode instance; // Singleton empty node instance
 
+    /**
+     * Private constructor to prevent external instantiation.
+     * This enforces the singleton design pattern.
+     */
     private EmptyNode() {
     }
 
-
     /**
-     * Removes a seminar from the binary tree. Since this is an empty node,
-     * it will remain unchanged and return itself.
-     *
+     * Attempts to remove a seminar from the binary tree.
+     * As this is an empty node, no removal is performed, and
+     * the empty node remains unchanged.
+     * 
      * @param seminar
-     *            the seminar to remove.
+     *            The seminar to remove (ignored).
      * @param level
-     *            the level in the binary tree where the removal occurs.
+     *            The level in the binary tree where the removal is attempted.
      * @param bbox
-     *            the bounding box for the seminar's location.
-     * @return the singleton instance of EmptyNode.
+     *            The bounding box for the seminar's location (ignored).
+     * @return The unchanged instance of EmptyNode.
      */
     public BintreeNode remove(Seminar seminar, int level, BoundingBox bbox) {
         return EmptyNode.getInstance();
     }
 
-
     /**
-     * Indicates whether this node is an internal node.
-     *
+     * Determines if this node is an internal node.
+     * Since this is an empty node, it is not considered an internal node.
+     * 
      * @return false, as this is an empty node.
      */
     public boolean isInternal() {
         return false;
     }
 
-
     /**
-     * Indicates whether this node is a leaf node.
-     *
+     * Determines if this node is a leaf node.
+     * Since this is an empty node, it is not considered a leaf node.
+     * 
      * @return false, as this is an empty node.
      */
     public boolean isLeaf() {
         return false;
     }
 
-
     /**
-     * Inserts a seminar into the binary tree, replacing this empty node
-     * with a new leaf node containing the specified seminar.
-     *
+     * Inserts a seminar into the binary tree. Since this is an empty node,
+     * it gets replaced by a new LeafNode that contains the provided seminar.
+     * 
      * @param seminar
-     *            the seminar to insert.
+     *            The seminar to insert into the tree.
      * @param level
-     *            the level in the binary tree where the insertion occurs.
+     *            The level in the binary tree where the insertion occurs.
      * @param bbox
-     *            the bounding box for the seminar's location.
-     * @return a new LeafNode containing the seminar.
+     *            The bounding box for the seminar's location.
+     * @return A new LeafNode containing the inserted seminar.
      */
     public BintreeNode insert(Seminar seminar, int level, BoundingBox bbox) {
         return new LeafNode(seminar);
     }
 
-
     /**
-     * Returns the singleton instance of the EmptyNode.
-     * If the instance does not exist, it creates one.
-     *
-     * @return the shared instance of EmptyNode.
+     * Provides the singleton instance of the EmptyNode class.
+     * If no instance exists, one is created. Otherwise, the existing instance
+     * is returned.
+     * 
+     * @return The singleton instance of EmptyNode.
      */
     public static EmptyNode getInstance() {
         if (instance == null) {
@@ -88,10 +95,9 @@ class EmptyNode implements BintreeNode {
         return instance;
     }
 
-
     /**
-     * Indicates whether this node is an empty node.
-     *
+     * Determines if this node is an empty node.
+     * 
      * @return true, as this is an empty node.
      */
     public boolean isEmpty() {
