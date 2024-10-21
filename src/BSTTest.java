@@ -21,7 +21,7 @@ public class BSTTest extends TestCase {
     public void setUp() {
 
         this.bstTree = new BST<>();
-        KeyValuePair<Integer, String> root = new KeyValuePair<>(5, "Five");
+        KVPair<Integer, String> root = new KVPair<>(5, "Five");
         this.bstTree.insert(root);
 
         assertEquals(1, bstTree.size());
@@ -36,20 +36,20 @@ public class BSTTest extends TestCase {
      * and ensures the size of the tree is updated.
      */
     public void testInsertElement() {
-        this.bstTree.insert(new KeyValuePair<>(4, "Four"));
-        this.bstTree.insert(new KeyValuePair<>(6, "Six"));
-        this.bstTree.insert(new KeyValuePair<>(7, "Seven"));
+        this.bstTree.insert(new KVPair<>(4, "Four"));
+        this.bstTree.insert(new KVPair<>(6, "Six"));
+        this.bstTree.insert(new KVPair<>(7, "Seven"));
 
         assertEquals(4, this.bstTree.size());
 
         assertNull(this.bstTree.find(10));
 
-        KeyValuePair<Integer, String> kvp = this.bstTree.find(4);
+        KVPair<Integer, String> kvp = this.bstTree.find(4);
 
         assertNotNull(kvp);
         assertEquals(kvp.getValue(), "Four");
 
-        KeyValuePair<Integer, String> kvp2 = this.bstTree.find(6);
+        KVPair<Integer, String> kvp2 = this.bstTree.find(6);
 
         assertNotNull(kvp2);
         assertEquals(kvp2.getValue(), "Six");
@@ -62,13 +62,13 @@ public class BSTTest extends TestCase {
      * the tree size is updated correctly after removing nodes.
      */
     public void testRemove() {
-        KeyValuePair<Integer, String> nullNode = this.bstTree.remove(100);
+        KVPair<Integer, String> nullNode = this.bstTree.remove(100);
 
         assertNull(nullNode);
 
-        this.bstTree.insert(new KeyValuePair<>(7, "Seven"));
+        this.bstTree.insert(new KVPair<>(7, "Seven"));
 
-        KeyValuePair<Integer, String> removedNode = this.bstTree.remove(7);
+        KVPair<Integer, String> removedNode = this.bstTree.remove(7);
 
         assertNotNull(removedNode);
 
@@ -91,14 +91,14 @@ public class BSTTest extends TestCase {
         this.bstTree.remove(5);
         assertNull(this.bstTree.remove(5));
         // Step 1: Insert nodes into the tree
-        this.bstTree.insert(new KeyValuePair<>(6, "Six"));
-        this.bstTree.insert(new KeyValuePair<>(3, "Three"));
-        this.bstTree.insert(new KeyValuePair<>(9, "Nine"));
-        this.bstTree.insert(new KeyValuePair<>(2, "Two"));
-        this.bstTree.insert(new KeyValuePair<>(5, "Five"));
-        this.bstTree.insert(new KeyValuePair<>(8, "Eight"));
-        this.bstTree.insert(new KeyValuePair<>(10, "Ten"));
-        this.bstTree.insert(new KeyValuePair<>(1, "One"));
+        this.bstTree.insert(new KVPair<>(6, "Six"));
+        this.bstTree.insert(new KVPair<>(3, "Three"));
+        this.bstTree.insert(new KVPair<>(9, "Nine"));
+        this.bstTree.insert(new KVPair<>(2, "Two"));
+        this.bstTree.insert(new KVPair<>(5, "Five"));
+        this.bstTree.insert(new KVPair<>(8, "Eight"));
+        this.bstTree.insert(new KVPair<>(10, "Ten"));
+        this.bstTree.insert(new KVPair<>(1, "One"));
 
         // Verify initial size is 8
         assertEquals(8, this.bstTree.size());
@@ -133,14 +133,14 @@ public class BSTTest extends TestCase {
      */
     public void testTraverse() {
         // Insert nodes into the tree
-        this.bstTree.insert(new KeyValuePair<>(6, "Six"));
-        this.bstTree.insert(new KeyValuePair<>(3, "Three"));
-        this.bstTree.insert(new KeyValuePair<>(9, "Nine"));
-        this.bstTree.insert(new KeyValuePair<>(2, "Two"));
-        this.bstTree.insert(new KeyValuePair<>(5, "Five"));
-        this.bstTree.insert(new KeyValuePair<>(8, "Eight"));
-        this.bstTree.insert(new KeyValuePair<>(10, "Ten"));
-        this.bstTree.insert(new KeyValuePair<>(1, "One"));
+        this.bstTree.insert(new KVPair<>(6, "Six"));
+        this.bstTree.insert(new KVPair<>(3, "Three"));
+        this.bstTree.insert(new KVPair<>(9, "Nine"));
+        this.bstTree.insert(new KVPair<>(2, "Two"));
+        this.bstTree.insert(new KVPair<>(5, "Five"));
+        this.bstTree.insert(new KVPair<>(8, "Eight"));
+        this.bstTree.insert(new KVPair<>(10, "Ten"));
+        this.bstTree.insert(new KVPair<>(1, "One"));
 
         // Test traversal between 3 and 8
         int traversedNodes = this.bstTree.traverse(3, 8);
@@ -169,9 +169,9 @@ public class BSTTest extends TestCase {
      * Verifies that the correct tree structure is printed.
      */
     public void testgetHeight() {
-        this.bstTree.insert(new KeyValuePair<>(6, "Six"));
-        this.bstTree.insert(new KeyValuePair<>(3, "Three"));
-        this.bstTree.insert(new KeyValuePair<>(9, "Nine"));
+        this.bstTree.insert(new KVPair<>(6, "Six"));
+        this.bstTree.insert(new KVPair<>(3, "Three"));
+        this.bstTree.insert(new KVPair<>(9, "Nine"));
 
         this.bstTree.print();
         String treeStructure = systemOut().getHistory();
@@ -192,9 +192,9 @@ public class BSTTest extends TestCase {
      * size is reset.
      */
     public void testClear() {
-        this.bstTree.insert(new KeyValuePair<>(4, "Four"));
-        this.bstTree.insert(new KeyValuePair<>(6, "Six"));
-        this.bstTree.insert(new KeyValuePair<>(7, "Seven"));
+        this.bstTree.insert(new KVPair<>(4, "Four"));
+        this.bstTree.insert(new KVPair<>(6, "Six"));
+        this.bstTree.insert(new KVPair<>(7, "Seven"));
 
         assertEquals(this.bstTree.size(), 4);
 

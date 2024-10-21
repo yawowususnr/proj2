@@ -144,7 +144,7 @@ public class Controller {
         String desc) {
 
         // Check if a Seminar with the same ID already exists
-        KeyValuePair<Integer, Seminar> foundNode = this.idBST.find(id);
+        KVPair<Integer, Seminar> foundNode = this.idBST.find(id);
 
         if (foundNode != null) {
             System.out.println(
@@ -165,15 +165,15 @@ public class Controller {
 
         // Insert the Seminar into all the BSTs based on different attributes
         // (id, cost, date, keywords)
-        this.idBST.insert(new KeyValuePair<Integer, Seminar>(id, seminarNode));
-        this.costBST.insert(new KeyValuePair<Integer, Seminar>(cost,
+        this.idBST.insert(new KVPair<Integer, Seminar>(id, seminarNode));
+        this.costBST.insert(new KVPair<Integer, Seminar>(cost,
             seminarNode));
-        this.dateBST.insert(new KeyValuePair<String, Seminar>(date,
+        this.dateBST.insert(new KVPair<String, Seminar>(date,
             seminarNode));
 
         // Insert each keyword associated with the Seminar into the keywords BST
         for (int i = 0; i < keywordsLength; i++) {
-            this.keywordsBST.insert(new KeyValuePair<String, Seminar>(
+            this.keywordsBST.insert(new KVPair<String, Seminar>(
                 keywords[i], seminarNode));
         }
 
@@ -195,19 +195,19 @@ public class Controller {
      */
     public void delete(int id) {
         // Remove the Seminar from the idBST based on ID
-        KeyValuePair<Integer, Seminar> removedNode = this.idBST.remove(id);
+        KVPair<Integer, Seminar> removedNode = this.idBST.remove(id);
 
         if (removedNode != null) {
             Seminar seminarObject = removedNode.getValue();
 
             // Remove the Seminar from the other BSTs (cost, date, keywords)
-            this.costBST.remove(new KeyValuePair<Integer, Seminar>(seminarObject
+            this.costBST.remove(new KVPair<Integer, Seminar>(seminarObject
                 .cost(), seminarObject));
-            this.dateBST.remove(new KeyValuePair<String, Seminar>(seminarObject
+            this.dateBST.remove(new KVPair<String, Seminar>(seminarObject
                 .date(), seminarObject));
 
             for (String word : seminarObject.keywords()) {
-                this.keywordsBST.remove(new KeyValuePair<String, Seminar>(word,
+                this.keywordsBST.remove(new KVPair<String, Seminar>(word,
                     seminarObject));
             }
 
@@ -234,7 +234,7 @@ public class Controller {
      */
     public void searchId(int id) {
         // Search the idBST for a Seminar with the given ID
-        KeyValuePair<Integer, Seminar> foundNode = this.idBST.find(id);
+        KVPair<Integer, Seminar> foundNode = this.idBST.find(id);
         if (foundNode != null) {
             System.out.println("Found record with ID " + id + ":");
             Seminar foundNodeSeminar = foundNode.getValue();

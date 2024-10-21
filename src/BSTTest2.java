@@ -14,12 +14,12 @@ import student.TestCase;
  */
 public class BSTTest2 extends TestCase {
 
-    private BSTNode<KeyValuePair<Integer, Seminar>> root;
-    private BSTNode<KeyValuePair<Integer, Seminar>> node1;
-    private BSTNode<KeyValuePair<Integer, Seminar>> node2;
-    private BSTNode<KeyValuePair<Integer, Seminar>> node3;
-    private BSTNode<KeyValuePair<Integer, Seminar>> node4;
-    private BSTNode<KeyValuePair<Integer, Seminar>> node5;
+    private BSTNode<KVPair<Integer, Seminar>> root;
+    private BSTNode<KVPair<Integer, Seminar>> node1;
+    private BSTNode<KVPair<Integer, Seminar>> node2;
+    private BSTNode<KVPair<Integer, Seminar>> node3;
+    private BSTNode<KVPair<Integer, Seminar>> node4;
+    private BSTNode<KVPair<Integer, Seminar>> node5;
     private BST<Integer, Seminar> bst;
 
     /**
@@ -48,11 +48,11 @@ public class BSTTest2 extends TestCase {
             "Description 5");
 
         // Create nodes
-        node1 = new BSTNode<>(new KeyValuePair<>(1, seminar1));
-        node2 = new BSTNode<>(new KeyValuePair<>(2, seminar2));
-        node3 = new BSTNode<>(new KeyValuePair<>(3, seminar3));
-        node4 = new BSTNode<>(new KeyValuePair<>(4, seminar4));
-        node5 = new BSTNode<>(new KeyValuePair<>(5, seminar5));
+        node1 = new BSTNode<>(new KVPair<>(1, seminar1));
+        node2 = new BSTNode<>(new KVPair<>(2, seminar2));
+        node3 = new BSTNode<>(new KVPair<>(3, seminar3));
+        node4 = new BSTNode<>(new KVPair<>(4, seminar4));
+        node5 = new BSTNode<>(new KVPair<>(5, seminar5));
 
         // Build a simple tree manually
         root = node3; // root is node3 (seminar 3)
@@ -69,8 +69,8 @@ public class BSTTest2 extends TestCase {
      */
     public void testRemoveNodeFromEmptyTree() {
         // Attempting to remove from an empty tree
-        BSTNode<KeyValuePair<Integer, Seminar>> result = bst.removehelp(null,
-            new KeyValuePair<>(1, node1.getElement().getValue()));
+        BSTNode<KVPair<Integer, Seminar>> result = bst.removehelp(null,
+            new KVPair<>(1, node1.getElement().getValue()));
         assertNull(result); // Tree should remain empty
     }
 
@@ -156,7 +156,7 @@ public class BSTTest2 extends TestCase {
         Seminar nonExistentSeminar = new Seminar(999, "Non-existent Seminar",
             "2024-01-06", (int)7.0, (short)7.0, (short)7.0, (int)160.0,
             new String[] { "Quantum" }, "Non-existent description");
-        KeyValuePair<Integer, Seminar> nonExistentPair = new KeyValuePair<>(999,
+        KVPair<Integer, Seminar> nonExistentPair = new KVPair<>(999,
             nonExistentSeminar);
 
         root = bst.removehelp(root, nonExistentPair);
@@ -178,7 +178,7 @@ public class BSTTest2 extends TestCase {
         Seminar newSeminar = new Seminar(1, "New Seminar", "2024-02-01",
             (int)8.0, (short)8.0, (short)8.0, (int)170.0, new String[] { "AI" },
             "New Description");
-        KeyValuePair<Integer, Seminar> newPair = new KeyValuePair<>(1,
+        KVPair<Integer, Seminar> newPair = new KVPair<>(1,
             newSeminar);
 
         // Try to remove the original node1 by specifying a different value

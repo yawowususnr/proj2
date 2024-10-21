@@ -9,7 +9,7 @@
  * @version 10/18/24
  */
 class BST<K extends Comparable<K>, V> {
-	private BSTNode<KeyValuePair<K, V>> root; // Root of the BST
+	private BSTNode<KVPair<K, V>> root; // Root of the BST
 	private int totalNodes; // Number of nodes in the BST
 
 	/**
@@ -43,7 +43,7 @@ class BST<K extends Comparable<K>, V> {
 	 * @param key The key value to search for.
 	 * @return The KeyValuePair associated with the key, or null if none exists.
 	 */
-	public KeyValuePair<K, V> find(K key) {
+	public KVPair<K, V> find(K key) {
 		return findhelp(root, key);
 	}
 
@@ -55,7 +55,7 @@ class BST<K extends Comparable<K>, V> {
 	 * @param key The key value to search for.
 	 * @return The KeyValuePair associated with the key, or null if none exists.
 	 */
-	private KeyValuePair<K, V> findhelp(BSTNode<KeyValuePair<K, V>> rt, K key) {
+	private KVPair<K, V> findhelp(BSTNode<KVPair<K, V>> rt, K key) {
 		if (rt == null) {
 			return null;
 		}
@@ -73,7 +73,7 @@ class BST<K extends Comparable<K>, V> {
 	 * 
 	 * @param newKVP The KeyValuePair to insert.
 	 */
-	public void insert(KeyValuePair<K, V> newKVP) {
+	public void insert(KVPair<K, V> newKVP) {
 		root = inserthelp(root, newKVP);
 		totalNodes++;
 	}
@@ -85,9 +85,9 @@ class BST<K extends Comparable<K>, V> {
 	 * @param newKVP The KeyValuePair to insert.
 	 * @return The new root of the subtree after insertion.
 	 */
-	private BSTNode<KeyValuePair<K, V>> inserthelp(BSTNode<KeyValuePair<K, V>> rt, KeyValuePair<K, V> newKVP) {
+	private BSTNode<KVPair<K, V>> inserthelp(BSTNode<KVPair<K, V>> rt, KVPair<K, V> newKVP) {
 		if (rt == null) {
-			return new BSTNode<KeyValuePair<K, V>>(newKVP);
+			return new BSTNode<KVPair<K, V>>(newKVP);
 		}
 		if (rt.getElement().compareTo(newKVP) >= 0) {
 			rt.setLeft(inserthelp(rt.getLeft(), newKVP));
@@ -103,8 +103,8 @@ class BST<K extends Comparable<K>, V> {
 	 * @param key The key value of the KeyValuePair to remove.
 	 * @return The KeyValuePair removed, or null if none exists.
 	 */
-	public KeyValuePair<K, V> remove(K key) {
-		KeyValuePair<K, V> temp = findhelp(root, key); // First find it
+	public KVPair<K, V> remove(K key) {
+		KVPair<K, V> temp = findhelp(root, key); // First find it
 		if (temp != null) {
 			root = removehelp(root, key); // Now remove it
 			totalNodes--;
@@ -117,7 +117,7 @@ class BST<K extends Comparable<K>, V> {
 	 * 
 	 * @param pair The KeyValuePair to remove.
 	 */
-	public void remove(KeyValuePair<K, V> pair) {
+	public void remove(KVPair<K, V> pair) {
 		root = removehelp(root, pair);
 		totalNodes--;
 	}
@@ -129,7 +129,7 @@ class BST<K extends Comparable<K>, V> {
 	 * @param pair The KeyValuePair to remove.
 	 * @return The new root of the subtree after removal.
 	 */
-	public BSTNode<KeyValuePair<K, V>> removehelp(BSTNode<KeyValuePair<K, V>> rt, KeyValuePair<K, V> pair) {
+	public BSTNode<KVPair<K, V>> removehelp(BSTNode<KVPair<K, V>> rt, KVPair<K, V> pair) {
 		if (rt == null) {
 			return null;
 		}
@@ -146,7 +146,7 @@ class BST<K extends Comparable<K>, V> {
 			} else if (rt.getRight() == null) {
 				return rt.getLeft();
 			} else { // Two children
-				BSTNode<KeyValuePair<K, V>> temp = getMax(rt.getLeft());
+				BSTNode<KVPair<K, V>> temp = getMax(rt.getLeft());
 				rt.setElement(temp.getElement());
 				rt.setLeft(deleteMax(rt.getLeft()));
 			}
@@ -161,7 +161,7 @@ class BST<K extends Comparable<K>, V> {
 	 * @param key The key value of the record to remove.
 	 * @return The new root of the subtree.
 	 */
-	private BSTNode<KeyValuePair<K, V>> removehelp(BSTNode<KeyValuePair<K, V>> rt, K key) {
+	private BSTNode<KVPair<K, V>> removehelp(BSTNode<KVPair<K, V>> rt, K key) {
 		if (rt == null) {
 			return null;
 		}
@@ -176,7 +176,7 @@ class BST<K extends Comparable<K>, V> {
 			} else if (rt.getRight() == null) {
 				return rt.getLeft();
 			} else { // Two children
-				BSTNode<KeyValuePair<K, V>> temp = getMax(rt.getLeft());
+				BSTNode<KVPair<K, V>> temp = getMax(rt.getLeft());
 				rt.setElement(temp.getElement());
 				rt.setLeft(deleteMax(rt.getLeft()));
 			}
@@ -191,7 +191,7 @@ class BST<K extends Comparable<K>, V> {
 	 * @param rt The root of the subtree.
 	 * @return The new root of the subtree.
 	 */
-	private BSTNode<KeyValuePair<K, V>> deleteMax(BSTNode<KeyValuePair<K, V>> rt) {
+	private BSTNode<KVPair<K, V>> deleteMax(BSTNode<KVPair<K, V>> rt) {
 		if (rt.getRight() == null) {
 			return rt.getLeft();
 		}
@@ -205,7 +205,7 @@ class BST<K extends Comparable<K>, V> {
 	 * @param rt The root of the subtree.
 	 * @return The maximum node.
 	 */
-	private BSTNode<KeyValuePair<K, V>> getMax(BSTNode<KeyValuePair<K, V>> rt) {
+	private BSTNode<KVPair<K, V>> getMax(BSTNode<KVPair<K, V>> rt) {
 		if (rt.getRight() == null) {
 			return rt;
 		}
@@ -233,7 +233,7 @@ class BST<K extends Comparable<K>, V> {
 	 * @param hi The upper bound of the range.
 	 * @return The total number of records found within the specified range.
 	 */
-	private int traverseHelp(BSTNode<KeyValuePair<K, V>> rt, K lo, K hi) {
+	private int traverseHelp(BSTNode<KVPair<K, V>> rt, K lo, K hi) {
 		if (rt == null) {
 			return 1;
 		}
@@ -272,7 +272,7 @@ class BST<K extends Comparable<K>, V> {
 	 * @param node The current node from which to calculate height.
 	 * @return The height of the subtree rooted at the specified node.
 	 */
-	private int getHeight(BSTNode<KeyValuePair<K, V>> node) {
+	private int getHeight(BSTNode<KVPair<K, V>> node) {
 		if (node == null) {
 			return 0;
 		}
@@ -288,7 +288,7 @@ class BST<K extends Comparable<K>, V> {
 	 * @param level  The current depth level in the tree.
 	 * @param height The overall height of the tree.
 	 */
-	private void printhelp(BSTNode<KeyValuePair<K, V>> rt, int level, int height) {
+	private void printhelp(BSTNode<KVPair<K, V>> rt, int level, int height) {
 		String space = "";
 		int distance = (height - level);
 
@@ -312,7 +312,7 @@ class BST<K extends Comparable<K>, V> {
 	 * @param space The indentation used for printing.
 	 * @param node  The KeyValuePair node to be printed.
 	 */
-	private void printVisit(String space, KeyValuePair<K, V> node) {
+	private void printVisit(String space, KVPair<K, V> node) {
 		K key = node.getKey();
 
 		System.out.println(space + '\\');
