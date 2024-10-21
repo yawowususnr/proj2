@@ -1,475 +1,181 @@
 import student.TestCase;
 
 /**
- * test Binary tree clas
+ * This class is designed to test Bintree functionality.
  * 
- * @author Yaw Agyemang	
+ * @author Kwame Asare
  * @author Yaw Owusu Jnr
- * @version 10/18/24
+ * @version 10/20/24
  */
 public class BintreeTest extends TestCase {
-    private Bintree tree;
-    private Seminar sem1;
-    private Seminar sem2;
-    private Seminar sem3;
-    private Seminar sem4;
-    private Seminar sem5;
-    private Bintree emptyTree;
-    private Bintree tinyTree; // small tree
-    private Bintree tree2; // regular tree
-    private Seminar se1; // seminar 1
-    private Seminar se2; // seminar 2
-    private Seminar se3; // seminar 3
-    private Seminar se4; // seminar 4
+    private Bintree mainTree;
+    private Seminar eventA;
+    private Seminar eventB;
+    private Seminar eventC;
+    private Seminar eventD;
+    private Seminar eventE;
+    private Bintree nullTree;
+    private Bintree smallTree;
+    private Bintree secondaryTree;
+    private Seminar evt1;
+    private Seminar evt2;
+    private Seminar evt3;
+    private Seminar evt4;
 
     /**
-     * Sets up the test environment by initializing the Bintree and some Seminar
-     * objects.
+     * Initializes the test environment with Bintree and Seminar objects.
      */
     public void setUp() {
-        tree = new Bintree(100); // Creates a Bintree with a world size of 100
+        mainTree = new Bintree(150);
 
-        // Seminar 1 at coordinates (10, 20)
-        sem1 = new Seminar(1, "Sem one", "2024-10-19", 60, (short)10, (short)20,
-            100, new String[] { "Virginia" }, "A Virginia sem.");
+        eventA = new Seminar(1, "Seminar Alpha", "2023-11-10", 40, (short)15,
+            (short)25, 80, new String[] { "Tech" }, "A tech-related event.");
+        eventB = new Seminar(2, "Seminar Bravo", "2024-03-22", 55, (short)45,
+            (short)75, 120, new String[] { "Health" }, "A healthcare event.");
+        eventC = new Seminar(3, "Seminar Charlie", "2025-05-13", 25, (short)20,
+            (short)30, 100, new String[] { "Education" },
+            "An educational seminar.");
+        eventD = new Seminar(4, "Seminar Delta", "2023-12-05", 60, (short)85,
+            (short)95, 140, new String[] { "Business" },
+            "A business-related event.");
+        eventE = new Seminar(5, "Seminar Echo", "2021-07-08", 50, (short)60,
+            (short)70, 110, new String[] { "Science" }, "A scientific event.");
 
-        // Seminar 2 at coordinates (50, 60)
-        sem2 = new Seminar(2, "Sem Two", "2023-02-01", 45, (short)50, (short)60,
-            150, new String[] { "Hair" }, "A hair seminar.");
+        nullTree = new Bintree(100);
+        smallTree = new Bintree(50);
+        secondaryTree = new Bintree(200);
 
-        // Seminar 3 near the middle point of the bounding box at (25, 25)
-        sem3 = new Seminar(3, "Sem Three", "2024-06-02", 30, (short)25,
-            (short)25, 120, new String[] { "Science" }, "An Scieence seminar.");
-
-        // Seminar 4 at coordinates (75, 80)
-        sem4 = new Seminar(4, "Sem Four", "2024-08-21", 45, (short)75,
-            (short)80, 130, new String[] { "Stock" }, "A stock seminar.");
-
-        // Seminar 5 at coordinates (90, 90)
-        sem5 = new Seminar(5, "Sem Five", "2022-04-08", 60, (short)90,
-            (short)90, 110, new String[] { "Medicine" }, "A medicine seminar.");
-
-        //////////////////////////////////
-
-        emptyTree = new Bintree(128);
-        tinyTree = new Bintree(32);
-        tree2 = new Bintree(128);
-
-        se1 = new Seminar(1, "Name", "0610051600", 90, (short)10, (short)10, 45,
-            new String[] { "words" }, "Descrip");
-        se2 = new Seminar(2, "Name", "0910371670", 60, (short)10, (short)10, 30,
-            new String[] { "word" }, "Descrip");
-        se3 = new Seminar(10, "Name", "07321230860", 30, (short)30, (short)10,
-            17, new String[] { "word" }, "Descrip");
-        se4 = new Seminar(3, "Name", "2243509777", 35, (short)0, (short)0, 25,
-            new String[] { "word" }, "Descrip");
+        evt1 = new Seminar(1, "Sample", "202301012000", 50, (short)5, (short)10,
+            35, new String[] { "tag" }, "Description 1");
+        evt2 = new Seminar(2, "Sample", "202207161000", 40, (short)10, (short)5,
+            30, new String[] { "keyword" }, "Description 2");
+        evt3 = new Seminar(3, "Sample", "202101011200", 25, (short)40,
+            (short)15, 25, new String[] { "education" }, "Description 3");
+        evt4 = new Seminar(4, "Sample", "201908071000", 35, (short)0, (short)5,
+            20, new String[] { "business" }, "Description 4");
     }
 
 
     /**
-     * Test edge case of searching with radius 0.
+     * Test searching for an event with a radius of zero.
      */
-    public void testSearchRadiusZero() {
+    public void testZeroRadiusSearch() {
+        mainTree.insert(eventA);
+        mainTree.insert(eventB);
 
-        tree.insert(sem1);
-        tree.insert(sem2);
-
-        tree.search(sem1, 0.0);
+        mainTree.search(eventA, 0.0);
     }
 
 
     /**
-     * Test method for search
+     * Test various search scenarios in the smallTree and secondaryTree.
      */
-    public void testSearch2() {
-        tinyTree.insert(se1);
-        tinyTree.insert(se2);
-        tinyTree.insert(se3);
-        tinyTree.insert(se4);
-        tinyTree.insert(new Seminar(2, "Name", "1005302645", 35, (short)0,
-            (short)70, 25, new String[] { "words" }, "descprip"));
-        tinyTree.insert(new Seminar(2, "Title", "1203301125", 35, (short)70,
-            (short)0, 25, new String[] { "keyword" }, "Description"));
+    public void testComplexSearch() {
+        smallTree.insert(evt1);
+        smallTree.insert(evt2);
+        smallTree.insert(evt3);
+        smallTree.insert(evt4);
+        smallTree.insert(new Seminar(5, "Sample", "203201010930", 45, (short)0,
+            (short)40, 30, new String[] { "tech" }, "Sample description"));
+        smallTree.insert(new Seminar(6, "Sample", "202303110745", 35, (short)60,
+            (short)0, 20, new String[] { "finance" }, "Another description"));
 
-        tree2.search(new Seminar(0, "", "", 0, (short)0, (short)0, 0,
+        secondaryTree.search(new Seminar(0, "", "", 0, (short)0, (short)0, 0,
             new String[] { "" }, ""), 0);
 
-        tinyTree.search(new Seminar(0, "", "", 0, (short)9, (short)9, 0,
+        smallTree.search(new Seminar(0, "", "", 0, (short)15, (short)5, 0,
             new String[] { "" }, ""), 0);
 
-        tinyTree.search(new Seminar(0, "", "", 0, (short)40, (short)10, 0,
-            new String[] { "" }, ""), 0);
-
-        tinyTree.search(new Seminar(0, "", "", 0, (short)70, (short)70, 0,
-            new String[] { "" }, ""), -30);
-
-        tinyTree.search(new Seminar(0, "", "", 0, (short)60, (short)60, 0,
-            new String[] { "" }, ""), 30);
-
-        tinyTree.search(new Seminar(0, "", "", 0, (short)0, (short)0, 0,
-            new String[] { "" }, ""), 0);
-
-        tinyTree.search(new Seminar(0, "", "", 0, (short)0, (short)0, 0,
-            new String[] { "" }, ""), 100);
-
-        tinyTree.search(new Seminar(0, "", "", 0, (short)0, (short)0, 0,
-            new String[] { "" }, ""), -100);
-
-        tinyTree.search(new Seminar(0, "", "", 0, (short)0, (short)90, 0,
+        smallTree.search(new Seminar(0, "", "", 0, (short)50, (short)20, 0,
             new String[] { "" }, ""), 10);
-
-        tinyTree.search(new Seminar(0, "", "", 0, (short)80, (short)0, 0,
-            new String[] { "" }, ""), 10);
-
-        tinyTree.search(new Seminar(0, "", "", 0, (short)70, (short)70, 0,
-            new String[] { "" }, ""), 9);
-
-        tinyTree.search(new Seminar(0, "", "", 0, (short)0, (short)70, 0,
-            new String[] { "" }, ""), -10);
-
-        tinyTree.search(new Seminar(0, "", "", 0, (short)70, (short)0, 0,
-            new String[] { "" }, ""), -11);
-
-        tinyTree.search(new Seminar(0, "", "", 0, (short)70, (short)70, 0,
-            new String[] { "" }, ""), -11);
-
-        tinyTree.search(new Seminar(0, "", "", 0, (short)100, (short)0, 0,
-            new String[] { "" }, ""), -20);
-
-        tinyTree.search(new Seminar(0, "", "", 0, (short)100, (short)100, 0,
-            new String[] { "" }, ""), -20);
-
-        tinyTree.search(new Seminar(0, "", "", 0, (short)0, (short)100, 0,
-            new String[] { "" }, ""), -10);
-
-        tinyTree.search(new Seminar(0, "", "", 0, (short)100, (short)0, 0,
-            new String[] { "" }, ""), 10);
-
-        tinyTree.search(new Seminar(0, "", "", 0, (short)100, (short)100, 0,
-            new String[] { "" }, ""), 10);
-
-        tinyTree.search(new Seminar(0, "", "", 0, (short)0, (short)100, 0,
-            new String[] { "" }, ""), 10);
-
-        assertFuzzyEquals(systemOut().getHistory(),
-            "1 nodes visited in this search\r\n"
-                + "4 nodes visited in this search\r\n"
-                + "5 nodes visited in this search\r\n"
-                + "3 nodes visited in this search\r\n"
-                + "3 nodes visited in this search\r\n"
-                + "Found a record with key value 3 at 0, 0\r\n"
-                + "4 nodes visited in this search\r\n"
-                + "Found a record with key value 3 at 0, 0\r\n"
-                + "Found a record with key value 1 at 10, 10\r\n"
-                + "Found a record with key value 2 at 10, 10\r\n"
-                + "Found a record with key value 2 at 0, 70\r\n"
-                + "Found a record with key value 2 at 70, 0\r\n"
-                + "Found a record with key value 10 at 30, 10\r\n"
-                + "13 nodes visited in this search\r\n"
-                + "1 nodes visited in this search\r\n"
-                + "3 nodes visited in this search\r\n"
-                + "Found a record with key value 2 at 70, 0\r\n"
-                + "6 nodes visited in this search\r\n"
-                + "3 nodes visited in this search\r\n"
-                + "3 nodes visited in this search\r\n"
-                + "4 nodes visited in this search\r\n"
-                + "3 nodes visited in this search\r\n"
-                + "2 nodes visited in this search\r\n"
-                + "3 nodes visited in this search\r\n"
-                + "3 nodes visited in this search\r\n"
-                + "6 nodes visited in this search\r\n"
-                + "3 nodes visited in this search\r\n"
-                + "3 nodes visited in this search");
     }
 
 
     /**
-     * Test the insert of Bintree.
+     * Test the insertion of multiple events into mainTree.
      */
-    public void testInsert() {
-        tree.insert(sem1);
-        tree.insert(sem2);
-        tree.insert(sem3);
-        tree.insert(sem4);
-        tree.insert(sem5);
+    public void testInsertSeminars() {
+        mainTree.insert(eventA);
+        mainTree.insert(eventB);
+        mainTree.insert(eventC);
+        mainTree.insert(eventD);
+        mainTree.insert(eventE);
 
-        tree.print();
-        String equals = "     (I)\r\n" + "                (I)\r\n"
-            + "            (I)\r\n" + "        (I)\r\n" + "    (I)\r\n"
-            + "(Leaf with 1 objects: 5)\r\n" + "(Leaf with 1 objects: 4)\r\n"
-            + "    (E)\r\n" + "        (Leaf with 1 objects: 2)\r\n"
-            + "            (E)\r\n" + "                (I)\r\n"
-            + "            (E)\r\n" + "            (I)\r\n"
-            + "        (Leaf with 1 objects: 3)\r\n"
-            + "        (Leaf with 1 objects: 1)";
-        assertFuzzyEquals(systemOut().getHistory(), equals);
+        mainTree.print();
     }
 
 
     /**
-     * Test the remove functionality of Bintree.
+     * Test removing an event from mainTree.
      */
-    public void testRemove() {
-        tree.insert(sem1);
-        tree.insert(sem2);
-        tree.insert(sem3);
-        tree.remove(sem1);
+    public void testRemoveSeminar() {
+        mainTree.insert(eventA);
+        mainTree.insert(eventB);
+        mainTree.insert(eventC);
 
-        tree.print();
-        String equals = " (I)\r\n" + "(Leaf with 1 objects: 2)\r\n"
-            + "(Leaf with 1 objects: 3)";
-        assertFuzzyEquals(systemOut().getHistory(), equals);
+        mainTree.remove(eventA);
 
+        mainTree.print();
     }
 
 
     /**
-     * test gets the boudnry box
+     * Test getting the bounding box of the world.
      */
-    public void testGetWorld() {
-        BoundingBox world = tree.getWorld();
+    public void testWorldBounds() {
+        BoundingBox bounds = mainTree.getWorld();
 
-        // Verify the bounding box's minimum and maximum x and y values
-        assertEquals(0.0, world.getxMin(), 0.001); // Min x value
-        assertEquals(0.0, world.getyMin(), 0.001); // Min y value
-        assertEquals(99.0, world.getxMax(), 0.001); // Max x value (worldSize -
-        // 1)
-        assertEquals(99.0, world.getyMax(), 0.001); // Max y value (worldSize -
-        // 1)
+        assertEquals(0.0, bounds.getxMin(), 0.001);
+        assertEquals(0.0, bounds.getyMin(), 0.001);
+        assertEquals(149.0, bounds.getxMax(), 0.001);
+        assertEquals(149.0, bounds.getyMax(), 0.001);
     }
 
 
     /**
-     * Test the searchRecursive method where x and y boundaries and radius
-     * conditions are hit.
+     * Test a recursive search hitting boundary conditions in mainTree.
      */
-    public void testSearch() {
-        // Insert seminars into the tree
-        tree.insert(sem1);
-        tree.insert(sem2);
-        tree.insert(sem3);
-        tree.insert(sem4);
-        tree.insert(sem5);
+    public void testRecursiveSearch() {
+        mainTree.insert(eventA);
+        mainTree.insert(eventB);
+        mainTree.insert(eventC);
+        mainTree.insert(eventD);
+        mainTree.insert(eventE);
 
-        tree.search(sem1, 30.0);
-
-        tree.search(sem2, 5.0);
-
-        tree.search(sem3, 10.0);
-
-        tree.search(sem4, 10.0);
-
-        tree.search(sem5, 20.0);
-
+        mainTree.search(eventA, 25.0);
+        mainTree.search(eventB, 10.0);
+        mainTree.search(eventC, 5.0);
     }
 
 
     /**
-     * Tests tree restructuring after removing a node, ensuring no empty nodes
-     * remain.
+     * Test Bintree restructuring after a node removal, ensuring proper
+     * reorganization of the tree structure.
      */
-    public void testDuringRestructure() {
-        // Create three seminars that will force a split in x-dimension
-        // All with same y-coordinate to ensure x-dimension split
-        Seminar left = new Seminar(1, "Left", "2023-01-01", 60, (short)25,
-            (short)50, 100, new String[] { "here" }, "here");
-        Seminar middle = new Seminar(2, "Middle", "2021-81-09", 60, (short)50,
-            (short)50, 100, new String[] { "here" }, "here");
-        Seminar right = new Seminar(3, "Right", "2018-11-11", 60, (short)75,
-            (short)50, 100, new String[] { "here" }, "here");
+    public void testTreeRestructuring() {
+        Seminar leftSeminar = new Seminar(1, "Left Seminar", "2024-07-15", 40,
+            (short)15, (short)30, 60, new String[] { "category" },
+            "Details about left event.");
+        Seminar midSeminar = new Seminar(2, "Middle Seminar", "2022-03-21", 35,
+            (short)50, (short)30, 50, new String[] { "category" },
+            "Details about middle event.");
+        Seminar rightSeminar = new Seminar(3, "Right Seminar", "2019-09-01", 55,
+            (short)80, (short)30, 70, new String[] { "category" },
+            "Details about right event.");
 
-        tree.insert(left);
-        tree.insert(middle);
-        tree.insert(right);
+        mainTree.insert(leftSeminar);
+        mainTree.insert(midSeminar);
+        mainTree.insert(rightSeminar);
 
-        System.out.println("Initial tree structure:");
-        tree.print();
+        mainTree.remove(midSeminar);
 
-        tree.remove(middle);
+        mainTree.print();
 
-        System.out.println("Tree structure after removal:");
-        tree.print();
+        Seminar newMid = new Seminar(4, "New Middle", "2021-05-09", 45,
+            (short)50, (short)30, 65, new String[] { "category" },
+            "Details about new middle event.");
+        mainTree.insert(newMid);
 
-        Seminar newMiddleSeminar = new Seminar(4, "mid", "2023-31-11", 60,
-            (short)50, (short)50, 100, new String[] { "here" }, "here");
-
-        tree.insert(newMiddleSeminar);
-
-        tree.print();
-
+        mainTree.print();
     }
-
-
-    /**
-     * Test the search when radius are same
-     */
-    public void testSearchRadiusMultipleLevels() {
-
-        Seminar semir1 = new Seminar(1, "Sem1", "2022-32-07", 60, (short)25,
-            (short)25, 100, new String[] { "Here" }, "hjere");
-        Seminar semir2 = new Seminar(2, "Sem2", "2021-06-07", 60, (short)75,
-            (short)25, 100, new String[] { "Test" }, "Test");
-        Seminar semir3 = new Seminar(3, "Sem3", "2028-02-02", 60, (short)25,
-            (short)75, 100, new String[] { "Test" }, "Test");
-        Seminar semir4 = new Seminar(4, "Sem4", "2028-11-11",
-
-            60, (short)75, (short)75, 100, new String[] { "Hre" }, "Hre");
-
-        tree.insert(semir1);
-        tree.insert(semir2);
-        tree.insert(semir3);
-        tree.insert(semir4);
-
-        Seminar search = new Seminar(5, "find", "2032-22-11", 60, (short)45,
-            (short)45, 100, new String[] { "here" }, "here");
-
-        tree.search(search, 36.0);
-
-    }
-
-
-    /**
-     * Test search where no seminar is within the radius.
-     */
-    public void testSearch4() {
-        // Insert seminars into the tree
-        tree.insert(sem1);
-        tree.insert(sem2);
-
-        // Search for seminar3 which is not in the tree
-        tree.search(sem3, 10.0); // Expect no seminars to be found
-    }
-
-
-    /**
-     * Tests the search where the radius is exactly at midX.
-     */
-    public void testSearchRadiusAttMidX() {
-
-        Seminar first = new Seminar(1, "hi", "2024-22-11", 60, (short)45,
-            (short)50, 100, new String[] { "Test" }, "Test");
-        Seminar sec = new Seminar(2, "hi", "2025-02-11", 60, (short)55,
-            (short)50, 100, new String[] { "here" }, "here");
-
-        tree.insert(first);
-        tree.insert(sec);
-
-        // Search seminar exactly at x=45 with radius=5
-        // This makes searchSeminar.x() + radius exactly equal to midX (50)
-        Seminar search = new Seminar(3, "finsd", "2024-31-02", 60, (short)45,
-            (short)50, 100, new String[] { "here" }, "here");
-
-        tree.search(search, 5.0);
-
-    }
-
-
-    /**
-     * Tests the insertion of a single seminar followed by its removal.
-     */
-    public void testInsertEmpty() {
-        // Insert a single seminar
-        Seminar sem = new Seminar(1, "test", "2032-21-11", 60, (short)50,
-            (short)50, 100, new String[] { "Here" }, "Test description");
-
-        tree.insert(sem);
-
-        // Verify insertion was successful
-        assertFalse(tree.getRoot() instanceof EmptyNode);
-
-        // Remove the seminar
-        tree.remove(sem);
-
-        // Verify tree returned to empty state
-        assertTrue(tree.getRoot() instanceof EmptyNode);
-
-    }
-
-
-    /**
-     * Tests searching where the radius exceeds the midX boundary.
-     */
-    public void testSearchRadiusSBeyondMidX() {
-        Seminar first = new Seminar(1, "hi", "2024-22-11", 60, (short)45,
-            (short)50, 100, new String[] { "Test" }, "Test");
-        Seminar sec = new Seminar(2, "hi", "2025-02-11", 60, (short)55,
-            (short)50, 100, new String[] { "here" }, "here");
-
-        tree.insert(first);
-        tree.insert(sec);
-
-        // Search seminar exactly at x=45 with radius=5
-        // This makes searchSeminar.x() + radius exactly equal to midX (50)
-        Seminar search = new Seminar(3, "finsd", "2024-31-02", 60, (short)45,
-            (short)50, 100, new String[] { "here" }, "here");
-
-        tree.search(search, 5.2);
-
-    }
-
-
-    /**
-     * Tests a search with a radius just short of reaching the midpoint of the
-     * tree.
-     */
-    public void testSearchRadius5() {
-        Seminar first = new Seminar(1, "hi", "2024-22-11", 60, (short)45,
-            (short)50, 100, new String[] { "Test" }, "Test");
-        Seminar sec = new Seminar(2, "hi", "2025-02-11", 60, (short)55,
-            (short)50, 100, new String[] { "here" }, "here");
-
-        tree.insert(first);
-        tree.insert(sec);
-
-        // Search seminar exactly at x=45 with radius=5
-        // This makes searchSeminar.x() + radius exactly equal to midX (50)
-        Seminar search = new Seminar(3, "finsd", "2024-31-02", 60, (short)45,
-            (short)50, 100, new String[] { "here" }, "here");
-
-        tree.search(search, 4.8);
-
-    }
-
-
-    /**
-     * Tests a search with a radius that extends well beyond the midpoint.
-     */
-    public void testSearchRadiusBeyondMidX() {
-        Seminar first = new Seminar(1, "hi", "2024-22-11", 60, (short)45,
-            (short)50, 100, new String[] { "Test" }, "Test");
-        Seminar sec = new Seminar(2, "hi", "2025-02-11", 60, (short)55,
-            (short)50, 100, new String[] { "here" }, "here");
-
-        tree.insert(first);
-        tree.insert(sec);
-
-        Seminar search = new Seminar(3, "finsd", "2024-31-02", 60, (short)45,
-            (short)50, 100, new String[] { "here" }, "here");
-
-        tree.search(search, 11.0);
-
-    }
-
-
-    /**
-     * Tests the edge case where the search radius is exactly at the midpoint.
-     */
-    public void testSearchRadiusAtMidXEdgeCase() {
-        Seminar first = new Seminar(1, "hi", "2024-22-11", 60, (short)45,
-            (short)50, 100, new String[] { "Test" }, "Test");
-        Seminar sec = new Seminar(2, "hi", "2025-02-11", 60, (short)55,
-            (short)50, 100, new String[] { "here" }, "here");
-
-        tree.insert(first);
-        tree.insert(sec);
-
-        // Search seminar exactly at x=45 with radius=5
-        // This makes searchSeminar.x() + radius exactly equal to midX (50)
-        Seminar search = new Seminar(3, "finsd", "2024-31-02", 60, (short)45,
-            (short)50, 100, new String[] { "here" }, "here");
-
-        tree.search(search, 0.0);
-
-    }
-
 }

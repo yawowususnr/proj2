@@ -39,7 +39,7 @@ class BoundingBox {
 	 * 
 	 * @return the maximum y-coordinate
 	 */
-	public double getMaxY() {
+	public double getyMax() {
 		return maximumY;
 	}
 
@@ -48,7 +48,7 @@ class BoundingBox {
 	 * 
 	 * @return the maximum x-coordinate
 	 */
-	public double getMaxX() {
+	public double getxMax() {
 		return maximumX;
 	}
 
@@ -57,7 +57,7 @@ class BoundingBox {
 	 * 
 	 * @return the minimum x-coordinate
 	 */
-	public double getMinX() {
+	public double getxMin() {
 		return minimumX;
 	}
 
@@ -66,7 +66,7 @@ class BoundingBox {
 	 * 
 	 * @return the minimum y-coordinate
 	 */
-	public double getMinY() {
+	public double getyMin() {
 		return minimumY;
 	}
 
@@ -230,8 +230,8 @@ public class Bintree {
 	 */
 	private int handleInternalNode(InternalNode currentNode, Seminar targetSeminar, double searchRadius, int depthLevel,
 			BoundingBox currentBox) {
-		double centerX = (currentBox.getMinX() + currentBox.getMaxX()) / 2.0;
-		double centerY = (currentBox.getMinY() + currentBox.getMaxY()) / 2.0;
+		double centerX = (currentBox.getxMin() + currentBox.getxMax()) / 2.0;
+		double centerY = (currentBox.getyMin() + currentBox.getyMax()) / 2.0;
 
 		if (depthLevel % 2 == 0) {
 			return handleXAxisSplit(currentNode, targetSeminar, searchRadius, depthLevel, currentBox, centerX);
@@ -311,11 +311,11 @@ public class Bintree {
 		BoundingBox rightBox;
 
 		if (isXAxis) {
-			leftBox = new BoundingBox(boundingBox.getMinX(), boundingBox.getMinY(), mid, boundingBox.getMaxY());
-			rightBox = new BoundingBox(mid, boundingBox.getMinY(), boundingBox.getMaxX(), boundingBox.getMaxY());
+			leftBox = new BoundingBox(boundingBox.getxMin(), boundingBox.getyMin(), mid, boundingBox.getyMax());
+			rightBox = new BoundingBox(mid, boundingBox.getyMin(), boundingBox.getxMax(), boundingBox.getyMax());
 		} else {
-			leftBox = new BoundingBox(boundingBox.getMinX(), boundingBox.getMinY(), boundingBox.getMaxX(), mid);
-			rightBox = new BoundingBox(boundingBox.getMinX(), mid, boundingBox.getMaxX(), boundingBox.getMaxY());
+			leftBox = new BoundingBox(boundingBox.getxMin(), boundingBox.getyMin(), boundingBox.getxMax(), mid);
+			rightBox = new BoundingBox(boundingBox.getxMin(), mid, boundingBox.getxMax(), boundingBox.getyMax());
 		}
 		return searchRecursive(internalNode.left(), targetSeminar, searchRadius, treeDepth + 1, leftBox)
 				+ searchRecursive(internalNode.right(), targetSeminar, searchRadius, treeDepth + 1, rightBox) + 1;
@@ -339,8 +339,8 @@ public class Bintree {
 	private int searchLeftChild(InternalNode internalNode, Seminar targetSeminar, double searchRadius, int treeDepth,
 			BoundingBox boundingBox, double mid, boolean isXAxis) {
 		BoundingBox leftBoundingBox = isXAxis
-				? new BoundingBox(boundingBox.getMinX(), boundingBox.getMinY(), mid, boundingBox.getMaxY())
-				: new BoundingBox(boundingBox.getMinX(), boundingBox.getMinY(), boundingBox.getMaxX(), mid);
+				? new BoundingBox(boundingBox.getxMin(), boundingBox.getyMin(), mid, boundingBox.getyMax())
+				: new BoundingBox(boundingBox.getxMin(), boundingBox.getyMin(), boundingBox.getxMax(), mid);
 		return searchRecursive(internalNode.left(), targetSeminar, searchRadius, treeDepth + 1, leftBoundingBox) + 1;
 	}
 
@@ -362,8 +362,8 @@ public class Bintree {
 	private int searchRightChild(InternalNode internalNode, Seminar targetSeminar, double searchRadius, int treeDepth,
 			BoundingBox boundingBox, double mid, boolean isXAxis) {
 		BoundingBox rightBoundingBox = isXAxis
-				? new BoundingBox(mid, boundingBox.getMinY(), boundingBox.getMaxX(), boundingBox.getMaxY())
-				: new BoundingBox(boundingBox.getMinX(), mid, boundingBox.getMaxX(), boundingBox.getMaxY());
+				? new BoundingBox(mid, boundingBox.getyMin(), boundingBox.getxMax(), boundingBox.getyMax())
+				: new BoundingBox(boundingBox.getxMin(), mid, boundingBox.getxMax(), boundingBox.getyMax());
 		return searchRecursive(internalNode.right(), targetSeminar, searchRadius, treeDepth + 1, rightBoundingBox) + 1;
 	}
 
